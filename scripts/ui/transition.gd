@@ -4,6 +4,7 @@ extends CanvasLayer
 @onready var shader_material: ShaderMaterial = overlay.material
 
 var transitioning := false
+var gameplay_scene: Node
 
 
 func _ready() -> void:
@@ -28,9 +29,23 @@ func change_scene(path: String) -> void:
 
 	var main := get_tree().current_scene
 	var new_scene := scene.instantiate()
-	main.add_child(new_scene)
-	main.move_child(new_scene, 0)
-	var main_menu := main.get_node_or_null("MainMenu") as Control
+	if main is Node2D:
+		get_tree().root.add_child(new_scene)
+		get_tree().current_scene = new_scene
+		main.queue_free()
+	else:
+		if is_instance_valid(gameplay_scene):
+			main.remove_child(gameplay_scene)
+			gameplay_scene.queue_free()
+		main.add_child(new_scene)
+		main.move_child(new_scene, 0)
+	gameplay_scene = new_scene
+	var navigation := main.get_node_or_null("Navigation")
+	if navigation != null:
+		navigation.set_location(path.get_file().get_basename())
+		if new_scene.has_signal("round_finished"):
+			new_scene.connect("round_finished", navigation.show_return_to_garage)
+	var main_menu := main.get_node_or_null("MenuLayer/MainMenu") as Control
 	if main_menu != null:
 		main_menu.hide()
 

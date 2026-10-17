@@ -25,7 +25,7 @@ script/source = "extends UIButton
 
 func _on_pressed() -> void:
 	super._on_pressed()
-	Transition.change_scene(\"res://scenes/scene1.tscn\")
+	Transition.change_scene(\"res://scenes/garage.tscn\")
 	ControllerGame.play_one_shot(preload(\"res://sounds/StartHit.mp3\"))
 	ControllerGame.isMainMenu = false
 "

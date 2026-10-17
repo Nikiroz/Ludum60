@@ -1,0 +1,995 @@
+[gd_scene format=3 uid="uid://cknk80nw3fbir"]
+
+[ext_resource type="Script" uid="uid://bxitp6of0yxta" path="res://scripts/scrapyard.gd" id="1_qxv53"]
+[ext_resource type="Texture2D" uid="uid://b1dadiud48imh" path="res://sprites/mocup/2026-10-17 19.56.54.jpg" id="1_xs6rm"]
+[ext_resource type="FontFile" uid="uid://vcx3t2gqfd6" path="res://font/PixelOperator-Bold.ttf" id="2_ebt5y"]
+[ext_resource type="Texture2D" uid="uid://cobqovy0xsqs7" path="res://sprites/ui/cell.png" id="3_n1w0p"]
+[ext_resource type="Texture2D" uid="uid://d160rs1wivf80" path="res://sprites/ui/item.png" id="5_qxv53"]
+[ext_resource type="Script" uid="uid://e1dwdqoh0r6k" path="res://scripts/ui/ui_cell.gd" id="5_ymbfr"]
+
+[node name="Scrapyard" type="Control" unique_id=338103327]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qxv53")
+game_time = 300.0
+max_moves = 200
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1066564817]
+position = Vector2(128, 131)
+scale = Vector2(0.50343, 0.4975043)
+texture = ExtResource("1_xs6rm")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=756671451]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -116.5
+offset_top = -64.5
+offset_right = 116.5
+offset_bottom = 64.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1959558944]
+layout_mode = 2
+
+[node name="Timer" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=443212119]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_ebt5y")
+theme_override_font_sizes/font_size = 8
+text = "00:00"
+horizontal_alignment = 1
+
+[node name="Timer" type="Timer" parent="VBoxContainer/HBoxContainer/Timer" unique_id=1750383354]
+
+[node name="HSlider" type="HSlider" parent="VBoxContainer/HBoxContainer" unique_id=576091178]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Moves" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1059497167]
+layout_mode = 2
+text = "0"
+
+[node name="Field" type="GridContainer" parent="VBoxContainer" unique_id=987621707]
+z_index = 1
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 18
+
+[node name="cell" type="TextureRect" parent="VBoxContainer/Field" unique_id=1799610872]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell2" type="TextureRect" parent="VBoxContainer/Field" unique_id=524027518]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell3" type="TextureRect" parent="VBoxContainer/Field" unique_id=1960635331]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell4" type="TextureRect" parent="VBoxContainer/Field" unique_id=877984789]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell5" type="TextureRect" parent="VBoxContainer/Field" unique_id=1539681047]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell6" type="TextureRect" parent="VBoxContainer/Field" unique_id=2064383614]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell7" type="TextureRect" parent="VBoxContainer/Field" unique_id=1974612535]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell8" type="TextureRect" parent="VBoxContainer/Field" unique_id=1077797919]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell9" type="TextureRect" parent="VBoxContainer/Field" unique_id=1935930592]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell10" type="TextureRect" parent="VBoxContainer/Field" unique_id=1013548888]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell11" type="TextureRect" parent="VBoxContainer/Field" unique_id=888029655]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell12" type="TextureRect" parent="VBoxContainer/Field" unique_id=1407227057]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell13" type="TextureRect" parent="VBoxContainer/Field" unique_id=8582598]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell14" type="TextureRect" parent="VBoxContainer/Field" unique_id=1712567249]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell15" type="TextureRect" parent="VBoxContainer/Field" unique_id=990147804]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell16" type="TextureRect" parent="VBoxContainer/Field" unique_id=1468773085]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell17" type="TextureRect" parent="VBoxContainer/Field" unique_id=1321844178]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell18" type="TextureRect" parent="VBoxContainer/Field" unique_id=1923798585]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell19" type="TextureRect" parent="VBoxContainer/Field" unique_id=369422699]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell20" type="TextureRect" parent="VBoxContainer/Field" unique_id=1586907687]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell21" type="TextureRect" parent="VBoxContainer/Field" unique_id=1236220238]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell22" type="TextureRect" parent="VBoxContainer/Field" unique_id=1383046873]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell23" type="TextureRect" parent="VBoxContainer/Field" unique_id=585336808]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell24" type="TextureRect" parent="VBoxContainer/Field" unique_id=998651268]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell25" type="TextureRect" parent="VBoxContainer/Field" unique_id=2130460879]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell26" type="TextureRect" parent="VBoxContainer/Field" unique_id=359695700]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell27" type="TextureRect" parent="VBoxContainer/Field" unique_id=1984564680]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell28" type="TextureRect" parent="VBoxContainer/Field" unique_id=624276949]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell29" type="TextureRect" parent="VBoxContainer/Field" unique_id=1190446936]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell30" type="TextureRect" parent="VBoxContainer/Field" unique_id=682630030]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell31" type="TextureRect" parent="VBoxContainer/Field" unique_id=2050647644]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell32" type="TextureRect" parent="VBoxContainer/Field" unique_id=997140292]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell33" type="TextureRect" parent="VBoxContainer/Field" unique_id=1412830640]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell34" type="TextureRect" parent="VBoxContainer/Field" unique_id=2090373439]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell35" type="TextureRect" parent="VBoxContainer/Field" unique_id=910364196]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell36" type="TextureRect" parent="VBoxContainer/Field" unique_id=1773167345]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell37" type="TextureRect" parent="VBoxContainer/Field" unique_id=1764547612]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell38" type="TextureRect" parent="VBoxContainer/Field" unique_id=2061361502]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell39" type="TextureRect" parent="VBoxContainer/Field" unique_id=1877497015]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell40" type="TextureRect" parent="VBoxContainer/Field" unique_id=1505672318]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell41" type="TextureRect" parent="VBoxContainer/Field" unique_id=1883588428]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell42" type="TextureRect" parent="VBoxContainer/Field" unique_id=1091793973]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell43" type="TextureRect" parent="VBoxContainer/Field" unique_id=1666152939]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell44" type="TextureRect" parent="VBoxContainer/Field" unique_id=1368996489]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell45" type="TextureRect" parent="VBoxContainer/Field" unique_id=2104244134]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell46" type="TextureRect" parent="VBoxContainer/Field" unique_id=1899387282]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell47" type="TextureRect" parent="VBoxContainer/Field" unique_id=546438776]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell48" type="TextureRect" parent="VBoxContainer/Field" unique_id=1462669115]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell49" type="TextureRect" parent="VBoxContainer/Field" unique_id=1943331840]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell50" type="TextureRect" parent="VBoxContainer/Field" unique_id=579413410]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell51" type="TextureRect" parent="VBoxContainer/Field" unique_id=1835833155]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell52" type="TextureRect" parent="VBoxContainer/Field" unique_id=1543476530]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell53" type="TextureRect" parent="VBoxContainer/Field" unique_id=2057157945]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell54" type="TextureRect" parent="VBoxContainer/Field" unique_id=1977007911]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell55" type="TextureRect" parent="VBoxContainer/Field" unique_id=793324696]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell56" type="TextureRect" parent="VBoxContainer/Field" unique_id=1956429133]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell57" type="TextureRect" parent="VBoxContainer/Field" unique_id=1566293887]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell58" type="TextureRect" parent="VBoxContainer/Field" unique_id=1480287402]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell59" type="TextureRect" parent="VBoxContainer/Field" unique_id=1028842250]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell60" type="TextureRect" parent="VBoxContainer/Field" unique_id=808617717]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell61" type="TextureRect" parent="VBoxContainer/Field" unique_id=1233612753]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell62" type="TextureRect" parent="VBoxContainer/Field" unique_id=157170964]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell63" type="TextureRect" parent="VBoxContainer/Field" unique_id=28092964]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell64" type="TextureRect" parent="VBoxContainer/Field" unique_id=1077890755]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell65" type="TextureRect" parent="VBoxContainer/Field" unique_id=498973525]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell66" type="TextureRect" parent="VBoxContainer/Field" unique_id=1855970517]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell67" type="TextureRect" parent="VBoxContainer/Field" unique_id=1617792462]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell68" type="TextureRect" parent="VBoxContainer/Field" unique_id=1553752281]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell69" type="TextureRect" parent="VBoxContainer/Field" unique_id=1286636454]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell70" type="TextureRect" parent="VBoxContainer/Field" unique_id=971034236]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell71" type="TextureRect" parent="VBoxContainer/Field" unique_id=829823743]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell72" type="TextureRect" parent="VBoxContainer/Field" unique_id=1829350138]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell73" type="TextureRect" parent="VBoxContainer/Field" unique_id=1968256143]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell74" type="TextureRect" parent="VBoxContainer/Field" unique_id=1535334776]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell75" type="TextureRect" parent="VBoxContainer/Field" unique_id=1964842954]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell76" type="TextureRect" parent="VBoxContainer/Field" unique_id=1488266748]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell77" type="TextureRect" parent="VBoxContainer/Field" unique_id=719962173]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell78" type="TextureRect" parent="VBoxContainer/Field" unique_id=311954845]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell79" type="TextureRect" parent="VBoxContainer/Field" unique_id=33598869]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell80" type="TextureRect" parent="VBoxContainer/Field" unique_id=291043098]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell81" type="TextureRect" parent="VBoxContainer/Field" unique_id=950879833]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell82" type="TextureRect" parent="VBoxContainer/Field" unique_id=592445043]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell83" type="TextureRect" parent="VBoxContainer/Field" unique_id=1153570577]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell84" type="TextureRect" parent="VBoxContainer/Field" unique_id=589454162]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell85" type="TextureRect" parent="VBoxContainer/Field" unique_id=640964688]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell86" type="TextureRect" parent="VBoxContainer/Field" unique_id=1095571413]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell87" type="TextureRect" parent="VBoxContainer/Field" unique_id=918762948]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell88" type="TextureRect" parent="VBoxContainer/Field" unique_id=1933190621]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell89" type="TextureRect" parent="VBoxContainer/Field" unique_id=198084008]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell90" type="TextureRect" parent="VBoxContainer/Field" unique_id=463860554]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell91" type="TextureRect" parent="VBoxContainer/Field" unique_id=634614439]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell92" type="TextureRect" parent="VBoxContainer/Field" unique_id=1125592942]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell93" type="TextureRect" parent="VBoxContainer/Field" unique_id=2129386056]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell94" type="TextureRect" parent="VBoxContainer/Field" unique_id=1718204195]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell95" type="TextureRect" parent="VBoxContainer/Field" unique_id=560432491]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell96" type="TextureRect" parent="VBoxContainer/Field" unique_id=62625556]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell97" type="TextureRect" parent="VBoxContainer/Field" unique_id=1129115823]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell98" type="TextureRect" parent="VBoxContainer/Field" unique_id=1758837113]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell99" type="TextureRect" parent="VBoxContainer/Field" unique_id=1747343422]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell100" type="TextureRect" parent="VBoxContainer/Field" unique_id=323445338]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell101" type="TextureRect" parent="VBoxContainer/Field" unique_id=627994011]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell102" type="TextureRect" parent="VBoxContainer/Field" unique_id=1565832599]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell103" type="TextureRect" parent="VBoxContainer/Field" unique_id=18045043]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell104" type="TextureRect" parent="VBoxContainer/Field" unique_id=268857809]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell105" type="TextureRect" parent="VBoxContainer/Field" unique_id=415418100]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell106" type="TextureRect" parent="VBoxContainer/Field" unique_id=728192761]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell107" type="TextureRect" parent="VBoxContainer/Field" unique_id=2096136884]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell108" type="TextureRect" parent="VBoxContainer/Field" unique_id=1919080458]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell109" type="TextureRect" parent="VBoxContainer/Field" unique_id=1660447924]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell110" type="TextureRect" parent="VBoxContainer/Field" unique_id=1288303379]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell111" type="TextureRect" parent="VBoxContainer/Field" unique_id=808930256]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell112" type="TextureRect" parent="VBoxContainer/Field" unique_id=131128396]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell113" type="TextureRect" parent="VBoxContainer/Field" unique_id=153308086]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell114" type="TextureRect" parent="VBoxContainer/Field" unique_id=219452912]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell115" type="TextureRect" parent="VBoxContainer/Field" unique_id=1437938667]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell116" type="TextureRect" parent="VBoxContainer/Field" unique_id=1541803876]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell117" type="TextureRect" parent="VBoxContainer/Field" unique_id=748004734]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell118" type="TextureRect" parent="VBoxContainer/Field" unique_id=91123791]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell119" type="TextureRect" parent="VBoxContainer/Field" unique_id=1349235695]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell120" type="TextureRect" parent="VBoxContainer/Field" unique_id=630360804]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell121" type="TextureRect" parent="VBoxContainer/Field" unique_id=1075398004]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell122" type="TextureRect" parent="VBoxContainer/Field" unique_id=297062378]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell123" type="TextureRect" parent="VBoxContainer/Field" unique_id=811126289]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell124" type="TextureRect" parent="VBoxContainer/Field" unique_id=1664186706]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell125" type="TextureRect" parent="VBoxContainer/Field" unique_id=675942696]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell126" type="TextureRect" parent="VBoxContainer/Field" unique_id=735569016]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell127" type="TextureRect" parent="VBoxContainer/Field" unique_id=286064078]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell128" type="TextureRect" parent="VBoxContainer/Field" unique_id=858967297]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell129" type="TextureRect" parent="VBoxContainer/Field" unique_id=685809940]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell130" type="TextureRect" parent="VBoxContainer/Field" unique_id=296991474]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell131" type="TextureRect" parent="VBoxContainer/Field" unique_id=1568598093]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell132" type="TextureRect" parent="VBoxContainer/Field" unique_id=408383010]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell133" type="TextureRect" parent="VBoxContainer/Field" unique_id=1076877464]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell134" type="TextureRect" parent="VBoxContainer/Field" unique_id=293110415]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell135" type="TextureRect" parent="VBoxContainer/Field" unique_id=375371627]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell136" type="TextureRect" parent="VBoxContainer/Field" unique_id=84624141]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell137" type="TextureRect" parent="VBoxContainer/Field" unique_id=1704996757]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell138" type="TextureRect" parent="VBoxContainer/Field" unique_id=2003999884]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell139" type="TextureRect" parent="VBoxContainer/Field" unique_id=1385964791]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell140" type="TextureRect" parent="VBoxContainer/Field" unique_id=1777068590]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell141" type="TextureRect" parent="VBoxContainer/Field" unique_id=981093627]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell142" type="TextureRect" parent="VBoxContainer/Field" unique_id=180896266]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell143" type="TextureRect" parent="VBoxContainer/Field" unique_id=1586929893]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell144" type="TextureRect" parent="VBoxContainer/Field" unique_id=2049834384]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell145" type="TextureRect" parent="VBoxContainer/Field" unique_id=2090112655]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell146" type="TextureRect" parent="VBoxContainer/Field" unique_id=1766490328]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell147" type="TextureRect" parent="VBoxContainer/Field" unique_id=1793421059]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell148" type="TextureRect" parent="VBoxContainer/Field" unique_id=1043112035]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell149" type="TextureRect" parent="VBoxContainer/Field" unique_id=135886823]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell150" type="TextureRect" parent="VBoxContainer/Field" unique_id=731596652]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell151" type="TextureRect" parent="VBoxContainer/Field" unique_id=1168796900]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell152" type="TextureRect" parent="VBoxContainer/Field" unique_id=1369725429]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell153" type="TextureRect" parent="VBoxContainer/Field" unique_id=773592338]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell154" type="TextureRect" parent="VBoxContainer/Field" unique_id=1232610770]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell155" type="TextureRect" parent="VBoxContainer/Field" unique_id=165347043]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell156" type="TextureRect" parent="VBoxContainer/Field" unique_id=1347552466]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell157" type="TextureRect" parent="VBoxContainer/Field" unique_id=105792779]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell158" type="TextureRect" parent="VBoxContainer/Field" unique_id=25193343]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell159" type="TextureRect" parent="VBoxContainer/Field" unique_id=1297981287]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell160" type="TextureRect" parent="VBoxContainer/Field" unique_id=1828792811]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell161" type="TextureRect" parent="VBoxContainer/Field" unique_id=1243854103]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell162" type="TextureRect" parent="VBoxContainer/Field" unique_id=1335020318]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell163" type="TextureRect" parent="VBoxContainer/Field" unique_id=77750647]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell164" type="TextureRect" parent="VBoxContainer/Field" unique_id=1290489770]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell165" type="TextureRect" parent="VBoxContainer/Field" unique_id=1633181566]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell166" type="TextureRect" parent="VBoxContainer/Field" unique_id=453170550]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell167" type="TextureRect" parent="VBoxContainer/Field" unique_id=858831232]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell168" type="TextureRect" parent="VBoxContainer/Field" unique_id=1979855838]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell169" type="TextureRect" parent="VBoxContainer/Field" unique_id=1327323006]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell170" type="TextureRect" parent="VBoxContainer/Field" unique_id=1298763890]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell171" type="TextureRect" parent="VBoxContainer/Field" unique_id=1523515947]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell172" type="TextureRect" parent="VBoxContainer/Field" unique_id=2130900671]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell173" type="TextureRect" parent="VBoxContainer/Field" unique_id=676671546]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell174" type="TextureRect" parent="VBoxContainer/Field" unique_id=1219555136]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell175" type="TextureRect" parent="VBoxContainer/Field" unique_id=1400960332]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell176" type="TextureRect" parent="VBoxContainer/Field" unique_id=790969441]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell177" type="TextureRect" parent="VBoxContainer/Field" unique_id=1483179590]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell178" type="TextureRect" parent="VBoxContainer/Field" unique_id=1683847178]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell179" type="TextureRect" parent="VBoxContainer/Field" unique_id=1453309474]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="cell180" type="TextureRect" parent="VBoxContainer/Field" unique_id=17648688]
+layout_mode = 2
+texture = ExtResource("3_n1w0p")
+script = ExtResource("5_ymbfr")
+
+[node name="Items" type="GridContainer" parent="VBoxContainer" unique_id=180443498]
+layout_mode = 2
+columns = 6
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Items" unique_id=672415356]
+layout_mode = 2
+texture = ExtResource("5_qxv53")
+
+[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/Items" unique_id=234987770]
+layout_mode = 2
+texture = ExtResource("5_qxv53")
+
+[node name="TextureRect5" type="TextureRect" parent="VBoxContainer/Items" unique_id=309091463]
+layout_mode = 2
+texture = ExtResource("5_qxv53")
+
+[node name="TextureRect6" type="TextureRect" parent="VBoxContainer/Items" unique_id=976633407]
+layout_mode = 2
+texture = ExtResource("5_qxv53")
+
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/Items" unique_id=1387033785]
+layout_mode = 2
+texture = ExtResource("5_qxv53")
+
+[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/Items" unique_id=1325159574]
+layout_mode = 2
+texture = ExtResource("5_qxv53")

@@ -19,6 +19,7 @@ gradient = SubResource("Gradient_rtw2f")
 width = 1
 
 [node name="CanvasLayer" type="CanvasLayer" unique_id=125196928]
+layer = 128
 script = ExtResource("1_1m0lo")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=1829581639]
@@ -28,5 +29,5 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
+mouse_filter = 0
 texture = SubResource("GradientTexture1D_8ln24")

@@ -1,0 +1,433 @@
+
+extends Control
+
+signal round_finished
+
+const ItemCatalog = preload("res://scripts/item_catalog.gd")
+const ITEM_COUNT := 6
+
+@export var game_time: float = 30.0
+@export var max_moves: int = 20
+
+@onready var timer: Timer = $VBoxContainer/HBoxContainer/Timer/Timer
+@onready var timer_label: Label = $VBoxContainer/HBoxContainer/Timer
+@onready var moves_slider: HSlider = $VBoxContainer/HBoxContainer/HSlider
+@onready var moves_label: Label = $VBoxContainer/HBoxContainer/Moves
+@onready var field: GridContainer = $VBoxContainer/Field
+@onready var items_grid: GridContainer = $VBoxContainer/Items
+
+
+# Запланированное размещение
+class SpawnPlan:
+	var data: GridInventoryItemData
+	var origin: Vector2i
+
+	func _init(p_data: GridInventoryItemData, p_origin: Vector2i) -> void:
+		data = p_data
+		origin = p_origin
+
+
+# Отдельный экземпляр предмета на поле
+class HiddenItem:
+	var data: GridInventoryItemData
+	var sprite: Sprite2D
+	var cells: Array[FieldCell] = []
+
+
+var moves_left: int
+var game_over := false
+
+var field_cells: Array[FieldCell] = []
+var inventory_slots: Array[TextureRect] = []
+
+var hidden_items: Array[HiddenItem] = []
+var cell_to_item: Dictionary = {}
+
+var collected_items: Array[GridInventoryItemData] = []
+var next_inventory_slot := 0
+
+
+func _ready() -> void:
+	# Инициализация ходов
+	moves_left = max_moves
+
+	moves_slider.min_value = 0
+	moves_slider.max_value = max_moves
+	moves_slider.step = 1
+	moves_slider.editable = false
+
+	update_moves_ui()
+
+	# Таймер
+	timer.wait_time = game_time
+	timer.one_shot = true
+	timer.timeout.connect(end_game)
+	timer.start()
+
+	# Клетки поля
+	for child in field.get_children():
+		if child is FieldCell:
+			var cell: FieldCell = child
+
+			cell.z_index = 1
+
+			field_cells.append(cell)
+			cell.cell_clicked.connect(_on_cell_clicked)
+
+	# Слоты инвентаря
+	for child in items_grid.get_children():
+		if child is TextureRect:
+			inventory_slots.append(child)
+
+	if inventory_slots.size() < ITEM_COUNT:
+		push_error("Inventory requires at least 6 slots")
+		return
+
+	await get_tree().process_frame
+
+	spawn_random_items()
+
+func _process(_delta: float) -> void:
+	if game_over:
+		return
+
+	var seconds: int = ceili(timer.time_left)
+	var minutes: int = int(seconds / 60)
+
+	timer_label.text = "%02d:%02d" % [
+		minutes,
+		seconds % 60
+	]
+	
+func load_available_items() -> Array[GridInventoryItemData]:
+	var result: Array[GridInventoryItemData] = []
+
+	var columns: int = field.columns
+	var rows: int = int(field_cells.size() / columns)
+
+	for path in ItemCatalog.get_item_paths():
+		var item: GridInventoryItemData = load(path) as GridInventoryItemData
+
+		if item == null:
+			continue
+
+		if item.occupied_cells.is_empty():
+			continue
+
+		if item.grid_size.x <= 0 or item.grid_size.y <= 0:
+			continue
+
+		if item.grid_size.x > columns or item.grid_size.y > rows:
+			continue
+
+		if item.get_texture() == null:
+			continue
+
+		var valid := true
+
+		for offset in item.occupied_cells:
+			if (
+				offset.x < 0 or offset.y < 0
+				or offset.x >= item.grid_size.x
+				or offset.y >= item.grid_size.y
+			):
+				valid = false
+				break
+
+		if valid:
+			result.append(item)
+
+	return result
+
+
+# ------------------------------------
+# ПОИСК СВОБОДНОГО МЕСТА
+# ------------------------------------
+
+func get_free_positions(
+	item: GridInventoryItemData,
+	occupied: Dictionary
+) -> Array[Vector2i]:
+
+	var positions: Array[Vector2i] = []
+
+	var columns: int = field.columns
+	var rows: int = int(field_cells.size() / columns)
+
+	for y in range(rows - item.grid_size.y + 1):
+		for x in range(columns - item.grid_size.x + 1):
+
+			var origin := Vector2i(x, y)
+			var valid := true
+
+			# Проверяем всю область спрайта
+			for dy in range(item.grid_size.y):
+				for dx in range(item.grid_size.x):
+					var pos := origin + Vector2i(dx, dy)
+
+					if occupied.has(pos):
+						valid = false
+						break
+
+				if not valid:
+					break
+
+			if valid:
+				positions.append(origin)
+
+	return positions
+
+
+# ------------------------------------
+# ГЕНЕРАЦИЯ 6 ПРЕДМЕТОВ
+# ------------------------------------
+
+func spawn_random_items() -> void:
+	var available_items := load_available_items()
+
+	if available_items.is_empty():
+		push_error("No suitable items found")
+		return
+
+	var plan: Array[SpawnPlan] = []
+
+	# Несколько попыток найти расположение всех 6 предметов
+	for attempt in range(200):
+		var occupied: Dictionary = {}
+		var current_plan: Array[SpawnPlan] = []
+
+		for i in range(ITEM_COUNT):
+
+			# Каждый раз берём весь список:
+			# один и тот же предмет может выпасть повторно
+			var candidates: Array[GridInventoryItemData] = available_items.duplicate()
+			candidates.shuffle()
+
+			var found := false
+
+			for item in candidates:
+				var positions := get_free_positions(item, occupied)
+
+				if positions.is_empty():
+					continue
+
+				var origin: Vector2i = positions.pick_random()
+
+				current_plan.append(SpawnPlan.new(item, origin))
+
+				# Резервируем прямоугольную область предмета
+				for dy in range(item.grid_size.y):
+					for dx in range(item.grid_size.x):
+						occupied[origin + Vector2i(dx, dy)] = true
+
+				found = true
+				break
+
+			if not found:
+				break
+
+		if current_plan.size() == ITEM_COUNT:
+			plan = current_plan
+			break
+
+	if plan.size() != ITEM_COUNT:
+		push_error("Could not fit all 6 items on the field")
+		return
+
+	# Размещаем все предметы одновременно
+	for placement in plan:
+		place_item(placement.data, placement.origin)
+
+	print("Spawned items: ", hidden_items.size())
+
+
+# ------------------------------------
+# РАЗМЕЩЕНИЕ ПРЕДМЕТА
+# ------------------------------------
+
+func place_item(
+	item: GridInventoryItemData,
+	origin: Vector2i
+) -> void:
+
+	var columns: int = field.columns
+
+	var start_index: int = origin.y * columns + origin.x
+
+	var end_index: int = (
+		(origin.y + item.grid_size.y - 1) * columns
+		+ origin.x + item.grid_size.x - 1
+	)
+
+	var first_cell: FieldCell = field_cells[start_index]
+	var last_cell: FieldCell = field_cells[end_index]
+
+	var start_pos: Vector2 = first_cell.position
+	var end_pos: Vector2 = last_cell.position + last_cell.size
+	var item_size: Vector2 = end_pos - start_pos
+
+	# Создаём спрайт
+	var sprite := Sprite2D.new()
+
+	sprite.texture = item.get_texture()
+	sprite.centered = false
+	sprite.position = start_pos
+	sprite.scale = item_size / Vector2(sprite.texture.get_size())
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite.z_index = 0
+
+	field.add_child(sprite)
+
+	# Создаём независимый экземпляр предмета
+	var hidden := HiddenItem.new()
+
+	hidden.data = item
+	hidden.sprite = sprite
+
+	# Крепость 2 только у клеток формы предмета
+	for offset in item.occupied_cells:
+		var cell_pos: Vector2i = origin + offset
+		var index: int = cell_pos.y * columns + cell_pos.x
+
+		var cell: FieldCell = field_cells[index]
+
+		cell.set_clicks_required(2)
+
+		hidden.cells.append(cell)
+		cell_to_item[cell] = hidden
+
+	hidden_items.append(hidden)
+
+	print("Spawned: ", item.display_name, " at ", origin)
+
+
+# ------------------------------------
+# КЛИК ПО КЛЕТКЕ
+# ------------------------------------
+
+func _on_cell_clicked(cell: FieldCell) -> void:
+	if game_over:
+		return
+
+	# Проверяем, принадлежит ли клетка предмету
+	var hidden: HiddenItem = cell_to_item.get(cell) as HiddenItem
+
+	if hidden != null:
+		if is_item_revealed(hidden):
+			collect_item(hidden)
+
+	use_move()
+
+
+# ------------------------------------
+# ПРОВЕРКА ОТКРЫТИЯ ПРЕДМЕТА
+# ------------------------------------
+
+func is_item_revealed(hidden: HiddenItem) -> bool:
+	for cell in hidden.cells:
+		if cell.clicks_left > 0:
+			return false
+
+	return true
+
+
+# ------------------------------------
+# СБОР ПРЕДМЕТА
+# ------------------------------------
+
+func collect_item(hidden: HiddenItem) -> void:
+	if next_inventory_slot >= inventory_slots.size():
+		push_warning("Inventory is full")
+		return
+
+	var slot: TextureRect = inventory_slots[next_inventory_slot]
+
+	# Иконка для нижнего инвентаря
+	var icon := TextureRect.new()
+
+	icon.texture = hidden.data.get_texture()
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	slot.add_child(icon)
+	icon.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+	collected_items.append(hidden.data)
+	next_inventory_slot += 1
+
+	# Убираем только собранный предмет
+	if is_instance_valid(hidden.sprite):
+		hidden.sprite.queue_free()
+
+	# Удаляем связи с его клетками
+	for cell in hidden.cells:
+		cell_to_item.erase(cell)
+
+	hidden_items.erase(hidden)
+	# Проверяем условие победы
+	if collected_items.size() >= ITEM_COUNT:
+		win_game()
+
+	print("Collected: ", hidden.data.display_name)
+	print("Collected total: ", collected_items.size())
+
+func win_game() -> void:
+	if game_over:
+		return
+
+	game_over = true
+
+	# Останавливаем и обнуляем таймер
+	timer.stop()
+	timer_label.text = "00:00"
+
+	# Обнуляем оставшиеся ходы
+	moves_left = 0
+	update_moves_ui()
+
+	# Блокируем поле
+	for cell in field_cells:
+		cell.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	print("YOU WIN!")
+	round_finished.emit()
+
+func use_move() -> void:
+	if game_over:
+		return
+
+	moves_left = maxi(moves_left - 1, 0)
+
+	update_moves_ui()
+
+	if moves_left == 0:
+		end_game()
+
+
+func update_moves_ui() -> void:
+	moves_slider.value = moves_left
+
+	moves_label.text = "Moves: %d / %d" % [
+		moves_left, max_moves
+	]
+
+
+# ------------------------------------
+# КОНЕЦ ИГРЫ
+# ------------------------------------
+
+func end_game() -> void:
+	if game_over:
+		return
+
+	game_over = true
+	timer.stop()
+	timer_label.text = "00:00"
+
+	for cell in field_cells:
+		cell.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	print("GAME OVER")
+	round_finished.emit()

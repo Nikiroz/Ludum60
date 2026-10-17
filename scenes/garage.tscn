@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://gc5ojvigf81x"]
+
+[ext_resource type="Texture2D" uid="uid://bh0tge15w6tl1" path="res://sprites/mocup/2jam.png" id="1_gnlqp"]
+
+[node name="Garage" type="Node2D" unique_id=55088034]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1066564817]
+position = Vector2(159.72224, 90.500015)
+scale = Vector2(0.08295717, 0.08287039)
+texture = ExtResource("1_gnlqp")

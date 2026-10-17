@@ -1,0 +1,9 @@
+{
+    "godotTools.editorPath.godot4": "/Applications/Godot.app",
+    "files.exclude": {
+        "**/*.uid": true,
+        "**/.godot": true,
+        "**/.vscode": true,
+        "**/.idea": true
+    }
+}

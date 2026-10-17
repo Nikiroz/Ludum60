@@ -6,7 +6,7 @@ func _on_pressed() -> void:
 	var root := get_tree().current_scene
 
 	while node != null:
-		if node.get_parent() == root:
+		if node is Control and (node.get_parent() == root or node.get_parent() is CanvasLayer):
 			node.hide()
 			return
 

@@ -5,16 +5,23 @@ var isMainMenu := true:
 		isMainMenu = value
 		_update_quit_to_main_menu_visibility()
 
-
 func _ready() -> void:
 	call_deferred("_update_quit_to_main_menu_visibility")
 
-
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_cancel"):
-		show_settings()
-		get_viewport().set_input_as_handled()
+	if isMainMenu:
+		return
 
+	if event.is_action_pressed("ui_cancel"):
+		var warning := get_tree().current_scene.get_node_or_null("MenuLayer/Warning") as Control
+		var settings := _get_settings()
+		if warning != null and warning.is_visible_in_tree():
+			warning.hide()
+		elif settings != null and settings.is_visible_in_tree():
+			settings.hide()
+		else:
+			show_settings()
+		get_viewport().set_input_as_handled()
 
 func show_settings() -> void:
 	var settings := _get_settings()
@@ -25,14 +32,12 @@ func show_settings() -> void:
 	settings.show()
 	_update_quit_to_main_menu_visibility()
 
-
 func _get_settings() -> Control:
 	var current_scene := get_tree().current_scene
 	if current_scene == null:
 		return null
 
-	return current_scene.get_node_or_null("Settings") as Control
-
+	return current_scene.get_node_or_null("MenuLayer/Settings") as Control
 
 func _update_quit_to_main_menu_visibility() -> void:
 	var settings := _get_settings()
@@ -44,7 +49,6 @@ func _update_quit_to_main_menu_visibility() -> void:
 	) as Button
 	if quit_to_main_menu != null:
 		quit_to_main_menu.visible = not isMainMenu
-
 
 func play_one_shot(stream: AudioStream, bus := "Sfx", volume_db := 0.0) -> AudioStreamPlayer:
 	var p := AudioStreamPlayer.new()
