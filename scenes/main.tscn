@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://1nh8ghvdvg5m"]
+
+[ext_resource type="PackedScene" uid="uid://dlxcemoturann" path="res://scenes/main_menu.tscn" id="1_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://bppj7wsn36efo" path="res://scenes/settings.tscn" id="2_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://cetha4v8rfyp3" path="res://scenes/credits.tscn" id="3_tefeu"]
+[ext_resource type="PackedScene" uid="uid://birdb0lniku25" path="res://scenes/warning.tscn" id="4_o6xl0"]
+
+[node name="Main" type="Node" unique_id=1672023872]
+
+[node name="MainMenu" parent="." unique_id=166247087 instance=ExtResource("1_jyhfs")]
+
+[node name="Settings" parent="." unique_id=1908913063 instance=ExtResource("2_tbgi4")]
+visible = false
+
+[node name="Credits" parent="." unique_id=1041939486 instance=ExtResource("3_tefeu")]
+visible = false
+
+[node name="Warning" parent="." unique_id=1943961518 instance=ExtResource("4_o6xl0")]
+visible = false

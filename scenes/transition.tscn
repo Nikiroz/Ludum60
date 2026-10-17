@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://fymlk7knt77j"]
+
+[ext_resource type="Script" uid="uid://q5chfag17ab6" path="res://scripts/ui/transition.gd" id="1_1m0lo"]
+[ext_resource type="Shader" uid="uid://usqoky8ohu4d" path="res://shaders/transition.gdshader" id="1_fyjtc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jk1qb"]
+shader = ExtResource("1_fyjtc")
+shader_parameter/progress = 0.0
+shader_parameter/density = 50.0
+shader_parameter/boundary_size = 1.0
+shader_parameter/antialiasing_intensity = 0.10000000149012
+
+[sub_resource type="Gradient" id="Gradient_rtw2f"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_8ln24"]
+gradient = SubResource("Gradient_rtw2f")
+width = 1
+
+[node name="CanvasLayer" type="CanvasLayer" unique_id=125196928]
+script = ExtResource("1_1m0lo")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1829581639]
+material = SubResource("ShaderMaterial_jk1qb")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("GradientTexture1D_8ln24")

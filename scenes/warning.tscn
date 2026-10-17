@@ -1,0 +1,150 @@
+[gd_scene format=3 uid="uid://birdb0lniku25"]
+
+[ext_resource type="Script" uid="uid://o5lvmh8lqvdo" path="res://scripts/ui/ui_back_to_menu.gd" id="1_lv2aw"]
+[ext_resource type="Script" uid="uid://dc0ij4d538tif" path="res://scripts/ui/ui_back_button.gd" id="2_fgfcp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gjs24"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_flqon"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rcqid"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.14044744, 0.14044744, 0.14044744, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ajci"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7b55j"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5pajh"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[node name="Warning" type="Control" unique_id=1943961518]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="." unique_id=818359456]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gjs24")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=16852073]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -38.5
+offset_right = 100.0
+offset_bottom = 38.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer" unique_id=188621568]
+custom_maximum_size = Vector2(200, -1)
+layout_mode = 2
+text = "Are you sure you want to return to the main menu?"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/VBoxContainer" unique_id=533238392]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer" unique_id=1650768653]
+layout_mode = 2
+alignment = 1
+
+[node name="yes" type="Button" parent="Panel/VBoxContainer/HBoxContainer" unique_id=1429170772]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_flqon")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rcqid")
+theme_override_styles/hover = SubResource("StyleBoxFlat_1ajci")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_7b55j")
+theme_override_styles/focus = SubResource("StyleBoxFlat_5pajh")
+text = "Yes"
+script = ExtResource("1_lv2aw")
+nodeName = "MainMenu"
+
+[node name="no" type="Button" parent="Panel/VBoxContainer/HBoxContainer" unique_id=1084740560]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_flqon")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rcqid")
+theme_override_styles/hover = SubResource("StyleBoxFlat_1ajci")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_7b55j")
+theme_override_styles/focus = SubResource("StyleBoxFlat_5pajh")
+text = "No"
+script = ExtResource("2_fgfcp")
+
+[connection signal="pressed" from="Panel/VBoxContainer/HBoxContainer/yes" to="Panel/VBoxContainer/HBoxContainer/yes" method="_on_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/HBoxContainer/no" to="Panel/VBoxContainer/HBoxContainer/no" method="_on_pressed"]
