@@ -40,11 +40,7 @@ func change_scene(path: String) -> void:
 		main.add_child(new_scene)
 		main.move_child(new_scene, 0)
 	gameplay_scene = new_scene
-	var navigation := main.get_node_or_null("Navigation")
-	if navigation != null:
-		navigation.set_location(path.get_file().get_basename())
-		if new_scene.has_signal("round_finished"):
-			new_scene.connect("round_finished", navigation.show_return_to_garage)
+	ControllerGame.set_gameplay_scene(new_scene)
 	var main_menu := main.get_node_or_null("MenuLayer/MainMenu") as Control
 	if main_menu != null:
 		main_menu.hide()

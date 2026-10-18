@@ -4,20 +4,18 @@ extends Control
 signal round_finished
 
 const ItemCatalog = preload("res://scripts/item_catalog.gd")
-const ITEM_COUNT := 6
+const ITEM_COUNT := 8
 
 @export var game_time: float = 30.0
 @export var max_moves: int = 20
 
 @onready var timer: Timer = $VBoxContainer/HBoxContainer/Timer/Timer
 @onready var timer_label: Label = $VBoxContainer/HBoxContainer/Timer
-@onready var moves_slider: HSlider = $VBoxContainer/HBoxContainer/HSlider
+@onready var moves_slider: HSlider = $VBoxContainer/HBoxContainer/Control/MarginContainer/HSlider
 @onready var moves_label: Label = $VBoxContainer/HBoxContainer/Moves
 @onready var field: GridContainer = $VBoxContainer/Field
-@onready var items_grid: GridContainer = $VBoxContainer/Items
+@onready var items_grid: GridContainer = $VBoxContainer/BottomPanel/Items
 
-
-# Запланированное размещение
 class SpawnPlan:
 	var data: GridInventoryItemData
 	var origin: Vector2i
@@ -26,13 +24,10 @@ class SpawnPlan:
 		data = p_data
 		origin = p_origin
 
-
-# Отдельный экземпляр предмета на поле
 class HiddenItem:
 	var data: GridInventoryItemData
 	var sprite: Sprite2D
 	var cells: Array[FieldCell] = []
-
 
 var moves_left: int
 var game_over := false
@@ -48,9 +43,8 @@ var next_inventory_slot := 0
 
 
 func _ready() -> void:
-	# Инициализация ходов
+	
 	moves_left = max_moves
-
 	moves_slider.min_value = 0
 	moves_slider.max_value = max_moves
 	moves_slider.step = 1
@@ -58,13 +52,12 @@ func _ready() -> void:
 
 	update_moves_ui()
 
-	# Таймер
 	timer.wait_time = game_time
 	timer.one_shot = true
 	timer.timeout.connect(end_game)
 	timer.start()
 
-	# Клетки поля
+
 	for child in field.get_children():
 		if child is FieldCell:
 			var cell: FieldCell = child
@@ -74,7 +67,6 @@ func _ready() -> void:
 			field_cells.append(cell)
 			cell.cell_clicked.connect(_on_cell_clicked)
 
-	# Слоты инвентаря
 	for child in items_grid.get_children():
 		if child is TextureRect:
 			inventory_slots.append(child)
@@ -139,11 +131,6 @@ func load_available_items() -> Array[GridInventoryItemData]:
 
 	return result
 
-
-# ------------------------------------
-# ПОИСК СВОБОДНОГО МЕСТА
-# ------------------------------------
-
 func get_free_positions(
 	item: GridInventoryItemData,
 	occupied: Dictionary
@@ -160,7 +147,6 @@ func get_free_positions(
 			var origin := Vector2i(x, y)
 			var valid := true
 
-			# Проверяем всю область спрайта
 			for dy in range(item.grid_size.y):
 				for dx in range(item.grid_size.x):
 					var pos := origin + Vector2i(dx, dy)
@@ -178,10 +164,6 @@ func get_free_positions(
 	return positions
 
 
-# ------------------------------------
-# ГЕНЕРАЦИЯ 6 ПРЕДМЕТОВ
-# ------------------------------------
-
 func spawn_random_items() -> void:
 	var available_items := load_available_items()
 
@@ -191,15 +173,12 @@ func spawn_random_items() -> void:
 
 	var plan: Array[SpawnPlan] = []
 
-	# Несколько попыток найти расположение всех 6 предметов
 	for attempt in range(200):
 		var occupied: Dictionary = {}
 		var current_plan: Array[SpawnPlan] = []
 
 		for i in range(ITEM_COUNT):
 
-			# Каждый раз берём весь список:
-			# один и тот же предмет может выпасть повторно
 			var candidates: Array[GridInventoryItemData] = available_items.duplicate()
 			candidates.shuffle()
 
@@ -215,7 +194,6 @@ func spawn_random_items() -> void:
 
 				current_plan.append(SpawnPlan.new(item, origin))
 
-				# Резервируем прямоугольную область предмета
 				for dy in range(item.grid_size.y):
 					for dx in range(item.grid_size.x):
 						occupied[origin + Vector2i(dx, dy)] = true
@@ -234,16 +212,10 @@ func spawn_random_items() -> void:
 		push_error("Could not fit all 6 items on the field")
 		return
 
-	# Размещаем все предметы одновременно
 	for placement in plan:
 		place_item(placement.data, placement.origin)
 
 	print("Spawned items: ", hidden_items.size())
-
-
-# ------------------------------------
-# РАЗМЕЩЕНИЕ ПРЕДМЕТА
-# ------------------------------------
 
 func place_item(
 	item: GridInventoryItemData,
@@ -266,7 +238,6 @@ func place_item(
 	var end_pos: Vector2 = last_cell.position + last_cell.size
 	var item_size: Vector2 = end_pos - start_pos
 
-	# Создаём спрайт
 	var sprite := Sprite2D.new()
 
 	sprite.texture = item.get_texture()
@@ -278,13 +249,11 @@ func place_item(
 
 	field.add_child(sprite)
 
-	# Создаём независимый экземпляр предмета
 	var hidden := HiddenItem.new()
 
 	hidden.data = item
 	hidden.sprite = sprite
 
-	# Крепость 2 только у клеток формы предмета
 	for offset in item.occupied_cells:
 		var cell_pos: Vector2i = origin + offset
 		var index: int = cell_pos.y * columns + cell_pos.x
@@ -300,16 +269,10 @@ func place_item(
 
 	print("Spawned: ", item.display_name, " at ", origin)
 
-
-# ------------------------------------
-# КЛИК ПО КЛЕТКЕ
-# ------------------------------------
-
 func _on_cell_clicked(cell: FieldCell) -> void:
 	if game_over:
 		return
 
-	# Проверяем, принадлежит ли клетка предмету
 	var hidden: HiddenItem = cell_to_item.get(cell) as HiddenItem
 
 	if hidden != null:
@@ -318,22 +281,12 @@ func _on_cell_clicked(cell: FieldCell) -> void:
 
 	use_move()
 
-
-# ------------------------------------
-# ПРОВЕРКА ОТКРЫТИЯ ПРЕДМЕТА
-# ------------------------------------
-
 func is_item_revealed(hidden: HiddenItem) -> bool:
 	for cell in hidden.cells:
 		if cell.clicks_left > 0:
 			return false
 
 	return true
-
-
-# ------------------------------------
-# СБОР ПРЕДМЕТА
-# ------------------------------------
 
 func collect_item(hidden: HiddenItem) -> void:
 	if next_inventory_slot >= inventory_slots.size():
@@ -342,9 +295,8 @@ func collect_item(hidden: HiddenItem) -> void:
 
 	var slot: TextureRect = inventory_slots[next_inventory_slot]
 
-	# Иконка для нижнего инвентаря
-	var icon := TextureRect.new()
 
+	var icon := TextureRect.new()
 	icon.texture = hidden.data.get_texture()
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -357,16 +309,14 @@ func collect_item(hidden: HiddenItem) -> void:
 	collected_items.append(hidden.data)
 	next_inventory_slot += 1
 
-	# Убираем только собранный предмет
 	if is_instance_valid(hidden.sprite):
 		hidden.sprite.queue_free()
 
-	# Удаляем связи с его клетками
 	for cell in hidden.cells:
 		cell_to_item.erase(cell)
 
 	hidden_items.erase(hidden)
-	# Проверяем условие победы
+
 	if collected_items.size() >= ITEM_COUNT:
 		win_game()
 
@@ -379,15 +329,12 @@ func win_game() -> void:
 
 	game_over = true
 
-	# Останавливаем и обнуляем таймер
 	timer.stop()
 	timer_label.text = "00:00"
 
-	# Обнуляем оставшиеся ходы
 	moves_left = 0
 	update_moves_ui()
 
-	# Блокируем поле
 	for cell in field_cells:
 		cell.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
@@ -412,11 +359,6 @@ func update_moves_ui() -> void:
 	moves_label.text = "Moves: %d / %d" % [
 		moves_left, max_moves
 	]
-
-
-# ------------------------------------
-# КОНЕЦ ИГРЫ
-# ------------------------------------
 
 func end_game() -> void:
 	if game_over:

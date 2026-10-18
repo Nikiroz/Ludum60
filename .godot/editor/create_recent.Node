@@ -1,9 +1,11 @@
-Label
 HBoxContainer
-Timer
+MarginContainer
 TextureRect
+Control
+Panel
+Label
+Timer
 GridContainer
 HSlider
 VBoxContainer
-Control
 GPUParticles2D

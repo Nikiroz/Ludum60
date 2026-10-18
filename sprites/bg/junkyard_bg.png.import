@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://blipaivgjbt0y"
-path="res://.godot/imported/cursor-big.png-a29307b3dc4981b0fdff65109d53e48f.ctex"
+uid="uid://xeqo407pmt78"
+path="res://.godot/imported/junkyard_bg.png-0d88581ce022ffb373d28735215388a1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/cursors/cursor-big.png"
-dest_files=["res://.godot/imported/cursor-big.png-a29307b3dc4981b0fdff65109d53e48f.ctex"]
+source_file="res://sprites/bg/junkyard_bg.png"
+dest_files=["res://.godot/imported/junkyard_bg.png-0d88581ce022ffb373d28735215388a1.ctex"]
 
 [params]
 

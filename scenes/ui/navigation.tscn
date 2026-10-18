@@ -10,17 +10,17 @@ script = ExtResource("1_navigation")
 
 [node name="GarageButton" type="Button" parent="." unique_id=641333903]
 visible = false
-offset_left = 52.0
-offset_top = 151.0
-offset_right = 173.66666
-offset_bottom = 171.0
+offset_left = 92.0
+offset_top = 5.0
+offset_right = 213.66666
+offset_bottom = 25.0
 theme = ExtResource("3_theme")
 text = "garage"
 script = ExtResource("2_button")
 scene_path = "res://scenes/garage.tscn"
 
 [node name="ScrapyardButton" type="Button" parent="." unique_id=699005649]
-offset_left = 179.0
+offset_left = 224.66666
 offset_top = 151.0
 offset_right = 300.66666
 offset_bottom = 171.0
@@ -30,7 +30,7 @@ script = ExtResource("2_button")
 scene_path = "res://scenes/scrapyard.tscn"
 
 [node name="BattleButton" type="Button" parent="." unique_id=438984085]
-offset_left = 184.0
+offset_left = 254.0
 offset_top = 5.0
 offset_right = 305.66666
 offset_bottom = 25.0
@@ -38,6 +38,15 @@ theme = ExtResource("3_theme")
 text = "battle"
 script = ExtResource("2_button")
 scene_path = "res://scenes/battle.tscn"
+
+[node name="StarBattleButton" type="Button" parent="." unique_id=1838279503]
+visible = false
+offset_left = 105.0
+offset_top = 150.0
+offset_right = 204.0
+offset_bottom = 170.0
+theme = ExtResource("3_theme")
+text = "Start battle"
 
 [connection signal="pressed" from="GarageButton" to="GarageButton" method="_on_pressed"]
 [connection signal="pressed" from="ScrapyardButton" to="ScrapyardButton" method="_on_pressed"]
