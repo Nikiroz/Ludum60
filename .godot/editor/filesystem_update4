@@ -8,3 +8,8 @@ res://scripts/robot_sprite.gd
 res://scripts/controllers/controller_game.gd
 res://scripts/ui/transition.gd
 res://scripts/scrapyard.gd
+res://scripts/battle.gd
+res://scripts/battle_unit.gd
+res://scenes/ui/battle_unit_slot.tscn
+res://scripts/temporary_unit_generator.gd
+res://tests/test_battle.gd

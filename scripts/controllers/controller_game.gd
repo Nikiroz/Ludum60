@@ -5,6 +5,8 @@ const CURSOR_NORMAL: Texture2D = preload("res://sprites/cursors/cursor.png")
 var _navigation: CanvasLayer
 var _location := "garage"
 var _round_finished := false
+var _battle_in_progress := false
+var _gameplay_scene: Node
 
 var isMainMenu := true:
 	set(value):
@@ -20,17 +22,37 @@ func register_navigation(navigation: CanvasLayer, location: String) -> void:
 	_navigation = navigation
 	_location = location
 	_round_finished = false
+	_battle_in_progress = false
+	var start_button := navigation.get_node("StarBattleButton") as Button
+	if not start_button.pressed.is_connected(_on_start_battle_pressed):
+		start_button.pressed.connect(_on_start_battle_pressed)
 	_update_navigation_visibility()
 
 func set_gameplay_scene(scene: Node) -> void:
+	_gameplay_scene = scene
 	_location = scene.scene_file_path.get_file().get_basename()
 	_round_finished = false
+	_battle_in_progress = false
 	if scene.has_signal("round_finished"):
 		scene.connect("round_finished", _on_round_finished)
+	if scene.has_signal("battle_started"):
+		scene.connect("battle_started", _on_battle_started)
+	_update_navigation_visibility()
+
+func _on_start_battle_pressed() -> void:
+	if _location != "battle" or not is_instance_valid(_gameplay_scene):
+		return
+	if _gameplay_scene.has_method("start_battle"):
+		if _gameplay_scene.start_battle():
+			play_one_shot(preload("res://sounds/click.wav"))
+
+func _on_battle_started() -> void:
+	_battle_in_progress = true
 	_update_navigation_visibility()
 
 func _on_round_finished() -> void:
 	_round_finished = true
+	_battle_in_progress = false
 	_update_navigation_visibility()
 
 func _update_navigation_visibility() -> void:
@@ -40,7 +62,9 @@ func _update_navigation_visibility() -> void:
 	_navigation.get_node("GarageButton").visible = _location == "battle" or _round_finished
 	_navigation.get_node("ScrapyardButton").visible = _location == "garage" and not _round_finished
 	_navigation.get_node("BattleButton").visible = _location == "garage" and not _round_finished
-	_navigation.get_node("StarBattleButton").visible = _location == "battle"
+	_navigation.get_node("StarBattleButton").visible = (
+		_location == "battle" and not _battle_in_progress and not _round_finished
+	)
 
 func set_drag_cursor(dragging: bool) -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN if dragging else Input.MOUSE_MODE_VISIBLE

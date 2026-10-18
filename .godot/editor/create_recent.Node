@@ -1,6 +1,6 @@
-HBoxContainer
-MarginContainer
 TextureRect
+MarginContainer
+HBoxContainer
 Control
 Panel
 Label

@@ -92,6 +92,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(266, 51.5)
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 7
 theme_override_constants/margin_right = 6

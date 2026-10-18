@@ -2,20 +2,47 @@
 class_name DraggableSlot
 extends Control
 
+const BossUnitData = preload("res://scripts/boss_unit.gd")
+const EMPTY_SLOT_SPRITE: Texture2D = preload("res://sprites/robots/dummy_blank.png")
+
+var dragging_enabled := true:
+	set(value):
+		dragging_enabled = value
+		if not value and active_slot == self:
+			_clear_drag()
+
 @export_group("Animation")
 @export_range(0.05, 0.5, 0.01)
 var shift_duration: float = 0.2
+@export var attack_distance: float = 6.0
+@export var attack_dash_duration: float = 0.06
+@export var attack_return_duration: float = 0.14
+@export var hit_shake_distance: float = 1.5
+@export var hit_shake_duration: float = 0.18
 
 @export_group("Cursors")
 @export var cursor_drag: Texture2D = preload("res://sprites/cursors/cursor_drag.png")
 @export var cursor_hotspot := Vector2.ZERO
 
-@onready var icon: TextureRect = $Icon
+@onready var _combat_motion: Control = $CombatMotion
+@onready var icon: TextureRect = $CombatMotion/Icon
+@onready var debug_stats: Label = $CombatMotion/Icon/DebugStats
+@onready var target_arrow: TextureRect = $TargetArrow
+
+var unit: BattleUnit:
+	set(value):
+		if unit != value:
+			_reset_combat_animation()
+		unit = value
+		if is_instance_valid(icon):
+			icon.texture = unit.sprite if unit != null else EMPTY_SLOT_SPRITE
+		_update_debug_stats()
 
 static var active_slot: DraggableSlot = null
 
 var _preview_layer: CanvasLayer
 var _preview: TextureRect
+var _preview_debug_stats: Label
 var _drag_cursor: TextureRect
 
 var _original_index: int
@@ -23,6 +50,18 @@ var _saved_alpha: float
 
 var _shift_tween: Tween
 var _waiting_for_sort := false
+var _attack_tween: Tween
+var _attack_duration := 0.0
+var _hit_tween: Tween
+var _pending_hit_tweens: Dictionary[int, Tween] = {}
+var _attack_offset := Vector2.ZERO:
+	set(value):
+		_attack_offset = value
+		_update_combat_motion()
+var _hit_offset := Vector2.ZERO:
+	set(value):
+		_hit_offset = value
+		_update_combat_motion()
 
 
 func _ready() -> void:
@@ -30,10 +69,34 @@ func _ready() -> void:
 	mouse_default_cursor_shape = Control.CURSOR_ARROW
 
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.texture = unit.sprite if unit != null else EMPTY_SLOT_SPRITE
 
-	set_process(false)
+	_update_debug_stats()
+
+
+func _update_debug_stats() -> void:
+	if not is_instance_valid(debug_stats):
+		return
+
+	debug_stats.visible = unit != null and active_slot != self
+	if unit == null:
+		return
+
+	var stats_text := "Жизни:%.0f\nАтк/с:%.2f\nУрон:%.0f\nКрит:%.0f%%" % [
+		unit.health, unit.attack_speed, unit.damage, unit.crit_chance * 100.0
+	]
+	if unit is BossUnitData:
+		var targets: PackedStringArray = []
+		for slot_number in unit.attack_sequence:
+			targets.append(str(slot_number))
+		stats_text += "\nЦели:" + " ".join(targets)
+	debug_stats.text = stats_text
+	if is_instance_valid(_preview_debug_stats):
+		_preview_debug_stats.text = stats_text
 
 func _gui_input(event: InputEvent) -> void:
+	if not dragging_enabled or unit == null:
+		return
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if active_slot == null:
@@ -41,9 +104,10 @@ func _gui_input(event: InputEvent) -> void:
 				accept_event()
 
 func _start_drag() -> void:
-	if not get_parent() is HBoxContainer:
+	if not dragging_enabled or unit == null or not get_parent() is HBoxContainer:
 		return
 
+	_reset_combat_animation()
 	active_slot = self
 	_original_index = get_index()
 	_saved_alpha = icon.self_modulate.a
@@ -67,6 +131,11 @@ func _start_drag() -> void:
 
 	_preview_layer.add_child(_preview)
 
+	_preview_debug_stats = debug_stats.duplicate() as Label
+	_preview.add_child(_preview_debug_stats)
+	_preview_debug_stats.show()
+	debug_stats.hide()
+
 	_drag_cursor = TextureRect.new()
 	_drag_cursor.texture = cursor_drag
 	_drag_cursor.size = cursor_drag.get_size()
@@ -82,6 +151,7 @@ func _start_drag() -> void:
 	_update_preview()
 
 func _process(_delta: float) -> void:
+	_update_debug_stats()
 	if active_slot != self:
 		return
 
@@ -99,7 +169,7 @@ func _update_preview() -> void:
 		_drag_cursor.position = mouse_pos - cursor_hotspot
 
 func _update_reorder() -> void:
-	if _waiting_for_sort:
+	if not dragging_enabled or _waiting_for_sort:
 		return
 
 	var row: HBoxContainer = get_parent() as HBoxContainer
@@ -130,7 +200,7 @@ func _update_reorder() -> void:
 func _animate_reorder(new_index: int) -> void:
 	var row: HBoxContainer = get_parent() as HBoxContainer
 
-	if row == null or _waiting_for_sort:
+	if not dragging_enabled or row == null or _waiting_for_sort:
 		return
 
 	_waiting_for_sort = true
@@ -200,8 +270,6 @@ func _finish_drag() -> void:
 	_clear_drag()
 
 func _clear_drag() -> void:
-	set_process(false)
-
 	icon.self_modulate.a = _saved_alpha
 
 	if is_instance_valid(_preview_layer):
@@ -209,12 +277,96 @@ func _clear_drag() -> void:
 
 	_preview_layer = null
 	_preview = null
+	_preview_debug_stats = null
 
 	active_slot = null
+	_update_debug_stats()
 
 	ControllerGame.set_drag_cursor(false)
 	_drag_cursor = null
 
 func _exit_tree() -> void:
+	_reset_combat_animation()
 	if active_slot == self:
 		_clear_drag()
+
+
+func set_targeted(targeted: bool) -> void:
+	target_arrow.visible = targeted
+
+
+func play_attack(direction: Vector2, start_delay: float = 0.0) -> float:
+	if unit == null:
+		return 0.0
+	# Добавляем каждый удар в очередь, включая несколько атак за один тик.
+	if not _attack_tween or not _attack_tween.is_valid():
+		_attack_tween = create_tween()
+		_attack_duration = maxf(start_delay, 0.0)
+		if _attack_duration > 0.0:
+			_attack_tween.tween_interval(_attack_duration)
+	var impact_delay := maxf(_attack_duration - _attack_tween.get_total_elapsed_time(), 0.0) + attack_dash_duration
+	_attack_tween.tween_property(
+		self, "_attack_offset", direction.normalized() * attack_distance, attack_dash_duration
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_attack_tween.tween_property(
+		self, "_attack_offset", Vector2.ZERO, attack_return_duration
+	).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_attack_duration += attack_dash_duration + attack_return_duration
+	return impact_delay
+
+
+func play_hit(start_delay: float = 0.0) -> void:
+	if unit == null:
+		return
+	if start_delay <= 0.0:
+		_start_hit_shake()
+		return
+
+	var pending_hit := create_tween()
+	var pending_id := pending_hit.get_instance_id()
+	_pending_hit_tweens[pending_id] = pending_hit
+	pending_hit.tween_interval(start_delay)
+	pending_hit.tween_callback(_start_delayed_hit.bind(pending_id))
+
+
+func _start_delayed_hit(pending_id: int) -> void:
+	_pending_hit_tweens.erase(pending_id)
+	_start_hit_shake()
+
+
+func _start_hit_shake() -> void:
+	if unit == null:
+		return
+	if _hit_tween and _hit_tween.is_valid():
+		_hit_tween.kill()
+	_hit_offset = Vector2.ZERO
+	_hit_tween = create_tween()
+	var offsets: Array[Vector2] = [
+		Vector2(1.0, 0.0), Vector2(-1.0, 0.5),
+		Vector2(0.7, -0.5), Vector2(-0.4, 0.0), Vector2.ZERO,
+	]
+	for offset in offsets:
+		_hit_tween.tween_property(
+			self, "_hit_offset", offset * hit_shake_distance, hit_shake_duration / offsets.size()
+		)
+
+
+func _update_combat_motion() -> void:
+	if is_instance_valid(_combat_motion):
+		_combat_motion.position = _attack_offset + _hit_offset
+
+
+func _reset_combat_animation() -> void:
+	if _attack_tween and _attack_tween.is_valid():
+		_attack_tween.kill()
+	if _hit_tween and _hit_tween.is_valid():
+		_hit_tween.kill()
+	for pending_hit in _pending_hit_tweens.values():
+		if pending_hit.is_valid():
+			pending_hit.kill()
+	_pending_hit_tweens.clear()
+	_attack_tween = null
+	_attack_duration = 0.0
+	_hit_tween = null
+	_attack_offset = Vector2.ZERO
+	_hit_offset = Vector2.ZERO

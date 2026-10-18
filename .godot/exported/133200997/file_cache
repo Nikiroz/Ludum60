@@ -1,8 +1,8 @@
 res://scenes/ui/navigation.tscn::cece2084394767436418c780fa433e7f::1792319039::res://.godot/exported/133200997/export-6e3c8592700cfb565f1a06440e6e9ad9-navigation.scn
 res://scenes/garage.tscn::e09ea260fde410494a01e69199b5afa4::1792259734::res://.godot/exported/133200997/export-82599acbac3df1c1d35c134ae54e2f0b-garage.scn
 res://scenes/main.tscn::40eadce27781bedfdca6e9dd386b92c1::1792259283::res://.godot/exported/133200997/export-3ad5c15c4f3250da0cc7c1af1770d85f-main.scn
-res://scenes/battle.tscn::69d20fbb13d0131324a42764dcb45d7b::1792328547::res://.godot/exported/133200997/export-d05c42cb8fa14c775531fe94d95302c2-battle.scn
-res://scenes/scrapyard.tscn::d56bcbb724e836a9aa95af1d1395eadd::1792335454::res://.godot/exported/133200997/export-85c9642a497db23249685e0d62886f68-scrapyard.scn
+res://scenes/battle.tscn::6fb89f21ca41d779240c0939fb0dc5bb::1792347313::res://.godot/exported/133200997/export-d05c42cb8fa14c775531fe94d95302c2-battle.scn
+res://scenes/scrapyard.tscn::bf0f443855229c5913b0e6e2aedc3e3a::1792340579::res://.godot/exported/133200997/export-85c9642a497db23249685e0d62886f68-scrapyard.scn
 res://styles/buttons.tres::674337efccdc4b80bf9e28a81f88eb56::1792308451::res://.godot/exported/133200997/export-fb92b6793c6aef28e8c86330ca821227-buttons.res
 res://styles/main_buttons.tres::b961a9d74b5011ef5ec854d410c0aeea::1792308451::res://.godot/exported/133200997/export-624e6b4e39445066b2bea9bf32469a2a-main_buttons.res
 res://styles/menu_title.tres::59e585a9366c22493d8ee4dfaac7344e::1790871759::res://.godot/exported/133200997/export-edd7b1abb8db18d3053363d89eb26e9a-menu_title.res
@@ -13,3 +13,4 @@ res://scenes/ui/main_menu.tscn::a06f089f654bed5606808aff5c517957::1792246869::re
 res://scenes/ui/settings.tscn::d2854920bd2d804a661200b9bd1d11db::1792244692::res://.godot/exported/133200997/export-596a9cfaa26328034797ad673fabaff8-settings.scn
 res://scenes/ui/transition.tscn::a98f91ee68e2c46a9b75faf3ad6c0aa2::1792247052::res://.godot/exported/133200997/export-bd572d93f5eebdcb57391a6b42ed971b-transition.scn
 res://scenes/ui/warning.tscn::d92a784929788494bf8b51039a731158::1792243719::res://.godot/exported/133200997/export-2c914b89b013cc99b64580d288d7b2a4-warning.scn
+res://scenes/ui/battle_unit_slot.tscn::2833fb91b14877f4648cbaa41339fa6d::1792348155::res://.godot/exported/133200997/export-dcc20908b7c6fa826d4721d33cdffc37-battle_unit_slot.scn

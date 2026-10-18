@@ -1,11 +1,7 @@
 [gd_scene format=3 uid="uid://cywpr57l471rg"]
 
+[ext_resource type="Script" uid="uid://cllj5g7p1yn1y" path="res://scripts/battle.gd" id="1_4k1nj"]
 [ext_resource type="Texture2D" uid="uid://da2td6l45ivd6" path="res://sprites/mocup/2026-10-18 09.11.53.jpg" id="1_dn72j"]
-[ext_resource type="Texture2D" uid="uid://bds6hbp34nt7n" path="res://sprites/robots/dummy1.png" id="2_6vh42"]
-[ext_resource type="Script" uid="uid://vjge3cefphbj" path="res://scripts/robot_sprite.gd" id="3_a12nh"]
-[ext_resource type="Texture2D" uid="uid://xb4yhglq0xcy" path="res://sprites/robots/dummy2.png" id="4_4k1nj"]
-[ext_resource type="Texture2D" uid="uid://pr1sn1cif7me" path="res://sprites/robots/dummy3.png" id="5_f4pi3"]
-[ext_resource type="Texture2D" uid="uid://rcbgsfifxsxn" path="res://sprites/robots/dummy4.png" id="6_yahae"]
 
 [node name="Battle" type="Control" unique_id=342407584]
 layout_mode = 3
@@ -14,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_4k1nj")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1066564817]
 position = Vector2(128, 130)
@@ -34,70 +31,20 @@ theme_override_constants/margin_left = 15
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=181266065]
 layout_mode = 2
 
-[node name="Slot1" type="Control" parent="MarginContainer/HBoxContainer" unique_id=1001129167]
-custom_minimum_size = Vector2(36, 60)
-layout_mode = 2
-script = ExtResource("3_a12nh")
-
-[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer/Slot1" unique_id=162723501]
+[node name="MarginContainer2" type="MarginContainer" parent="." unique_id=630180953]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
 grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-mouse_filter = 2
-texture = ExtResource("2_6vh42")
+pivot_offset = Vector2(-173, 28)
+theme_override_constants/margin_right = 50
 
-[node name="Slot2" type="Control" parent="MarginContainer/HBoxContainer" unique_id=63375855]
-custom_minimum_size = Vector2(36, 60)
-layout_mode = 2
-script = ExtResource("3_a12nh")
-
-[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer/Slot2" unique_id=134450909]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-mouse_filter = 2
-texture = ExtResource("4_4k1nj")
-
-[node name="Slot3" type="Control" parent="MarginContainer/HBoxContainer" unique_id=5827557]
-custom_minimum_size = Vector2(36, 60)
-layout_mode = 2
-script = ExtResource("3_a12nh")
-
-[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer/Slot3" unique_id=868437345]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-mouse_filter = 2
-texture = ExtResource("5_f4pi3")
-
-[node name="Slot4" type="Control" parent="MarginContainer/HBoxContainer" unique_id=28599416]
-custom_minimum_size = Vector2(36, 60)
-layout_mode = 2
-script = ExtResource("3_a12nh")
-
-[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer/Slot4" unique_id=1125497536]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-mouse_filter = 2
-texture = ExtResource("6_yahae")
+[node name="BattleTimer" type="Timer" parent="."]
+wait_time = 1.0
