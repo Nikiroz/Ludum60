@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dgopqhqch8r0o"
+path="res://.godot/imported/FIND DETAIL.ogg-840ba60ac0fae502051dd39eb2dd511f.oggvorbisstr"
+
+[deps]
+
+source_file="res://sounds/SFX 1/FIND DETAIL.ogg"
+dest_files=["res://.godot/imported/FIND DETAIL.ogg-840ba60ac0fae502051dd39eb2dd511f.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

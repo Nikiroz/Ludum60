@@ -150,6 +150,7 @@ grow_vertical = 2
 theme = SubResource("Theme_oa1go")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer2" unique_id=17319768]
+visible = false
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Panel/VBoxContainer2/HBoxContainer" unique_id=1589731084]

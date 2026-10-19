@@ -22,3 +22,7 @@ res://scripts/battle_unit.gd
 res://scripts/battle.gd
 res://scripts/garage.gd
 res://tests/test_unit_pool.gd
+res://scenes/ui/navigation.tscn
+res://scripts/ui/ui_scene_button.gd
+res://tests/test_game_progress.gd
+res://tests/test_equipment.gd

@@ -1,58 +1,7 @@
-[gd_scene format=3 uid="uid://br13egudkrioi"]
+[gd_scene format=3 uid="uid://nh1qtevyqw30"]
 
-[ext_resource type="Script" uid="uid://br01vd4y0a3jr" path="res://scripts/ui/navigation.gd" id="1_navigation"]
-[ext_resource type="Script" uid="uid://d2k5m0cpjhw1u" path="res://scripts/ui/ui_scene_button.gd" id="2_button"]
-[ext_resource type="Theme" uid="uid://dusbxqn3cho4s" path="res://styles/buttons.tres" id="3_theme"]
+[ext_resource type="Script" path="res://scripts/ui/navigation.gd" id="1_navigation"]
 
 [node name="Navigation" type="CanvasLayer" unique_id=889696910]
 layer = 10
 script = ExtResource("1_navigation")
-
-[node name="GarageButton" type="Button" parent="." unique_id=641333903]
-offset_left = 300.0
-offset_top = 115.88446
-offset_right = 367.22516
-offset_bottom = 135.88446
-rotation = -1.5707964
-theme = ExtResource("3_theme")
-text = "garage"
-script = ExtResource("2_button")
-scene_path = "res://scenes/garage.tscn"
-
-[node name="ScrapyardButton" type="Button" parent="." unique_id=699005649]
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 20.0
-offset_top = -45.0
-offset_right = 110.681404
-offset_bottom = -25.0
-grow_vertical = 2
-rotation = 1.5707964
-theme = ExtResource("3_theme")
-text = "scrapyard"
-script = ExtResource("2_button")
-scene_path = "res://scenes/scrapyard.tscn"
-
-[node name="BattleButton" type="Button" parent="." unique_id=438984085]
-offset_left = 232.0
-offset_top = 150.0
-offset_right = 298.66666
-offset_bottom = 170.0
-theme = ExtResource("3_theme")
-text = "battle"
-script = ExtResource("2_button")
-scene_path = "res://scenes/battle.tscn"
-
-[node name="StarBattleButton" type="Button" parent="." unique_id=1838279503]
-visible = false
-offset_left = 105.0
-offset_top = 150.0
-offset_right = 204.0
-offset_bottom = 170.0
-theme = ExtResource("3_theme")
-text = "Start battle"
-
-[connection signal="pressed" from="GarageButton" to="GarageButton" method="_on_pressed"]
-[connection signal="pressed" from="ScrapyardButton" to="ScrapyardButton" method="_on_pressed"]
-[connection signal="pressed" from="BattleButton" to="BattleButton" method="_on_pressed"]

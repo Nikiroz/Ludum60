@@ -1,8 +1,8 @@
-res://scenes/ui/navigation.tscn::fd8780edfb123a5d998fd25d25dbfacd::1792357999::res://.godot/exported/133200997/export-6e3c8592700cfb565f1a06440e6e9ad9-navigation.scn
-res://scenes/garage.tscn::f02fa8559d79b72ac3bc8bbc91e04939::1792426395::res://.godot/exported/133200997/export-82599acbac3df1c1d35c134ae54e2f0b-garage.scn
-res://scenes/main.tscn::468d460a017ea5d6772da90911e3bdf4::1792408397::res://.godot/exported/133200997/export-3ad5c15c4f3250da0cc7c1af1770d85f-main.scn
-res://scenes/battle.tscn::5fc452d786485099f3625475ad908fec::1792403289::res://.godot/exported/133200997/export-d05c42cb8fa14c775531fe94d95302c2-battle.scn
-res://scenes/scrapyard.tscn::63f470840f7a8c9e3a5666e9cb17dd86::1792418845::res://.godot/exported/133200997/export-85c9642a497db23249685e0d62886f68-scrapyard.scn
+res://scenes/ui/navigation.tscn::58d4522fc2cdfe6a7aff1e8b6b1b8b3d::1792432163::res://.godot/exported/133200997/export-6e3c8592700cfb565f1a06440e6e9ad9-navigation.scn
+res://scenes/garage.tscn::8fd9138e31d141aaecfacf70dc494354::1792431591::res://.godot/exported/133200997/export-82599acbac3df1c1d35c134ae54e2f0b-garage.scn
+res://scenes/main.tscn::a3143bbf273fa89a66e30f10fb1fabd4::1792431918::res://.godot/exported/133200997/export-3ad5c15c4f3250da0cc7c1af1770d85f-main.scn
+res://scenes/battle.tscn::ee73ba44a8a6e5430876d20b24594125::1792432253::res://.godot/exported/133200997/export-d05c42cb8fa14c775531fe94d95302c2-battle.scn
+res://scenes/scrapyard.tscn::a0aa67ce7c8e8f5f2a48d4eecca5b861::1792431591::res://.godot/exported/133200997/export-85c9642a497db23249685e0d62886f68-scrapyard.scn
 res://styles/buttons.tres::674337efccdc4b80bf9e28a81f88eb56::1792396913::res://.godot/exported/133200997/export-fb92b6793c6aef28e8c86330ca821227-buttons.res
 res://styles/main_buttons.tres::b961a9d74b5011ef5ec854d410c0aeea::1792408489::res://.godot/exported/133200997/export-624e6b4e39445066b2bea9bf32469a2a-main_buttons.res
 res://styles/menu_title.tres::59e585a9366c22493d8ee4dfaac7344e::1790871759::res://.godot/exported/133200997/export-edd7b1abb8db18d3053363d89eb26e9a-menu_title.res
@@ -33,3 +33,4 @@ res://item_pack/items/head_router.tres::19ca7fe58a9b864fa2bdf3c8cf495454::179240
 res://item_pack/items/leg_bathtub.tres::4baa73b63684277f7a2a6e702ac39f6a::1792406346::res://.godot/exported/133200997/export-974a2b07c9176040267ff5f83db9194a-leg_bathtub.res
 res://item_pack/items/leg_mono.tres::65d65a98fc1c682c5c113b31968f940e::1792406346::res://.godot/exported/133200997/export-100b8f5dfb1812886143815f6552b9f5-leg_mono.res
 res://styles/scroll.tres::4f8f3ea8a49fb4656ba2e47d28f52bf6::1792417323::res://.godot/exported/133200997/export-56c8bd5c9aa36f53086d6d38b1488787-scroll.res
+res://item_pack/items/hand_hairdryer.tres::cfbaef41bd7e0d58f97d506946766539::1792430135::res://.godot/exported/133200997/export-24ef96e9a9df06c0272c08742a954694-hand_hairdryer.res

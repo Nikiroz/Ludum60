@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://c1vymuny1ujth"
+path="res://.godot/imported/TRASH-004.ogg-29e42c5defe7eb440948cb32a6fbbd1e.oggvorbisstr"
+
+[deps]
+
+source_file="res://sounds/SFX 1/TRASH-004.ogg"
+dest_files=["res://.godot/imported/TRASH-004.ogg-29e42c5defe7eb440948cb32a6fbbd1e.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

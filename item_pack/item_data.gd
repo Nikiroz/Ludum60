@@ -5,6 +5,8 @@ extends Resource
 
 @export var item_id: String = ""
 @export var display_name: String = ""
+## Built-in equipment: excluded from scrapyard loot and discarded when replaced.
+@export var is_service_item: bool = false
 ## String path keeps the exported asset independent of the editor's texture-import state.
 ## Example: res://item_pack/sprites/iron_sword.png
 @export_file("*.png") var sprite_path: String = ""

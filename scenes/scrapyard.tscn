@@ -9,6 +9,8 @@
 [ext_resource type="Script" uid="uid://e1dwdqoh0r6k" path="res://scripts/ui/ui_cell.gd" id="5_ymbfr"]
 [ext_resource type="Texture2D" uid="uid://buuvk53bhts6x" path="res://sprites/bg/items_bar.png" id="6_qxv53"]
 [ext_resource type="Texture2D" uid="uid://ppmpnnh57xcj" path="res://sprites/bg/border.png" id="6_suqf5"]
+[ext_resource type="Theme" uid="uid://dusbxqn3cho4s" path="res://styles/buttons.tres" id="10_wubbp"]
+[ext_resource type="Script" uid="uid://d2k5m0cpjhw1u" path="res://scripts/ui/ui_scene_button.gd" id="11_5o808"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_suqf5"]
 bg_color = Color(0.18431373, 0.28235295, 0.36862746, 1)
@@ -1046,3 +1048,25 @@ layout_mode = 2
 [node name="TextureRect8" type="TextureRect" parent="VBoxContainer/BottomPanel/Items" unique_id=1182361674]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
+
+[node name="GarageButton" type="Button" parent="." unique_id=920782873]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 23.0
+offset_right = 47.22516
+offset_bottom = 43.0
+grow_horizontal = 0
+grow_vertical = 2
+rotation = -1.5707964
+theme = ExtResource("10_wubbp")
+text = "garage"
+script = ExtResource("11_5o808")
+scene_path = "res://scenes/garage.tscn"
+show_after_round_finished = true
+
+[connection signal="pressed" from="GarageButton" to="GarageButton" method="_on_pressed"]

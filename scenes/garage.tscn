@@ -8,10 +8,11 @@
 [ext_resource type="Theme" uid="uid://cx7xm3yx6xpow" path="res://styles/scroll.tres" id="7_v0fcm"]
 [ext_resource type="Texture2D" uid="uid://cxhgbsvyfea52" path="res://sprites/ui/garage/stats.png" id="8_47l8i"]
 [ext_resource type="Texture2D" uid="uid://66r16n1bi1a5" path="res://sprites/ui/garage/battle_button.png" id="9_oyih7"]
-[ext_resource type="Script" uid="uid://mdymk87qlj2m" path="res://scripts/ui/ui_button.gd" id="10_8ish0"]
 [ext_resource type="Script" uid="uid://ckg3p5xnsmbve" path="res://scripts/ui/inventory_grid.gd" id="10_inventory"]
 [ext_resource type="Script" uid="uid://cefdxqlr7hx15" path="res://scripts/ui/side_tabs.gd" id="11_side_tabs"]
 [ext_resource type="Script" uid="uid://cce4052u4yygb" path="res://scripts/ui/robot_equipment_drop.gd" id="12_equipment_drop"]
+[ext_resource type="Theme" uid="uid://dusbxqn3cho4s" path="res://styles/buttons.tres" id="13_spycl"]
+[ext_resource type="Script" uid="uid://d2k5m0cpjhw1u" path="res://scripts/ui/ui_scene_button.gd" id="14_nulr8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d8qye"]
 content_margin_left = 0.0
@@ -181,19 +182,19 @@ layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 4
 
-[node name="LeftHandButton" type="TextureButton" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabButtons" unique_id=1062727773]
+[node name="Robot1" type="TextureButton" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabButtons" unique_id=1062727773]
 layout_mode = 2
 tooltip_text = "Robot 1"
 toggle_mode = true
 texture_normal = ExtResource("2_gnlqp")
 
-[node name="RightHandButton" type="TextureButton" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabButtons" unique_id=767822516]
+[node name="Robot2" type="TextureButton" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabButtons" unique_id=767822516]
 layout_mode = 2
 tooltip_text = "Robot 2"
 toggle_mode = true
 texture_normal = ExtResource("2_gnlqp")
 
-[node name="FeetButton" type="TextureButton" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabButtons" unique_id=587732376]
+[node name="Robot3" type="TextureButton" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabButtons" unique_id=587732376]
 layout_mode = 2
 tooltip_text = "Robot 3"
 toggle_mode = true
@@ -204,6 +205,7 @@ custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 8
+text = "Wally"
 alignment = 1
 
 [node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer" unique_id=1839725025]
@@ -276,8 +278,27 @@ horizontal_alignment = 1
 vertical_alignment = 1
 clip_text = true
 
-[node name="UIButton" type="Button" parent="VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1325151344]
+[node name="BattleButton" type="Button" parent="VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1325151344]
 layout_mode = 2
 icon = ExtResource("9_oyih7")
-script = ExtResource("10_8ish0")
-metadata/_custom_type_script = "uid://mdymk87qlj2m"
+script = ExtResource("14_nulr8")
+scene_path = "res://scenes/battle.tscn"
+
+[node name="ScrapyardButton" type="Button" parent="." unique_id=1273339278]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 20.0
+offset_top = -45.0
+offset_right = 110.681404
+offset_bottom = -25.0
+grow_vertical = 2
+rotation = 1.5707964
+theme = ExtResource("13_spycl")
+text = "scrapyard"
+script = ExtResource("14_nulr8")
+scene_path = "res://scenes/scrapyard.tscn"
+
+[connection signal="pressed" from="VBoxContainer/MarginContainer2/HBoxContainer/BattleButton" to="VBoxContainer/MarginContainer2/HBoxContainer/BattleButton" method="_on_pressed"]
+[connection signal="pressed" from="ScrapyardButton" to="ScrapyardButton" method="_on_pressed"]

@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bpb1s3t6lape4"
+path="res://.godot/imported/UI CLICK-003.ogg-06b1c3c68f61f42abad3de47724cf84d.oggvorbisstr"
+
+[deps]
+
+source_file="res://sounds/SFX 1/UI CLICK-003.ogg"
+dest_files=["res://.godot/imported/UI CLICK-003.ogg-06b1c3c68f61f42abad3de47724cf84d.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

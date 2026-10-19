@@ -93,6 +93,17 @@ func _run() -> void:
 	await _open_garage()
 	var first: BattleUnit = _controller.units[0]
 	var second: BattleUnit = _controller.units[1]
+	var basic_torso: GridInventoryItemData = first.equipment.get(&"torso")
+	var basic_legs: GridInventoryItemData = first.equipment.get(&"legs")
+	for unit in _controller.units:
+		var torso_item: GridInventoryItemData = unit.equipment.get(&"torso")
+		var legs_item: GridInventoryItemData = unit.equipment.get(&"legs")
+		_expect(torso_item != null and torso_item.item_id == "base_basic", "Starting robot is missing its basic torso")
+		_expect(legs_item != null and legs_item.item_id == "leg_basic", "Starting robot is missing its basic legs")
+		_expect(unit.equipment.size() == 2, "Starting robot has unexpected equipment")
+	_expect(basic_torso != second.equipment.get(&"torso") and basic_legs != second.equipment.get(&"legs"), "Robots share their basic equipment instances")
+	_expect(_controller.collected_items.is_empty() and _grid.items.is_empty(), "Basic equipment appeared in starting inventory")
+	_stats(first, 1, 1, 1, 0)
 
 	var head := _give("head_lamp", 10, 2, 3, 0.1)
 	await _drag(head)
@@ -110,6 +121,9 @@ func _run() -> void:
 
 	var torso := _give("base_fridge", 100, 0, 0, 0)
 	await _drag(torso)
+	_expect(first.equipment.get(&"torso") == torso, "Normal torso did not replace the basic torso")
+	_expect(not _controller.collected_items.has(basic_torso) and not _grid.items.has(basic_torso), "Replaced basic torso returned to inventory")
+	_expect(not _controller.inventory_positions.has(basic_torso), "Replaced basic torso occupies inventory cells")
 	_stats(first, 121, 5, 6, 0.2)
 	var replacement_torso := _give("base_printer", 50, 1, 2, 0)
 	await _drag(replacement_torso)
@@ -117,6 +131,10 @@ func _run() -> void:
 	_stats(first, 71, 6, 8, 0.2)
 	var legs := _give("leg_bicycle", 5, 2, 3, 0.05)
 	await _drag(legs)
+	_expect(first.equipment.get(&"legs") == legs, "Normal legs did not replace the basic legs")
+	_expect(not _controller.collected_items.has(basic_legs) and not _grid.items.has(basic_legs), "Replaced basic legs returned to inventory")
+	_expect(not _controller.inventory_positions.has(basic_legs), "Replaced basic legs occupy inventory cells")
+	_expect(second.equipment.get(&"torso") != null and second.equipment.get(&"legs") != null, "Replacing basic equipment changed another robot")
 	_stats(first, 76, 8, 11, 0.25)
 	var replacement_legs := _give("leg_bathtub", 8, -1, 0, 0)
 	await _drag(replacement_legs)
@@ -168,6 +186,7 @@ func _run() -> void:
 	battle.free()
 	_viewport.free()
 	_controller.reset_progress()
+	_expect(_controller.units[0].equipment.get(&"torso") != basic_torso and _controller.units[0].equipment.get(&"legs") != basic_legs, "New game reused basic equipment from the previous game")
 	await process_frame
 	if not _failed:
 		print("Equipment tests passed: %d checks." % _checks)

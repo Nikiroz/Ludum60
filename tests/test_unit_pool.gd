@@ -29,7 +29,7 @@ func _run() -> void:
 	var sprites: Array[Texture2D] = []
 	for unit in original_units:
 		_expect(unit.health == 1.0 and unit.attack_speed == 1.0 and unit.damage == 1.0 and unit.crit_chance == 0.0, "Starting unit has incorrect stats")
-		_expect(unit.name in ["биба", "боба", "абоба"], "Starting unit lost its random name")
+		_expect(unit.name in ["Wally", "Mike", "Cost"], "Starting unit lost its random name")
 		_expect(unit.sprite != null and not sprites.has(unit.sprite), "Starting robot sprites are missing or repeated")
 		sprites.append(unit.sprite)
 	await create_timer(1.0).timeout

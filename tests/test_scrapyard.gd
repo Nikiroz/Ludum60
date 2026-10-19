@@ -21,6 +21,18 @@ func _item(width: int = 1) -> GridInventoryItemData:
 
 func _run() -> void:
 	seed(12345)
+	var real_yard = load("res://scripts/scrapyard.gd").new()
+	real_yard.field = GridContainer.new()
+	real_yard.field.columns = 8
+	real_yard.field_cells.resize(64)
+	var loot: Array[GridInventoryItemData] = real_yard.load_available_items()
+	var catalog = load("res://scripts/item_catalog.gd")
+	_expect(loot.size() == catalog.get_item_paths().size() - 2, "Scrapyard loot did not exclude exactly the two basic items")
+	for item in loot:
+		_expect(item.item_id != "base_basic" and item.item_id != "leg_basic", "Basic equipment can spawn in the scrapyard")
+	real_yard.field.free()
+	real_yard.free()
+
 	var yard = load("res://tests/fixtures/scrapyard.gd").new()
 	yard.field = GridContainer.new()
 	yard.field.columns = 8

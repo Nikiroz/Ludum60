@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bhq8ccl20c2u3"
+path="res://.godot/imported/UI CLICK accept.ogg-7baf6be4e4c81ede4ab5a9c7219d9e78.oggvorbisstr"
+
+[deps]
+
+source_file="res://sounds/SFX 1/UI CLICK accept.ogg"
+dest_files=["res://.godot/imported/UI CLICK accept.ogg-7baf6be4e4c81ede4ab5a9c7219d9e78.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

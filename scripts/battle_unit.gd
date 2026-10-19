@@ -1,7 +1,9 @@
 class_name BattleUnit
 extends RefCounted
 
-const UNIT_NAMES: Array[String] = ["биба", "боба", "абоба"]
+const UNIT_NAMES: Array[String] = ["Wally", "Mike", "Cost"]
+const BASIC_TORSO: GridInventoryItemData = preload("res://item_pack/items/base_basic.tres")
+const BASIC_LEGS: GridInventoryItemData = preload("res://item_pack/items/leg_basic.tres")
 
 var name: String = UNIT_NAMES.pick_random()
 var health: float = 100.0
@@ -16,6 +18,8 @@ var equipment: Dictionary[StringName, GridInventoryItemData] = {}
 
 func _init(p_sprite: Texture2D = null) -> void:
 	sprite = p_sprite
+	equip_item(BASIC_TORSO.duplicate(true) as GridInventoryItemData, &"torso")
+	equip_item(BASIC_LEGS.duplicate(true) as GridInventoryItemData, &"legs")
 
 
 func equip_item(item: GridInventoryItemData, slot: StringName) -> GridInventoryItemData:

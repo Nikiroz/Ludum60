@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bi57eh03ditk3"
+path="res://.godot/imported/PUNCH-002.ogg-f4004fb429b9ffce607725fe7c66d212.oggvorbisstr"
+
+[deps]
+
+source_file="res://sounds/SFX 1/PUNCH-002.ogg"
+dest_files=["res://.godot/imported/PUNCH-002.ogg-f4004fb429b9ffce607725fe7c66d212.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

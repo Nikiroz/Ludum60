@@ -99,7 +99,7 @@ func load_available_items() -> Array[GridInventoryItemData]:
 	for path in ItemCatalog.get_item_paths():
 		var item: GridInventoryItemData = load(path) as GridInventoryItemData
 
-		if item == null:
+		if item == null or item.is_service_item:
 			continue
 
 		if item.occupied_cells.is_empty():

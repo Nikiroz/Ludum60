@@ -68,12 +68,12 @@ func _run() -> void:
 	root.add_child(_main)
 	current_scene = _main
 	_main.get_node("MenuLayer/MainMenu").hide()
-	var start_button: Button = _main.get_node("Navigation/StarBattleButton")
 
 	# The real button starts exactly one timer and locks the formation.
 	var attacker := _unit(100.0, 1.0, 2.0)
 	var boss := _boss()
 	var battle := _battle([attacker], boss)
+	var start_button: Button = battle.get_node("StarBattleButton")
 	await process_frame
 	await process_frame
 	var row: HBoxContainer = battle.get_node("MarginContainer/HBoxContainer")
@@ -157,6 +157,7 @@ func _run() -> void:
 	boss = _boss(5.0, 1000.0)
 	battle = _battle([attacker], boss)
 	var ended: Array = []
+	start_button = battle.get_node("StarBattleButton")
 	battle.round_finished.connect(func() -> void: ended.append(true))
 	battle.start_battle()
 	_step(battle)
@@ -172,6 +173,7 @@ func _run() -> void:
 	# A dead unit becomes an empty position without shifting the other slots.
 	attacker = _unit(5.0, 0.0, 0.0)
 	battle = _battle([attacker], _boss(100.0, 10.0))
+	start_button = battle.get_node("StarBattleButton")
 	battle.start_battle()
 	_step(battle)
 	_expect(attacker.health == 5.0 and battle.units[0] == null, "Defeat did not restore the removed unit's health")
@@ -201,6 +203,7 @@ func _run() -> void:
 
 	# Starting without a living army is rejected and dead sprites are cleaned up.
 	battle = _battle([_unit(0.0)], _boss())
+	start_button = battle.get_node("StarBattleButton")
 	_expect(not battle.start_battle(), "Battle started without a living army")
 	_expect(start_button.visible and battle.get_node("BattleTimer").is_stopped(), "Rejected start changed battle UI or timer")
 	_expect(battle.units[0] == null, "Already dead unit remained on the field")

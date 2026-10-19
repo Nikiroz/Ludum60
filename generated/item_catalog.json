@@ -1,4 +1,5 @@
 [
+	"res://item_pack/items/base_basic.tres",
 	"res://item_pack/items/base_fridge.tres",
 	"res://item_pack/items/base_heater.tres",
 	"res://item_pack/items/base_printer.tres",
@@ -15,6 +16,7 @@
 	"res://item_pack/items/head_electrokettle.tres",
 	"res://item_pack/items/head_lamp.tres",
 	"res://item_pack/items/head_router.tres",
+	"res://item_pack/items/leg_basic.tres",
 	"res://item_pack/items/leg_bathtub.tres",
 	"res://item_pack/items/leg_bicycle.tres",
 	"res://item_pack/items/leg_mono.tres",

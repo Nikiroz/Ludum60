@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://bppj7wsn36efo" path="res://scenes/ui/settings.tscn" id="2_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://cetha4v8rfyp3" path="res://scenes/ui/credits.tscn" id="3_tefeu"]
 [ext_resource type="PackedScene" uid="uid://birdb0lniku25" path="res://scenes/ui/warning.tscn" id="4_o6xl0"]
-[ext_resource type="PackedScene" uid="uid://br13egudkrioi" path="res://scenes/ui/navigation.tscn" id="5_tbgi4"]
 [ext_resource type="Script" path="res://scripts/ui/pause_menu.gd" id="6_pause_menu"]
 
 [node name="Main" type="Node" unique_id=1672023872]
@@ -24,5 +23,3 @@ visible = false
 
 [node name="Warning" parent="MenuLayer" unique_id=1943961518 instance=ExtResource("4_o6xl0")]
 visible = false
-
-[node name="Navigation" parent="." unique_id=889696910 instance=ExtResource("5_tbgi4")]

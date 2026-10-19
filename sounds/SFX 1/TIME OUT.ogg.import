@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://d0ikcbhy4meec"
+path="res://.godot/imported/TIME OUT.ogg-ae465b7081a6843cbcae94d416d891c6.oggvorbisstr"
+
+[deps]
+
+source_file="res://sounds/SFX 1/TIME OUT.ogg"
+dest_files=["res://.godot/imported/TIME OUT.ogg-ae465b7081a6843cbcae94d416d891c6.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
