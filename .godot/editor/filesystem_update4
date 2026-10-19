@@ -18,3 +18,4 @@ res://scripts/ui/transition.gd
 res://tests/test_scrapyard.gd
 res://scripts/ui/inventory_grid.gd
 res://tests/test_inventory.gd
+res://scripts/battle_unit.gd

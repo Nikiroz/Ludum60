@@ -83,8 +83,8 @@ func _update_debug_stats() -> void:
 	if unit == null:
 		return
 
-	var stats_text := "Жизни:%.0f\nАтк/с:%.2f\nУрон:%.0f\nКрит:%.0f%%" % [
-		unit.health, unit.attack_speed, unit.damage, unit.crit_chance * 100.0
+	var stats_text := "%s\nЖизни:%.0f\nАтк/с:%.2f\nУрон:%.0f\nКрит:%.0f%%" % [
+		unit.name, unit.health, unit.attack_speed, unit.damage, unit.crit_chance * 100.0
 	]
 	if unit is BossUnitData:
 		var targets: PackedStringArray = []

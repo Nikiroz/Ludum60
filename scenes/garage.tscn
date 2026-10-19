@@ -3,13 +3,15 @@
 [ext_resource type="Script" uid="uid://3p2nn0t14v6h" path="res://scripts/garage.gd" id="1_47l8i"]
 [ext_resource type="Texture2D" uid="uid://b80dnnraacuc0" path="res://sprites/mocup/screen2_base.png" id="1_f50xb"]
 [ext_resource type="Texture2D" uid="uid://dd38cu5vqkvxx" path="res://sprites/mocup/screen2_buttons.png" id="2_6thhw"]
-[ext_resource type="Texture2D" uid="uid://bgclvlxk1fc0n" path="res://sprites/ui/button/ui_part.png" id="2_gnlqp"]
+[ext_resource type="Texture2D" uid="uid://c2h7kk68cse5f" path="res://sprites/ui/garage/active_ico_2.png" id="2_gnlqp"]
 [ext_resource type="Texture2D" uid="uid://d00xl4qq8kd4g" path="res://sprites/ui/cell_bg.png" id="7_47l8i"]
 [ext_resource type="Theme" uid="uid://cx7xm3yx6xpow" path="res://styles/scroll.tres" id="7_v0fcm"]
+[ext_resource type="Texture2D" uid="uid://k1v7ag8nntqd" path="res://sprites/mocup/2026-10-19 16.49.34.jpg" id="8_4laxj"]
 [ext_resource type="Texture2D" uid="uid://cxhgbsvyfea52" path="res://sprites/ui/garage/stats.png" id="8_47l8i"]
 [ext_resource type="Texture2D" uid="uid://66r16n1bi1a5" path="res://sprites/ui/garage/battle_button.png" id="9_oyih7"]
 [ext_resource type="Script" uid="uid://mdymk87qlj2m" path="res://scripts/ui/ui_button.gd" id="10_8ish0"]
 [ext_resource type="Script" uid="uid://ckg3p5xnsmbve" path="res://scripts/ui/inventory_grid.gd" id="10_inventory"]
+[ext_resource type="Script" uid="uid://cefdxqlr7hx15" path="res://scripts/ui/side_tabs.gd" id="11_side_tabs"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d8qye"]
 content_margin_left = 0.0
@@ -85,12 +87,16 @@ layout_mode = 2
 script = ExtResource("10_inventory")
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer/HBoxContainer" unique_id=1599431966]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/margin_left = 27
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_right = 11
 
-[node name="TabContainer2" type="TabContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer" unique_id=249565875]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer" unique_id=1085941650]
+layout_mode = 2
+script = ExtResource("11_side_tabs")
+
+[node name="TabContainer2" type="TabContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer" unique_id=249565875]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/side_margin = 0
@@ -102,32 +108,35 @@ theme_override_styles/tab_hovered = SubResource("StyleBoxFlat_d8qye")
 theme_override_styles/tab_selected = SubResource("StyleBoxFlat_d8qye")
 theme_override_styles/tab_disabled = SubResource("StyleBoxFlat_d8qye")
 theme_override_styles/tab_focus = SubResource("StyleBoxFlat_d8qye")
-current_tab = 1
-tab_0/icon = ExtResource("2_gnlqp")
-tab_1/icon = ExtResource("2_gnlqp")
-tab_2/icon = ExtResource("2_gnlqp")
+current_tab = 0
+tabs_visible = false
 
-[node name="TabBar3" type="TabBar" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/TabContainer2" unique_id=2113432495]
-visible = false
+[node name="TabBar3" type="TabBar" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2" unique_id=2113432495]
 layout_mode = 2
 metadata/_tab_index = 0
 metadata/_tab_name = ""
 
-[node name="TextEdit" type="TextEdit" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/TabContainer2/TabBar3" unique_id=538678478]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2/TabBar3" unique_id=1523984160]
+custom_maximum_size = Vector2(60, 100)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 31.0
+offset_right = -7.0
+offset_bottom = -7.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "left hand"
+texture = ExtResource("8_4laxj")
 
-[node name="TabBar4" type="TabBar" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/TabContainer2" unique_id=1045187979]
+[node name="TabBar4" type="TabBar" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2" unique_id=1045187979]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 metadata/_tab_name = ""
 
-[node name="TextEdit" type="TextEdit" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/TabContainer2/TabBar4" unique_id=162637557]
+[node name="TextEdit" type="TextEdit" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2/TabBar4" unique_id=162637557]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -136,17 +145,40 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "right hand"
 
-[node name="TabBar5" type="TabBar" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/TabContainer2" unique_id=2127662024]
+[node name="TabBar5" type="TabBar" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2" unique_id=2127662024]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 metadata/_tab_name = ""
 
-[node name="TextEdit" type="TextEdit" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/TabContainer2/TabBar5" unique_id=357318558]
+[node name="TextEdit" type="TextEdit" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2/TabBar5" unique_id=357318558]
 layout_mode = 0
 offset_right = 119.0
 offset_bottom = 106.0
 text = "foots"
+
+[node name="TabButtons" type="VBoxContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1441514338]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 4
+
+[node name="LeftHandButton" type="TextureButton" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabButtons" unique_id=1062727773]
+layout_mode = 2
+tooltip_text = "Left hand"
+toggle_mode = true
+texture_normal = ExtResource("2_gnlqp")
+
+[node name="RightHandButton" type="TextureButton" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabButtons" unique_id=767822516]
+layout_mode = 2
+tooltip_text = "Right hand"
+toggle_mode = true
+texture_normal = ExtResource("2_gnlqp")
+
+[node name="FeetButton" type="TextureButton" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabButtons" unique_id=587732376]
+layout_mode = 2
+tooltip_text = "Feet"
+toggle_mode = true
+texture_normal = ExtResource("2_gnlqp")
 
 [node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer" unique_id=1839725025]
 layout_mode = 2

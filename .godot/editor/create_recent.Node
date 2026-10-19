@@ -1,9 +1,9 @@
+TextureRect
 UIButton
 Button
 HBoxContainer
 MarginContainer
 VBoxContainer
-TextureRect
 ScrollContainer
 GridContainer
 Control
@@ -12,4 +12,3 @@ TextEdit
 TabContainer
 TabBar
 Panel
-Label
