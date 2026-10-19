@@ -9,31 +9,36 @@ layer = 10
 script = ExtResource("1_navigation")
 
 [node name="GarageButton" type="Button" parent="." unique_id=641333903]
-visible = false
-offset_left = 92.0
-offset_top = 5.0
-offset_right = 213.66666
-offset_bottom = 25.0
+offset_left = 300.0
+offset_top = 115.88446
+offset_right = 367.22516
+offset_bottom = 135.88446
+rotation = -1.5707964
 theme = ExtResource("3_theme")
 text = "garage"
 script = ExtResource("2_button")
 scene_path = "res://scenes/garage.tscn"
 
 [node name="ScrapyardButton" type="Button" parent="." unique_id=699005649]
-offset_left = 224.66666
-offset_top = 151.0
-offset_right = 300.66666
-offset_bottom = 171.0
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 20.0
+offset_top = -45.0
+offset_right = 110.681404
+offset_bottom = -25.0
+grow_vertical = 2
+rotation = 1.5707964
 theme = ExtResource("3_theme")
 text = "scrapyard"
 script = ExtResource("2_button")
 scene_path = "res://scenes/scrapyard.tscn"
 
 [node name="BattleButton" type="Button" parent="." unique_id=438984085]
-offset_left = 254.0
-offset_top = 5.0
-offset_right = 305.66666
-offset_bottom = 25.0
+offset_left = 232.0
+offset_top = 150.0
+offset_right = 298.66666
+offset_bottom = 170.0
 theme = ExtResource("3_theme")
 text = "battle"
 script = ExtResource("2_button")

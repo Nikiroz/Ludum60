@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cywpr57l471rg"]
 
 [ext_resource type="Script" uid="uid://cllj5g7p1yn1y" path="res://scripts/battle.gd" id="1_4k1nj"]
-[ext_resource type="Texture2D" uid="uid://da2td6l45ivd6" path="res://sprites/mocup/2026-10-18 09.11.53.jpg" id="1_dn72j"]
+[ext_resource type="Texture2D" uid="uid://dy8k0y5o3ywww" path="res://sprites/bg/battle.png" id="2_th188"]
 
 [node name="Battle" type="Control" unique_id=342407584]
 layout_mode = 3
@@ -12,10 +12,11 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_4k1nj")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1066564817]
-position = Vector2(128, 130)
-scale = Vector2(0.4964844, 0.4964844)
-texture = ExtResource("1_dn72j")
+[node name="TextureRect" type="TextureRect" parent="." unique_id=2054473994]
+layout_mode = 1
+offset_right = 320.0
+offset_bottom = 180.0
+texture = ExtResource("2_th188")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1504602287]
 layout_mode = 1
@@ -46,5 +47,4 @@ grow_vertical = 2
 pivot_offset = Vector2(-173, 28)
 theme_override_constants/margin_right = 50
 
-[node name="BattleTimer" type="Timer" parent="."]
-wait_time = 1.0
+[node name="BattleTimer" type="Timer" parent="." unique_id=178283342]

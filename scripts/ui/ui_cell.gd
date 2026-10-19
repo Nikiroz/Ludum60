@@ -1,7 +1,13 @@
 class_name FieldCell
-extends Control
+extends TextureRect
 
 signal cell_clicked(cell: FieldCell)
+
+const SCRAP_TEXTURES: Array[Texture2D] = [
+	preload("res://sprites/bg/scrap1.png"),
+	preload("res://sprites/bg/scrap2.png"),
+	preload("res://sprites/bg/scrap3.png"),
+]
 
 @export_range(1, 20, 1) var clicks_required: int = 1
 
@@ -9,6 +15,7 @@ var clicks_left: int
 
 
 func _ready() -> void:
+	texture = SCRAP_TEXTURES.pick_random()
 	set_clicks_required(clicks_required)
 
 

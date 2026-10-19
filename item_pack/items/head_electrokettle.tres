@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="GridInventoryItemData" format=3]
+
+[ext_resource type="Script" path="res://item_pack/item_data.gd" id="1_tbxad"]
+
+[resource]
+script = ExtResource("1_tbxad")
+item_id = "head_electrokettle"
+display_name = "Electric kettle"
+sprite_path = "res://item_pack/sprites/head_electrokettle.png"
+occupied_cells = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, 1)])
+health_bonus = 12.0
+attack_speed_bonus = 5.0
+damage_bonus = 8.0

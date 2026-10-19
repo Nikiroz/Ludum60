@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="GridInventoryItemData" format=3]
+
+[ext_resource type="Script" path="res://item_pack/item_data.gd" id="1_6o6c7"]
+
+[resource]
+script = ExtResource("1_6o6c7")
+item_id = "hand_fork"
+display_name = "Golden fork"
+sprite_path = "res://item_pack/sprites/hand_fork.png"
+occupied_cells = Array[Vector2i]([Vector2i(0, 0)])
+attack_speed_bonus = 0.5
+damage_bonus = 7.0
+crit_chance_bonus = 0.45

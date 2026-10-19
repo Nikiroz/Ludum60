@@ -3,10 +3,10 @@ extends RefCounted
 const BossUnitData = preload("res://scripts/boss_unit.gd")
 
 const ROBOT_SPRITES: Array[Texture2D] = [
-	preload("res://sprites/robots/dummy1.png"),
-	preload("res://sprites/robots/dummy2.png"),
-	preload("res://sprites/robots/dummy3.png"),
-	preload("res://sprites/robots/dummy4.png"),
+	preload("res://sprites/examples/1.png"),
+	preload("res://sprites/examples/2.png"),
+	preload("res://sprites/examples/3.png"),
+	preload("res://sprites/examples/4.png"),
 ]
 
 

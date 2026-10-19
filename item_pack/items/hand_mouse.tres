@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="GridInventoryItemData" format=3]
+
+[ext_resource type="Script" path="res://item_pack/item_data.gd" id="1_ldwm4"]
+
+[resource]
+script = ExtResource("1_ldwm4")
+item_id = "hand_mouse"
+display_name = "Mouse"
+sprite_path = "res://item_pack/sprites/hand_mouse.png"
+occupied_cells = Array[Vector2i]([Vector2i(0, 0)])
+attack_speed_bonus = 5.7700000000186265
+damage_bonus = 2.0
+crit_chance_bonus = 0.0006999999999999318

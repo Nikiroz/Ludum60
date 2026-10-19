@@ -7,13 +7,11 @@ const ItemCatalog = preload("res://scripts/item_catalog.gd")
 const ITEM_COUNT := 8
 
 @export var game_time: float = 30.0
-@export var max_moves: int = 20
 
-@onready var timer: Timer = $VBoxContainer/HBoxContainer/Timer/Timer
-@onready var timer_label: Label = $VBoxContainer/HBoxContainer/Timer
-@onready var moves_slider: HSlider = $VBoxContainer/HBoxContainer/Control/MarginContainer/HSlider
-@onready var moves_label: Label = $VBoxContainer/HBoxContainer/Moves
-@onready var field: GridContainer = $VBoxContainer/Field
+@onready var timer: Timer = $VBoxContainer/Control2/Timer/Timer
+@onready var timer_label: Label = $VBoxContainer/Control2/Timer
+@onready var timer_slider: HSlider = $VBoxContainer/Control2/Control/MarginContainer/HSlider
+@onready var field: GridContainer = $VBoxContainer/Control/Field
 @onready var items_grid: GridContainer = $VBoxContainer/BottomPanel/Items
 
 class SpawnPlan:
@@ -29,7 +27,6 @@ class HiddenItem:
 	var sprite: Sprite2D
 	var cells: Array[FieldCell] = []
 
-var moves_left: int
 var game_over := false
 
 var field_cells: Array[FieldCell] = []
@@ -43,19 +40,17 @@ var next_inventory_slot := 0
 
 
 func _ready() -> void:
-	
-	moves_left = max_moves
-	moves_slider.min_value = 0
-	moves_slider.max_value = max_moves
-	moves_slider.step = 1
-	moves_slider.editable = false
-
-	update_moves_ui()
+	timer_slider.min_value = 0
+	timer_slider.max_value = game_time
+	timer_slider.step = 0
+	timer_slider.rounded = false
+	timer_slider.editable = false
 
 	timer.wait_time = game_time
 	timer.one_shot = true
 	timer.timeout.connect(end_game)
 	timer.start()
+	update_timer_ui()
 
 
 	for child in field.get_children():
@@ -83,6 +78,10 @@ func _process(_delta: float) -> void:
 	if game_over:
 		return
 
+	update_timer_ui()
+
+func update_timer_ui() -> void:
+	timer_slider.value = timer.time_left
 	var seconds: int = ceili(timer.time_left)
 	var minutes: int = int(seconds / 60)
 
@@ -176,30 +175,36 @@ func spawn_random_items() -> void:
 	for attempt in range(200):
 		var occupied: Dictionary = {}
 		var current_plan: Array[SpawnPlan] = []
+		var item_pool: Array[GridInventoryItemData] = available_items.duplicate()
 
 		for i in range(ITEM_COUNT):
-
-			var candidates: Array[GridInventoryItemData] = available_items.duplicate()
-			candidates.shuffle()
-
 			var found := false
 
-			for item in candidates:
-				var positions := get_free_positions(item, occupied)
+			# Refill only after exhausting the remaining items that can fit.
+			for pool_attempt in range(2):
+				if item_pool.is_empty():
+					item_pool.assign(available_items)
+				item_pool.shuffle()
 
-				if positions.is_empty():
-					continue
+				while not item_pool.is_empty():
+					var item: GridInventoryItemData = item_pool.pop_back()
+					var positions := get_free_positions(item, occupied)
 
-				var origin: Vector2i = positions.pick_random()
+					if positions.is_empty():
+						continue
 
-				current_plan.append(SpawnPlan.new(item, origin))
+					var origin: Vector2i = positions.pick_random()
+					current_plan.append(SpawnPlan.new(item, origin))
 
-				for dy in range(item.grid_size.y):
-					for dx in range(item.grid_size.x):
-						occupied[origin + Vector2i(dx, dy)] = true
+					for dy in range(item.grid_size.y):
+						for dx in range(item.grid_size.x):
+							occupied[origin + Vector2i(dx, dy)] = true
 
-				found = true
-				break
+					found = true
+					break
+
+				if found:
+					break
 
 			if not found:
 				break
@@ -209,7 +214,7 @@ func spawn_random_items() -> void:
 			break
 
 	if plan.size() != ITEM_COUNT:
-		push_error("Could not fit all 6 items on the field")
+		push_error("Could not fit all %d items on the field" % ITEM_COUNT)
 		return
 
 	for placement in plan:
@@ -279,8 +284,6 @@ func _on_cell_clicked(cell: FieldCell) -> void:
 		if is_item_revealed(hidden):
 			collect_item(hidden)
 
-	use_move()
-
 func is_item_revealed(hidden: HiddenItem) -> bool:
 	for cell in hidden.cells:
 		if cell.clicks_left > 0:
@@ -307,6 +310,7 @@ func collect_item(hidden: HiddenItem) -> void:
 	icon.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 	collected_items.append(hidden.data)
+	ControllerGame.add_collected_item(hidden.data)
 	next_inventory_slot += 1
 
 	if is_instance_valid(hidden.sprite):
@@ -329,11 +333,8 @@ func win_game() -> void:
 
 	game_over = true
 
+	update_timer_ui()
 	timer.stop()
-	timer_label.text = "00:00"
-
-	moves_left = 0
-	update_moves_ui()
 
 	for cell in field_cells:
 		cell.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -341,32 +342,13 @@ func win_game() -> void:
 	print("YOU WIN!")
 	round_finished.emit()
 
-func use_move() -> void:
-	if game_over:
-		return
-
-	moves_left = maxi(moves_left - 1, 0)
-
-	update_moves_ui()
-
-	if moves_left == 0:
-		end_game()
-
-
-func update_moves_ui() -> void:
-	moves_slider.value = moves_left
-
-	moves_label.text = "Moves: %d / %d" % [
-		moves_left, max_moves
-	]
-
 func end_game() -> void:
 	if game_over:
 		return
 
 	game_over = true
 	timer.stop()
-	timer_label.text = "00:00"
+	update_timer_ui()
 
 	for cell in field_cells:
 		cell.mouse_filter = Control.MOUSE_FILTER_IGNORE

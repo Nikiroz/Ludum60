@@ -11,6 +11,25 @@ extends Resource
 @export var occupied_cells: Array[Vector2i] = []
 @export var grid_size: Vector2i = Vector2i(3, 3)
 
+@export_group("Stat bonuses")
+## Additive modifiers. Zero means the item does not change this stat.
+@export var health_bonus: float = 0.0
+## Additional attacks per second, matching BattleUnit.attack_speed.
+@export var attack_speed_bonus: float = 0.0
+@export var damage_bonus: float = 0.0
+## Probability delta: 0.15 adds 15 percentage points to the crit chance.
+@export_range(-1.0, 1.0, 0.0001) var crit_chance_bonus: float = 0.0
+
+
+## Keys and units match the battle unit's stats; this resource has no game dependencies.
+func get_stat_bonuses() -> Dictionary:
+    return {
+        "health": health_bonus,
+        "attack_speed": attack_speed_bonus,
+        "damage": damage_bonus,
+        "crit_chance": crit_chance_bonus,
+    }
+
 
 func occupies(cell: Vector2i) -> bool:
     return occupied_cells.has(cell)

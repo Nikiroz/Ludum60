@@ -1,3 +1,21 @@
 [
-	"res://item_pack/items/test.tres"
+	"res://item_pack/items/base_fridge.tres",
+	"res://item_pack/items/base_heater.tres",
+	"res://item_pack/items/base_printer.tres",
+	"res://item_pack/items/base_washer.tres",
+	"res://item_pack/items/hand_drill.tres",
+	"res://item_pack/items/hand_fork.tres",
+	"res://item_pack/items/hand_mixer.tres",
+	"res://item_pack/items/hand_mouse.tres",
+	"res://item_pack/items/hand_shark.tres",
+	"res://item_pack/items/hand_synthesizer.tres",
+	"res://item_pack/items/hand_tv.tres",
+	"res://item_pack/items/head_cellphone.tres",
+	"res://item_pack/items/head_electrokettle.tres",
+	"res://item_pack/items/head_lamp.tres",
+	"res://item_pack/items/head_router.tres",
+	"res://item_pack/items/leg_bathtub.tres",
+	"res://item_pack/items/leg_bicycle.tres",
+	"res://item_pack/items/leg_mono.tres",
+	"res://item_pack/items/leg_tank.tres"
 ]

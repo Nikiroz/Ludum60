@@ -26,6 +26,7 @@ var shift_duration: float = 0.2
 
 @onready var _combat_motion: Control = $CombatMotion
 @onready var icon: TextureRect = $CombatMotion/Icon
+@onready var _icon_rest_position: Vector2 = icon.position
 @onready var debug_stats: Label = $CombatMotion/Icon/DebugStats
 @onready var target_arrow: TextureRect = $TargetArrow
 
@@ -234,7 +235,7 @@ func _animate_from(old_global_pos: Vector2) -> void:
 		_shift_tween.kill()
 
 	icon.position = (
-		get_global_transform().affine_inverse() * old_global_pos
+		_combat_motion.get_global_transform().affine_inverse() * old_global_pos
 	)
 
 	_shift_tween = create_tween()
@@ -244,7 +245,7 @@ func _animate_from(old_global_pos: Vector2) -> void:
 	_shift_tween.tween_property(
 		icon,
 		"position",
-		Vector2.ZERO,
+		_icon_rest_position,
 		shift_duration
 	)
 

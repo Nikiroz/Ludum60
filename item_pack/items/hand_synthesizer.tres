@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="GridInventoryItemData" format=3]
+
+[ext_resource type="Script" path="res://item_pack/item_data.gd" id="1_i12fm"]
+
+[resource]
+script = ExtResource("1_i12fm")
+item_id = "hand_synthesizer"
+display_name = "Synthesizer"
+sprite_path = "res://item_pack/sprites/hand_synthesizer.png"
+occupied_cells = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, 1), Vector2i(0, 2)])
+attack_speed_bonus = 1.0
+damage_bonus = 30.0
+crit_chance_bonus = 0.05

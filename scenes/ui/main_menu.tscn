@@ -1,101 +1,18 @@
 [gd_scene format=3 uid="uid://dlxcemoturann"]
 
-[ext_resource type="Shader" uid="uid://cqt0xe5nn1b6u" path="res://shaders/offset.gdshader" id="1_bqqt6"]
-[ext_resource type="Texture2D" uid="uid://cfsljeg2r0aa4" path="res://sprites/bg.png" id="1_l6cm7"]
-[ext_resource type="Texture2D" uid="uid://b372pgfpqq4uj" path="res://sprites/ludum.png" id="4_8ln24"]
-[ext_resource type="Texture2D" uid="uid://dto0p5drpabq1" path="res://sprites/border.png" id="4_rtw2f"]
+[ext_resource type="Texture2D" uid="uid://dnywxnopgcs6q" path="res://sprites/mocup/menu_merged.png" id="1_m1kxf"]
 [ext_resource type="Script" uid="uid://dexwaw3i4exg1" path="res://scripts/ui/ui_show_button.gd" id="6_rcqid"]
 [ext_resource type="Theme" uid="uid://kxx26dlcfs5b" path="res://styles/main_buttons.tres" id="6_rtw2f"]
-[ext_resource type="Script" uid="uid://bwvgpltq2e0qb" path="res://scripts/ui/ui_quit.gd" id="7_tbmy8"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ekxnf"]
-shader = ExtResource("1_bqqt6")
-shader_parameter/speed = Vector2(-0.15, 0.25)
-
-[sub_resource type="Gradient" id="Gradient_l6cm7"]
-offsets = PackedFloat32Array(0, 0.37048194, 0.7198795, 1)
-colors = PackedColorArray(0, 0, 0, 0.7490196, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.7490196)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_ekxnf"]
-gradient = SubResource("Gradient_l6cm7")
-fill_from = Vector2(0, 1)
 
 [sub_resource type="GDScript" id="GDScript_oa1go"]
 script/source = "extends UIButton
 
 func _on_pressed() -> void:
 	super._on_pressed()
+	ControllerGame.reset_progress()
 	Transition.change_scene(\"res://scenes/garage.tscn\")
 	ControllerGame.play_one_shot(preload(\"res://sounds/StartHit.mp3\"))
 	ControllerGame.isMainMenu = false
-"
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oa1go"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0, 0, 0, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1, 1, 1, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tbmy8"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0.14044744, 0.14044744, 0.14044744, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1, 1, 1, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jk1qb"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0, 0, 0, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1, 1, 1, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5dd4i"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0, 0, 0, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1, 1, 1, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lgwnu"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0, 0, 0, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1, 1, 1, 1)
-
-[sub_resource type="GDScript" id="GDScript_flqon"]
-script/source = "extends UIButton
-
-func _on_pressed() -> void:
-	super._on_pressed()
-	
 "
 
 [node name="MainMenu" type="Control" unique_id=166247087]
@@ -107,58 +24,39 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Bg2" type="TextureRect" parent="." unique_id=565672521]
-material = SubResource("ShaderMaterial_ekxnf")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_l6cm7")
+texture = ExtResource("1_m1kxf")
 stretch_mode = 1
 
-[node name="Gradient" type="TextureRect" parent="." unique_id=187243331]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=944139333]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("GradientTexture2D_ekxnf")
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 30
 
-[node name="Logo" type="TextureRect" parent="." unique_id=1739068648]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -94.0
-offset_top = 7.0
-offset_right = -19.0
-offset_bottom = 34.0
-grow_horizontal = 0
-texture = ExtResource("4_8ln24")
-stretch_mode = 2
-
-[node name="Buttons" type="VBoxContainer" parent="." unique_id=347095572]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 22.0
-offset_top = -56.0
-offset_right = 72.0
-offset_bottom = -9.0
-grow_vertical = 0
+[node name="Buttons" type="VBoxContainer" parent="MarginContainer" unique_id=347095572]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
 alignment = 2
 
-[node name="NewGame" type="Button" parent="Buttons" unique_id=2060632857]
+[node name="NewGame" type="Button" parent="MarginContainer/Buttons" unique_id=2060632857]
 layout_mode = 2
 theme = ExtResource("6_rtw2f")
 text = "New game"
 alignment = 0
 script = SubResource("GDScript_oa1go")
 
-[node name="Settings_button" type="Button" parent="Buttons" unique_id=1522020321]
+[node name="Settings_button" type="Button" parent="MarginContainer/Buttons" unique_id=1522020321]
 layout_mode = 2
 theme = ExtResource("6_rtw2f")
 text = "Settings"
@@ -166,7 +64,7 @@ alignment = 0
 script = ExtResource("6_rcqid")
 nodeName = "Settings"
 
-[node name="Credits_button" type="Button" parent="Buttons" unique_id=1206189617]
+[node name="Credits_button" type="Button" parent="MarginContainer/Buttons" unique_id=1206189617]
 layout_mode = 2
 theme = ExtResource("6_rtw2f")
 text = "Credits"
@@ -174,43 +72,6 @@ alignment = 0
 script = ExtResource("6_rcqid")
 nodeName = "Credits"
 
-[node name="Quit" type="Button" parent="Buttons" unique_id=1999063832]
-layout_mode = 2
-theme = ExtResource("6_rtw2f")
-text = "Quit"
-alignment = 0
-script = ExtResource("7_tbmy8")
-
-[node name="Border" type="NinePatchRect" parent="." unique_id=1691788133]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_rtw2f")
-patch_margin_left = 15
-patch_margin_top = 16
-patch_margin_right = 16
-patch_margin_bottom = 16
-axis_stretch_vertical = 2
-
-[node name="Button" type="Button" parent="Border" unique_id=1344331374]
-visible = false
-layout_mode = 0
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_styles/normal = SubResource("StyleBoxFlat_oa1go")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_tbmy8")
-theme_override_styles/hover = SubResource("StyleBoxFlat_jk1qb")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_5dd4i")
-theme_override_styles/focus = SubResource("StyleBoxFlat_lgwnu")
-text = "Quit to Main Menu"
-script = SubResource("GDScript_flqon")
-
-[connection signal="pressed" from="Buttons/NewGame" to="Buttons/NewGame" method="_on_pressed"]
-[connection signal="pressed" from="Buttons/Settings_button" to="Buttons/Settings_button" method="_on_pressed"]
-[connection signal="pressed" from="Buttons/Credits_button" to="Buttons/Credits_button" method="_on_pressed"]
-[connection signal="pressed" from="Buttons/Quit" to="Buttons/Quit" method="_on_pressed"]
-[connection signal="pressed" from="Border/Button" to="Border/Button" method="_on_pressed"]
+[connection signal="pressed" from="MarginContainer/Buttons/NewGame" to="MarginContainer/Buttons/NewGame" method="_on_pressed"]
+[connection signal="pressed" from="MarginContainer/Buttons/Settings_button" to="MarginContainer/Buttons/Settings_button" method="_on_pressed"]
+[connection signal="pressed" from="MarginContainer/Buttons/Credits_button" to="MarginContainer/Buttons/Credits_button" method="_on_pressed"]

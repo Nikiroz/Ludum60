@@ -1,6 +1,14 @@
 extends Node
 
+signal item_collected(item: GridInventoryItemData)
+
 const CURSOR_NORMAL: Texture2D = preload("res://sprites/cursors/cursor.png")
+
+var collected_items: Array[GridInventoryItemData] = []
+var scrapyard_available := true:
+	set(value):
+		scrapyard_available = value
+		_update_navigation_visibility()
 
 var _navigation: CanvasLayer
 var _location := "garage"
@@ -14,6 +22,7 @@ var isMainMenu := true:
 		_update_quit_to_main_menu_visibility()
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	Input.set_custom_mouse_cursor(CURSOR_NORMAL, Input.CURSOR_ARROW)
 	set_drag_cursor(false)
 	call_deferred("_update_quit_to_main_menu_visibility")
@@ -33,11 +42,22 @@ func set_gameplay_scene(scene: Node) -> void:
 	_location = scene.scene_file_path.get_file().get_basename()
 	_round_finished = false
 	_battle_in_progress = false
+	if _location == "scrapyard":
+		scrapyard_available = false
 	if scene.has_signal("round_finished"):
 		scene.connect("round_finished", _on_round_finished)
 	if scene.has_signal("battle_started"):
 		scene.connect("battle_started", _on_battle_started)
 	_update_navigation_visibility()
+
+func add_collected_item(item: GridInventoryItemData) -> void:
+	var collected := item.duplicate(true) as GridInventoryItemData
+	collected_items.append(collected)
+	item_collected.emit(collected)
+
+func reset_progress() -> void:
+	collected_items.clear()
+	scrapyard_available = true
 
 func _on_start_battle_pressed() -> void:
 	if _location != "battle" or not is_instance_valid(_gameplay_scene):
@@ -53,6 +73,8 @@ func _on_battle_started() -> void:
 func _on_round_finished() -> void:
 	_round_finished = true
 	_battle_in_progress = false
+	if _location == "battle":
+		scrapyard_available = true
 	_update_navigation_visibility()
 
 func _update_navigation_visibility() -> void:
@@ -61,6 +83,7 @@ func _update_navigation_visibility() -> void:
 
 	_navigation.get_node("GarageButton").visible = _location == "battle" or _round_finished
 	_navigation.get_node("ScrapyardButton").visible = _location == "garage" and not _round_finished
+	_navigation.get_node("ScrapyardButton").disabled = not scrapyard_available
 	_navigation.get_node("BattleButton").visible = _location == "garage" and not _round_finished
 	_navigation.get_node("StarBattleButton").visible = (
 		_location == "battle" and not _battle_in_progress and not _round_finished

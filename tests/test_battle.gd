@@ -78,6 +78,8 @@ func _run() -> void:
 	await process_frame
 	var row: HBoxContainer = battle.get_node("MarginContainer/HBoxContainer")
 	var slot: Control = row.get_child(0)
+	_expect(slot.size.is_equal_approx(Vector2(36, 60)), "Robot visual changed the slot hit area")
+	_expect(slot.icon.size.is_equal_approx(Vector2(95, 100)), "Robot visual is not 95 by 100")
 	_expect(start_button.visible, "Start button is missing during preparation")
 	slot._start_drag()
 	_expect(slot.active_slot == slot, "Preparation drag did not start")
@@ -242,7 +244,7 @@ func _run() -> void:
 	await create_timer(0.4).timeout
 	for view in [slot, second_view, third_view, boss_view]:
 		_expect(view._combat_motion.position.is_zero_approx(), "Combat animation did not return to its origin")
-		_expect(view.icon.position.is_zero_approx(), "Combat animation affected the reorder position")
+		_expect(view.icon.position.is_equal_approx(view._icon_rest_position), "Combat animation affected the reorder position")
 	_expect(battle.tick_count == 1, "Animation offsets advanced the battle clock")
 	battle.free()
 
@@ -293,14 +295,29 @@ func _run() -> void:
 	await process_frame
 	row = battle.get_node("MarginContainer/HBoxContainer")
 	slot = row.get_child(0)
+	var neighbor: Control = row.get_child(1)
+	var click_position: Vector2 = slot.get_global_rect().get_center()
+	_expect(neighbor.icon.get_global_rect().has_point(click_position), "Drag test needs overlapping robot visuals")
+	var press := InputEventMouseButton.new()
+	press.button_index = MOUSE_BUTTON_LEFT
+	press.pressed = true
+	press.position = click_position
+	root.push_input(press)
+	_expect(slot.active_slot == slot, "Overlapping robot intercepted another slot's drag")
+	if slot.active_slot != null:
+		slot.active_slot._clear_drag()
+	var release := InputEventMouseButton.new()
+	release.button_index = MOUSE_BUTTON_LEFT
+	release.position = click_position
+	root.push_input(release)
 	slot._animate_reorder(1)
 	await create_timer(0.05).timeout
 	var shifted_view: Control = row.get_child(0)
 	_expect(battle.units[0] == second and battle.units[1] == attacker, "Motion layer broke formation order")
-	_expect(shifted_view.icon.position.length() > 0.0, "Reorder tween no longer animates the icon")
+	_expect(not shifted_view.icon.position.is_equal_approx(shifted_view._icon_rest_position), "Reorder tween no longer animates the icon")
 	_expect(shifted_view._combat_motion.position.is_zero_approx(), "Reorder incorrectly changed combat offsets")
 	await create_timer(0.25).timeout
-	_expect(shifted_view.icon.position.is_zero_approx(), "Reorder tween did not return the icon to its origin")
+	_expect(shifted_view.icon.position.is_equal_approx(shifted_view._icon_rest_position), "Reorder tween did not return the icon to its origin")
 	battle.free()
 
 	_main.free()

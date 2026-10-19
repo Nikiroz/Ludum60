@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="GridInventoryItemData" format=3]
+
+[ext_resource type="Script" path="res://item_pack/item_data.gd" id="1_2tsi4"]
+
+[resource]
+script = ExtResource("1_2tsi4")
+item_id = "leg_bicycle"
+display_name = "Bicycle"
+sprite_path = "res://item_pack/sprites/leg_bicycle.png"
+occupied_cells = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1)])
+health_bonus = 66.0
+attack_speed_bonus = 45.0
+damage_bonus = 37.0

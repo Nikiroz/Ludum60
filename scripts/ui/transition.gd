@@ -15,6 +15,8 @@ func _ready() -> void:
 func change_scene(path: String) -> void:
 	if transitioning:
 		return
+	if path == "res://scenes/scrapyard.tscn" and not ControllerGame.scrapyard_available:
+		return
 
 	transitioning = true
 	overlay.show()

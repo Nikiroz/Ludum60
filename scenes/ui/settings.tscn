@@ -8,7 +8,7 @@
 [ext_resource type="Script" uid="uid://chkle6a1llld2" path="res://scripts/ui/ui_fullscreen.gd" id="6_83j8s"]
 [ext_resource type="Script" uid="uid://dc0ij4d538tif" path="res://scripts/ui/ui_back_button.gd" id="6_uhhto"]
 [ext_resource type="Script" uid="uid://dexwaw3i4exg1" path="res://scripts/ui/ui_show_button.gd" id="9_am25x"]
-[ext_resource type="Script" path="res://scripts/ui/ui_volume_slider.gd" id="10_volume"]
+[ext_resource type="Script" uid="uid://bflre3rbyhirp" path="res://scripts/ui/ui_volume_slider.gd" id="10_volume"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rtw2f"]
 bg_color = Color(0, 0, 0, 0.8627451)
@@ -153,6 +153,7 @@ theme = SubResource("Theme_oa1go")
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Panel/VBoxContainer2/HBoxContainer" unique_id=1589731084]
+custom_maximum_size = Vector2(88, -1)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Language"
@@ -182,6 +183,7 @@ flip_h = true
 layout_mode = 2
 
 [node name="Label2" type="Label" parent="Panel/VBoxContainer2/HBoxContainer2" unique_id=837955712]
+custom_maximum_size = Vector2(88, -1)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Sound"
@@ -202,6 +204,7 @@ bus_name = &"Sfx"
 layout_mode = 2
 
 [node name="Label3" type="Label" parent="Panel/VBoxContainer2/HBoxContainer3" unique_id=1718363947]
+custom_maximum_size = Vector2(88, -1)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Music"
@@ -222,13 +225,14 @@ bus_name = &"Music"
 layout_mode = 2
 
 [node name="Label4" type="Label" parent="Panel/VBoxContainer2/HBoxContainer4" unique_id=945880070]
+custom_maximum_size = Vector2(88, -1)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Fullscreen"
 
 [node name="CheckBox" type="CheckBox" parent="Panel/VBoxContainer2/HBoxContainer4" unique_id=1023015008]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 0
 theme_override_styles/normal = SubResource("StyleBoxEmpty_lgwnu")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_lgwnu")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_lgwnu")
