@@ -35,7 +35,9 @@ var _rebuilding_slots := false
 
 func _ready() -> void:
 	_battle_timer.wait_time = TICK_SECONDS
-	_battle_timer.timeout.connect(_on_battle_tick)
+	_battle_timer.one_shot = true
+	_battle_timer.ignore_time_scale = true
+	_battle_timer.timeout.connect(_on_battle_timeout)
 	_unit_slots.child_order_changed.connect(_on_unit_order_changed)
 	if generate_demo_units_on_start and not _units_provided:
 		set_units(ControllerGame.units)
@@ -187,9 +189,15 @@ func start_battle() -> bool:
 			_log_event("Слот %d: жизни %.2f, атак/с %.2f, урон %.2f, крит %.1f%%." % [
 				index + 1, unit.health, unit.attack_speed, unit.damage, unit.crit_chance * 100.0
 			])
-	_battle_timer.start()
+	_battle_timer.start(TICK_SECONDS)
 	battle_started.emit()
 	return true
+
+
+func _on_battle_timeout() -> void:
+	_on_battle_tick()
+	if state == State.FIGHTING:
+		_battle_timer.start(TICK_SECONDS)
 
 
 func _on_battle_tick() -> void:

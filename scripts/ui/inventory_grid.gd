@@ -18,11 +18,7 @@ var _drop_valid := false
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	ControllerGame.item_collected.connect(_on_item_collected)
-	_sync_inventory()
-
-
-func _on_item_collected(_item: GridInventoryItemData) -> void:
+	ControllerGame.inventory_changed.connect(_sync_inventory)
 	_sync_inventory()
 
 

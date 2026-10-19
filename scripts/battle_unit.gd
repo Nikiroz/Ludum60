@@ -11,7 +11,24 @@ var damage: float = 0.0
 # Вероятность от 0.0 до 1.0.
 var crit_chance: float = 0.0
 var sprite: Texture2D
+var equipment: Dictionary[StringName, GridInventoryItemData] = {}
 
 
 func _init(p_sprite: Texture2D = null) -> void:
 	sprite = p_sprite
+
+
+func equip_item(item: GridInventoryItemData, slot: StringName) -> GridInventoryItemData:
+	var previous: GridInventoryItemData = equipment.get(slot)
+	if previous != null:
+		_apply_item_bonuses(previous, -1.0)
+	equipment[slot] = item
+	_apply_item_bonuses(item, 1.0)
+	return previous
+
+
+func _apply_item_bonuses(item: GridInventoryItemData, multiplier: float) -> void:
+	health += item.health_bonus * multiplier
+	attack_speed += item.attack_speed_bonus * multiplier
+	damage += item.damage_bonus * multiplier
+	crit_chance += item.crit_chance_bonus * multiplier

@@ -52,9 +52,7 @@ var _saved_alpha: float
 var _shift_tween: Tween
 var _waiting_for_sort := false
 var _attack_tween: Tween
-var _attack_duration := 0.0
 var _hit_tween: Tween
-var _pending_hit_tweens: Dictionary[int, Tween] = {}
 var _attack_offset := Vector2.ZERO:
 	set(value):
 		_attack_offset = value
@@ -299,49 +297,31 @@ func set_targeted(targeted: bool) -> void:
 func play_attack(direction: Vector2, start_delay: float = 0.0) -> float:
 	if unit == null:
 		return 0.0
-	# Добавляем каждый удар в очередь, включая несколько атак за один тик.
-	if not _attack_tween or not _attack_tween.is_valid():
-		_attack_tween = create_tween()
-		_attack_duration = maxf(start_delay, 0.0)
-		if _attack_duration > 0.0:
-			_attack_tween.tween_interval(_attack_duration)
-	var impact_delay := maxf(_attack_duration - _attack_tween.get_total_elapsed_time(), 0.0) + attack_dash_duration
+	if _attack_tween and _attack_tween.is_valid():
+		_attack_tween.kill()
+	_attack_offset = Vector2.ZERO
+	var delay := maxf(start_delay, 0.0)
+	_attack_tween = create_tween()
+	if delay > 0.0:
+		_attack_tween.tween_interval(delay)
 	_attack_tween.tween_property(
 		self, "_attack_offset", direction.normalized() * attack_distance, attack_dash_duration
 	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	_attack_tween.tween_property(
 		self, "_attack_offset", Vector2.ZERO, attack_return_duration
 	).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	_attack_duration += attack_dash_duration + attack_return_duration
-	return impact_delay
+	return delay + attack_dash_duration
 
 
 func play_hit(start_delay: float = 0.0) -> void:
-	if unit == null:
-		return
-	if start_delay <= 0.0:
-		_start_hit_shake()
-		return
-
-	var pending_hit := create_tween()
-	var pending_id := pending_hit.get_instance_id()
-	_pending_hit_tweens[pending_id] = pending_hit
-	pending_hit.tween_interval(start_delay)
-	pending_hit.tween_callback(_start_delayed_hit.bind(pending_id))
-
-
-func _start_delayed_hit(pending_id: int) -> void:
-	_pending_hit_tweens.erase(pending_id)
-	_start_hit_shake()
-
-
-func _start_hit_shake() -> void:
 	if unit == null:
 		return
 	if _hit_tween and _hit_tween.is_valid():
 		_hit_tween.kill()
 	_hit_offset = Vector2.ZERO
 	_hit_tween = create_tween()
+	if start_delay > 0.0:
+		_hit_tween.tween_interval(start_delay)
 	var offsets: Array[Vector2] = [
 		Vector2(1.0, 0.0), Vector2(-1.0, 0.5),
 		Vector2(0.7, -0.5), Vector2(-0.4, 0.0), Vector2.ZERO,
@@ -362,12 +342,7 @@ func _reset_combat_animation() -> void:
 		_attack_tween.kill()
 	if _hit_tween and _hit_tween.is_valid():
 		_hit_tween.kill()
-	for pending_hit in _pending_hit_tweens.values():
-		if pending_hit.is_valid():
-			pending_hit.kill()
-	_pending_hit_tweens.clear()
 	_attack_tween = null
-	_attack_duration = 0.0
 	_hit_tween = null
 	_attack_offset = Vector2.ZERO
 	_hit_offset = Vector2.ZERO

@@ -31,6 +31,19 @@ func get_stat_bonuses() -> Dictionary:
     }
 
 
+func get_equipment_slot(left_hand: bool = true) -> StringName:
+    match item_id.get_slice("_", 0):
+        "head":
+            return &"head"
+        "base":
+            return &"torso"
+        "leg":
+            return &"legs"
+        "hand":
+            return &"left_hand" if left_hand else &"right_hand"
+    return &""
+
+
 func occupies(cell: Vector2i) -> bool:
     return occupied_cells.has(cell)
 

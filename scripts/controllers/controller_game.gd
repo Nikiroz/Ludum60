@@ -1,6 +1,7 @@
 extends Node
 
 signal item_collected(item: GridInventoryItemData)
+signal inventory_changed
 
 const CURSOR_NORMAL: Texture2D = preload("res://sprites/cursors/cursor.png")
 const UnitGenerator = preload("res://scripts/temporary_unit_generator.gd")
@@ -57,12 +58,32 @@ func add_collected_item(item: GridInventoryItemData) -> void:
 	var collected := item.duplicate(true) as GridInventoryItemData
 	collected_items.append(collected)
 	item_collected.emit(collected)
+	inventory_changed.emit()
+
+func can_equip_item(unit: BattleUnit, item: GridInventoryItemData, left_hand: bool = true) -> bool:
+	return (
+		unit != null and units.has(unit)
+		and item != null and collected_items.has(item)
+		and item.get_equipment_slot(left_hand) != &""
+	)
+
+func equip_item(unit: BattleUnit, item: GridInventoryItemData, left_hand: bool = true) -> bool:
+	if not can_equip_item(unit, item, left_hand):
+		return false
+	var previous := unit.equip_item(item, item.get_equipment_slot(left_hand))
+	collected_items.erase(item)
+	inventory_positions.erase(item)
+	if previous != null:
+		collected_items.append(previous)
+	inventory_changed.emit()
+	return true
 
 func reset_progress() -> void:
 	units = UnitGenerator.generate_units(3)
 	collected_items.clear()
 	inventory_positions.clear()
 	scrapyard_available = true
+	inventory_changed.emit()
 
 func _on_start_battle_pressed() -> void:
 	if _location != "battle" or not is_instance_valid(_gameplay_scene):

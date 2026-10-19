@@ -50,7 +50,7 @@ func _battle(army: Array, boss: BossData) -> Node:
 
 
 func _step(battle: Node) -> void:
-	battle.get_node("BattleTimer").timeout.emit()
+	battle._on_battle_tick()
 
 
 func _has_log(battle: Node, text: String) -> bool:
@@ -235,10 +235,12 @@ func _run() -> void:
 	await create_timer(0.08).timeout
 	_expect(second_view._attack_offset.x > 0.0, "Second unit did not attack after its offset")
 	_expect(third_view._attack_offset.is_zero_approx(), "Third unit attacked too early")
-	_expect(boss_view._hit_offset.length() > 0.0, "Boss did not shake after an impact")
+	_expect(boss_view._hit_offset.is_zero_approx(), "Replaced hit animation started before the latest impact")
 	await create_timer(0.08).timeout
 	_expect(third_view._attack_offset.x > 0.0, "Third unit did not attack after its offset")
-	await create_timer(0.17).timeout
+	await create_timer(0.08).timeout
+	_expect(boss_view._hit_offset.length() > 0.0, "Boss did not shake after the latest impact")
+	await create_timer(0.09).timeout
 	_expect(boss_view._combat_motion.position.x < 0.0, "Boss did not dash left while receiving damage")
 	_expect(slot.position.is_equal_approx(original_slot_position), "Attack animation moved the actual slot")
 	await create_timer(0.4).timeout
@@ -248,7 +250,7 @@ func _run() -> void:
 	_expect(battle.tick_count == 1, "Animation offsets advanced the battle clock")
 	battle.free()
 
-	# Two attacks in one tick each get a dash and a delayed damage reaction.
+	# Multiple attacks in one tick restart visuals while applying every attack's damage.
 	attacker = _unit(100.0, 2.0, 10.0)
 	boss = _boss(1000.0, 0.0, [])
 	battle = _battle([attacker], boss)
@@ -260,31 +262,57 @@ func _run() -> void:
 	battle.get_node("BattleTimer").stop()
 	_step(battle)
 	await create_timer(0.09).timeout
-	_expect(boss_view._hit_offset.length() > 0.0, "First queued hit was lost")
+	_expect(boss_view._hit_offset.length() > 0.0, "Latest hit reaction did not start")
 	await create_timer(0.16).timeout
-	_expect(slot._attack_offset.x > 0.0, "Second attack in the same tick had no dash")
-	await create_timer(0.05).timeout
-	_expect(boss_view._hit_offset.length() > 0.0, "Second queued hit was lost")
-	await create_timer(0.3).timeout
-	_expect(slot._combat_motion.position.is_zero_approx() and boss_view._combat_motion.position.is_zero_approx(), "Queued effects left a permanent offset")
-	_expect(boss_view._pending_hit_tweens.is_empty(), "Completed hit callbacks were retained")
+	_expect(slot._attack_offset.is_zero_approx(), "Attack animation continued as an unwanted queue")
+	_expect(slot._combat_motion.position.is_zero_approx() and boss_view._combat_motion.position.is_zero_approx(), "Restarted effects left a permanent offset")
+	_expect(not slot._attack_tween.is_valid() and not boss_view._hit_tween.is_valid(), "Animation replacements retained delayed effects")
 	_expect(boss.health == 980.0, "Multiple hit animations changed damage")
 	battle.free()
 
-	# Replacing a unit cancels any effects that were waiting to start.
+	# A later tick stops the currently running animation instead of queuing attacks.
+	attacker = _unit(100.0, 6.0, 1.0)
+	boss = _boss(1000.0, 0.0, [])
+	battle = _battle([attacker], boss)
+	await process_frame
+	await process_frame
+	slot = battle.get_node("MarginContainer/HBoxContainer").get_child(0)
+	boss_view = battle.get_node("MarginContainer2").get_child(0)
+	battle.start_battle()
+	battle.get_node("BattleTimer").stop()
+	_step(battle)
+	await create_timer(0.1).timeout
+	var interrupted_attack: Tween = slot._attack_tween
+	var interrupted_hit: Tween = boss_view._hit_tween
+	_step(battle)
+	_expect(not interrupted_attack.is_valid() and slot._attack_tween != interrupted_attack, "New attack did not stop the running animation")
+	_expect(not interrupted_hit.is_valid() and boss_view._hit_tween != interrupted_hit, "New hit did not stop the running reaction")
+	_expect(boss.health == 988.0 and battle.tick_count == 2, "Restarting animations changed high-speed attack damage")
+	await create_timer(0.35).timeout
+	_expect(not slot._attack_tween.is_valid(), "Repeated attacks accumulated an animation queue")
+	_expect(slot._combat_motion.position.is_zero_approx(), "Multi-tick attacks left the robot displaced")
+	_expect(not boss_view._hit_tween.is_valid(), "Multi-tick hit reactions did not finish")
+	battle.free()
+
+	# Replacing a unit stops its current attack and hit reaction.
 	attacker = _unit()
 	battle = _battle([attacker], _boss())
 	await process_frame
 	await process_frame
 	slot = battle.get_node("MarginContainer/HBoxContainer").get_child(0)
 	slot.play_attack(Vector2.RIGHT, 0.1)
+	slot.play_attack(Vector2.RIGHT)
+	slot.play_attack(Vector2.RIGHT)
 	slot.play_hit(0.15)
+	interrupted_attack = slot._attack_tween
+	interrupted_hit = slot._hit_tween
 	battle.remove_unit(attacker)
 	var replacement := _unit()
 	battle.add_unit(replacement)
 	await create_timer(0.3).timeout
 	_expect(slot.unit == replacement and slot._combat_motion.position.is_zero_approx(), "Replacement inherited an old unit's effect")
-	_expect(slot._pending_hit_tweens.is_empty(), "Removing a unit left delayed hit callbacks")
+	_expect(not interrupted_hit.is_valid() and slot._hit_tween == null, "Removing a unit left a hit reaction")
+	_expect(not interrupted_attack.is_valid() and slot._attack_tween == null, "Removing a unit left an attack animation")
 	battle.free()
 
 	# The existing tween for rearranging the preparation slots still works.
@@ -322,5 +350,5 @@ func _run() -> void:
 
 	_main.free()
 	if not _failed:
-		print("Battle tests passed: %d checks (combat, animation offsets, queued hits, cleanup and rearranging)." % _checks)
+		print("Battle tests passed: %d checks (combat, restarting animations, cleanup and rearranging)." % _checks)
 	quit(1 if _failed else 0)
