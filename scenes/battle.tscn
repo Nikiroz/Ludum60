@@ -44,9 +44,10 @@ texture = ExtResource("2_th188")
 
 [node name="TextureRect2" type="TextureRect" parent="." unique_id=2137194159]
 layout_mode = 1
-offset_left = 1.0
-offset_right = 321.0
-offset_bottom = 180.0
+offset_left = 711.0
+offset_top = -84.0
+offset_right = 1031.0
+offset_bottom = 96.0
 texture = ExtResource("3_6vh42")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1504602287]
@@ -100,8 +101,8 @@ theme = ExtResource("3_p1qf1")
 theme_override_styles/normal = SubResource("StyleBoxTexture_start")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_start_pressed")
 theme_override_styles/hover = SubResource("StyleBoxTexture_start")
-theme_override_styles/disabled = SubResource("StyleBoxTexture_start")
 theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_start_pressed")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_start")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "Start battle"
 script = ExtResource("4_start_battle")
@@ -124,8 +125,8 @@ theme = ExtResource("3_p1qf1")
 theme_override_styles/normal = SubResource("StyleBoxTexture_start")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_start_pressed")
 theme_override_styles/hover = SubResource("StyleBoxTexture_start")
-theme_override_styles/disabled = SubResource("StyleBoxTexture_start")
 theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_start_pressed")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_start")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "garage"
 script = ExtResource("5_scene_button")
