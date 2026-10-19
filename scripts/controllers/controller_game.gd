@@ -3,7 +3,9 @@ extends Node
 signal item_collected(item: GridInventoryItemData)
 
 const CURSOR_NORMAL: Texture2D = preload("res://sprites/cursors/cursor.png")
+const UnitGenerator = preload("res://scripts/temporary_unit_generator.gd")
 
+var units: Array[BattleUnit] = []
 var collected_items: Array[GridInventoryItemData] = []
 var inventory_positions: Dictionary[GridInventoryItemData, Vector2i] = {}
 var scrapyard_available := true:
@@ -57,6 +59,7 @@ func add_collected_item(item: GridInventoryItemData) -> void:
 	item_collected.emit(collected)
 
 func reset_progress() -> void:
+	units = UnitGenerator.generate_units(3)
 	collected_items.clear()
 	inventory_positions.clear()
 	scrapyard_available = true

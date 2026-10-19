@@ -26,6 +26,7 @@ var state: State = State.PREPARATION
 var tick_count := 0
 var battle_log: Array[String] = []
 var _attack_progress: Dictionary[BattleUnit, float] = {}
+var _initial_unit_stats: Dictionary[BattleUnit, Dictionary] = {}
 var _boss_pattern_index := 0
 var _units_provided := false
 var _boss_provided := false
@@ -37,7 +38,7 @@ func _ready() -> void:
 	_battle_timer.timeout.connect(_on_battle_tick)
 	_unit_slots.child_order_changed.connect(_on_unit_order_changed)
 	if generate_demo_units_on_start and not _units_provided:
-		set_units(TemporaryUnitGenerator.generate_units(3))
+		set_units(ControllerGame.units)
 	else:
 		_rebuild_unit_slots()
 	if generate_demo_units_on_start and not _boss_provided:
@@ -158,6 +159,16 @@ func start_battle() -> bool:
 	if boss == null or boss.health <= 0.0 or _count_living_units() == 0:
 		_log_event("Запуск отклонён: нужны живой босс и хотя бы один живой юнит.")
 		return false
+
+	_initial_unit_stats.clear()
+	for unit in units:
+		if unit != null:
+			_initial_unit_stats[unit] = {
+				"health": unit.health,
+				"attack_speed": unit.attack_speed,
+				"damage": unit.damage,
+				"crit_chance": unit.crit_chance,
+			}
 
 	state = State.FIGHTING
 	tick_count = 0
@@ -304,7 +315,18 @@ func _finish_battle(victory: bool) -> void:
 	if boss != null and boss.health <= 0.0:
 		_rebuild_boss_slot()
 	_log_event("ПОБЕДА: босс повержен." if victory else "ПОРАЖЕНИЕ: все юниты погибли.")
+	_restore_unit_stats()
 	round_finished.emit()
+
+
+func _restore_unit_stats() -> void:
+	for unit in _initial_unit_stats:
+		var stats: Dictionary = _initial_unit_stats[unit]
+		unit.health = stats.health
+		unit.attack_speed = stats.attack_speed
+		unit.damage = stats.damage
+		unit.crit_chance = stats.crit_chance
+	_initial_unit_stats.clear()
 
 
 func _describe_formation() -> String:
@@ -326,5 +348,6 @@ func _log_event(message: String) -> void:
 func _exit_tree() -> void:
 	if state == State.FIGHTING:
 		_log_event("Битва прервана: выход с экрана.")
+		_restore_unit_stats()
 	if is_instance_valid(_battle_timer):
 		_battle_timer.stop()

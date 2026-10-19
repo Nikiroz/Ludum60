@@ -1,11 +1,60 @@
 extends Control
 
+@onready var robot_tabs: TabContainer = $VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2
+@onready var robot_name: LineEdit = $VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/robotname
+@onready var health_label: Label = %Health
+@onready var damage_label: Label = %Damage
+@onready var speed_label: Label = %Speed
+@onready var crit_label: Label = %Crit
 
-# Called when the node enters the scene tree for the first time.
+var _active_unit: BattleUnit
+var _active_robot_index := -1
+
+
 func _ready() -> void:
-	pass # Replace with function body.
+	var buttons: VBoxContainer = robot_tabs.get_parent().get_node("TabButtons")
+	for index in range(robot_tabs.get_tab_count()):
+		var tab := robot_tabs.get_tab_control(index)
+		var icon := tab.get_child(0) as TextureRect
+		var unit: BattleUnit = ControllerGame.units[index] if index < ControllerGame.units.size() else null
+		icon.texture = unit.sprite if unit != null else null
+		buttons.get_child(index).tooltip_text = unit.name if unit != null else "Robot %d" % (index + 1)
+	robot_tabs.tab_changed.connect(_on_robot_selected)
+	robot_name.text_changed.connect(_on_robot_name_changed)
+	_on_robot_selected(robot_tabs.current_tab)
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func _process(_delta: float) -> void:
+	_update_robot_stats()
+
+
+func _on_robot_selected(index: int) -> void:
+	_save_robot_name()
+	_active_robot_index = index
+	_active_unit = ControllerGame.units[index] if index >= 0 and index < ControllerGame.units.size() else null
+	robot_name.editable = _active_unit != null
+	robot_name.text = _active_unit.name if _active_unit != null else ""
+	_update_robot_stats()
+
+
+func _update_robot_stats() -> void:
+	health_label.text = String.num(_active_unit.health, 2) if _active_unit != null else ""
+	damage_label.text = String.num(_active_unit.damage, 2) if _active_unit != null else ""
+	speed_label.text = String.num(_active_unit.attack_speed, 2) if _active_unit != null else ""
+	crit_label.text = String.num(_active_unit.crit_chance * 100.0, 2) + "%" if _active_unit != null else ""
+
+
+func _on_robot_name_changed(_new_name: String) -> void:
+	_save_robot_name()
+
+
+func _save_robot_name() -> void:
+	if _active_unit == null:
+		return
+	_active_unit.name = robot_name.text
+	var buttons: VBoxContainer = robot_tabs.get_parent().get_node("TabButtons")
+	buttons.get_child(_active_robot_index).tooltip_text = _active_unit.name
+
+
+func _exit_tree() -> void:
+	_save_robot_name()

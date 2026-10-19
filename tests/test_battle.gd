@@ -174,7 +174,7 @@ func _run() -> void:
 	battle = _battle([attacker], _boss(100.0, 10.0))
 	battle.start_battle()
 	_step(battle)
-	_expect(attacker.health == 0.0 and battle.units[0] == null, "Dead unit was not removed")
+	_expect(attacker.health == 5.0 and battle.units[0] == null, "Defeat did not restore the removed unit's health")
 	row = battle.get_node("MarginContainer/HBoxContainer")
 	_expect(row.get_child_count() == 4, "Death changed fixed slot numbering")
 	_expect(row.get_child(0).icon.texture.resource_path.ends_with("dummy_blank.png"), "Dead unit sprite remained")

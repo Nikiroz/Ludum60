@@ -14,10 +14,16 @@ static func generate_units(count: int = 3) -> Array[BattleUnit]:
 	var result: Array[BattleUnit] = []
 	var sprites: Array[Texture2D] = ROBOT_SPRITES.duplicate()
 	sprites.shuffle()
+	var names: Array[String] = BattleUnit.UNIT_NAMES.duplicate()
+	names.shuffle()
 
 	for index in range(count):
 		var unit := BattleUnit.new(sprites[index % sprites.size()])
-		_randomize_stats(unit)
+		unit.name = names[index % names.size()]
+		unit.health = 1.0
+		unit.attack_speed = 1.0
+		unit.damage = 1.0
+		unit.crit_chance = 0.0
 		result.append(unit)
 
 	return result
