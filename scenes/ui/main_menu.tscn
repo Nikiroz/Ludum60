@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dlxcemoturann"]
 
-[ext_resource type="Texture2D" uid="uid://dnywxnopgcs6q" path="res://sprites/mocup/menu_merged.png" id="1_m1kxf"]
+[ext_resource type="Texture2D" uid="uid://di3f1pp5jb27w" path="res://sprites/mocup/image_2026-10-19_23-27-23.png" id="1_1g8jr"]
 [ext_resource type="Script" uid="uid://dexwaw3i4exg1" path="res://scripts/ui/ui_show_button.gd" id="6_rcqid"]
 [ext_resource type="Theme" uid="uid://kxx26dlcfs5b" path="res://styles/main_buttons.tres" id="6_rtw2f"]
 
@@ -30,8 +30,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_m1kxf")
-stretch_mode = 1
+texture = ExtResource("1_1g8jr")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=944139333]
 layout_mode = 1
@@ -40,10 +39,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 50
-theme_override_constants/margin_top = 30
+theme_override_constants/margin_left = 55
+theme_override_constants/margin_top = 68
 
 [node name="Buttons" type="VBoxContainer" parent="MarginContainer" unique_id=347095572]
+custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
