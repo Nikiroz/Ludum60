@@ -39,3 +39,18 @@ func _apply_item_bonuses(item: GridInventoryItemData, multiplier: float) -> void
 	attack_speed += item.attack_speed_bonus * multiplier
 	damage += item.damage_bonus * multiplier
 	crit_chance += item.crit_chance_bonus * multiplier
+
+
+func unequip_item(slot: StringName) -> GridInventoryItemData:
+	var item: GridInventoryItemData = equipment.get(slot)
+	if item == null or item.is_service_item:
+		return null
+	match slot:
+		&"torso":
+			return equip_item(BASIC_TORSO.duplicate(true) as GridInventoryItemData, slot)
+		&"legs":
+			return equip_item(BASIC_LEGS.duplicate(true) as GridInventoryItemData, slot)
+	equipment.erase(slot)
+	_apply_item_bonuses(item, -1.0)
+	equipment_changed.emit()
+	return item

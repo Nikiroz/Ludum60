@@ -16,6 +16,7 @@ var unit: BattleUnit:
 			_refresh()
 
 var _layers: Dictionary[StringName, Sprite2D] = {}
+var _images: Dictionary[StringName, Image] = {}
 
 
 func _ready() -> void:
@@ -26,7 +27,6 @@ func _ready() -> void:
 		layer.name = slot
 		layer.centered = false
 		layer.region_enabled = true
-		layer.flip_h = slot == &"left_hand"
 		add_child(layer)
 		_layers[slot] = layer
 	resized.connect(_layout_parts)
@@ -37,11 +37,38 @@ func _refresh() -> void:
 	for slot in SLOTS:
 		var item: GridInventoryItemData = unit.equipment.get(slot) if unit != null else null
 		var layer := _layers[slot]
-		layer.texture = item.get_unit_texture() if item != null else null
+		layer.texture = null
+		if item != null:
+			match slot:
+				&"left_hand":
+					layer.texture = item.get_left_hand_texture()
+				&"right_hand":
+					layer.texture = item.get_right_hand_texture()
+				_:
+					layer.texture = item.get_unit_texture()
 		layer.visible = layer.texture != null
 		if layer.texture != null:
-			layer.region_rect = layer.texture.get_image().get_used_rect()
+			_images[slot] = layer.texture.get_image()
+			layer.region_rect = _images[slot].get_used_rect()
+		else:
+			_images.erase(slot)
 	_layout_parts()
+
+
+func get_slot_at(at_position: Vector2) -> StringName:
+	# Pick the frontmost opaque pixel, so transparent margins cannot steal a grab.
+	for index in range(SLOTS.size() - 1, -1, -1):
+		var slot := SLOTS[index]
+		var layer := _layers[slot]
+		if not layer.visible:
+			continue
+		var local := layer.get_transform().affine_inverse() * at_position
+		if not Rect2(Vector2.ZERO, layer.region_rect.size).has_point(local):
+			continue
+		var pixel := Vector2i(local.floor()) + Vector2i(layer.region_rect.position)
+		if _images[slot].get_pixelv(pixel).a > 0.0:
+			return slot
+	return &""
 
 
 func _part_size(slot: StringName) -> Vector2:

@@ -23,12 +23,12 @@ func _expect(condition: bool, message: String) -> void:
 
 func _give(id: String, health: float, speed: float, damage: float, crit: float) -> GridInventoryItemData:
 	var item := GridInventoryItemData.new()
+	var resource_path := "res://item_pack/items/%s.tres" % id
+	if ResourceLoader.exists(resource_path):
+		item = load(resource_path).duplicate(true) as GridInventoryItemData
 	item.item_id = id
 	item.display_name = id
-	var sprite_path := "res://item_pack/sprites/%s.png" % id
 	item.sprite_path = "res://item_pack/sprites/head_lamp.png"
-	if ResourceLoader.exists(sprite_path):
-		item.unit_sprite_path = sprite_path
 	item.occupied_cells = [Vector2i.ZERO]
 	item.health_bonus = health
 	item.attack_speed_bonus = speed
@@ -79,10 +79,17 @@ func _appearance(unit: BattleUnit) -> void:
 		var layer: Sprite2D = preview.get_node(NodePath(slot))
 		var item: GridInventoryItemData = unit.equipment.get(slot)
 		_expect(layer.scale.is_equal_approx(Vector2.ONE), "Equipment preview changed the texture's native size")
-		_expect(layer.visible == (item != null), "Equipment preview shows an empty slot or hides equipped gear")
+		_expect(not layer.flip_h and not layer.flip_v, "Equipment preview mirrored an authored part texture")
 		var expected_texture: Texture2D = null
 		if item != null:
-			expected_texture = load(item.unit_sprite_path) as Texture2D if ResourceLoader.exists(item.unit_sprite_path) else item.get_texture()
+			var texture_path := item.unit_sprite_path
+			if slot == &"left_hand":
+				texture_path = item.left_hand_sprite_path
+			elif slot == &"right_hand":
+				texture_path = item.right_hand_sprite_path
+			if not texture_path.is_empty():
+				expected_texture = load(texture_path) as Texture2D
+		_expect(layer.visible == (expected_texture != null), "Equipment preview shows an empty slot or hides equipped gear")
 		_expect(layer.texture == expected_texture, "Equipment preview did not use the item's Unit Sprite")
 	if not preview.is_visible_in_tree():
 		return

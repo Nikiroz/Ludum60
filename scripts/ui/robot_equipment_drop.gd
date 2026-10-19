@@ -4,6 +4,42 @@ var unit: BattleUnit
 var _show_drop := false
 var _hand_item := false
 var _left_hand := true
+var _dragged_slot: StringName = &""
+
+
+func _slot_at(at_position: Vector2) -> StringName:
+	var preview: Control = $EquipmentPreview
+	var preview_position := preview.get_global_transform().affine_inverse() * (get_global_transform() * at_position)
+	return preview.get_slot_at(preview_position)
+
+
+func _get_drag_data(at_position: Vector2) -> Variant:
+	if unit == null:
+		return null
+	var slot := _slot_at(at_position)
+	var item: GridInventoryItemData = unit.equipment.get(slot)
+	if not ControllerGame.can_unequip_item(unit, slot, item):
+		return null
+	var grab_offset := item.occupied_cells[0] if not item.occupied_cells.is_empty() else Vector2i.ZERO
+	var preview := Control.new()
+	preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var icon := TextureRect.new()
+	icon.texture = item.get_texture()
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.size = Vector2(item.grid_size) * 12
+	icon.position = -Vector2(grab_offset) * 12 - Vector2(6, 6)
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	preview.add_child(icon)
+	set_drag_preview(preview)
+	_dragged_slot = slot
+	$EquipmentPreview.get_node(NodePath(slot)).modulate.a = 0.25
+	return {"equipment": self, "unit": unit, "slot": slot, "item": item, "grab_offset": grab_offset}
+
+
+func _gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion and unit != null:
+		var item: GridInventoryItemData = unit.equipment.get(_slot_at(event.position))
+		tooltip_text = item.display_name if item != null else ""
 
 
 func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
@@ -25,6 +61,9 @@ func _drop_data(at_position: Vector2, data: Variant) -> void:
 
 
 func _notification(what: int) -> void:
+	if what == NOTIFICATION_DRAG_END and _dragged_slot != &"":
+		$EquipmentPreview.get_node(NodePath(_dragged_slot)).modulate.a = 1.0
+		_dragged_slot = &""
 	if what == NOTIFICATION_MOUSE_EXIT or what == NOTIFICATION_DRAG_END:
 		_show_drop = false
 		queue_redraw()

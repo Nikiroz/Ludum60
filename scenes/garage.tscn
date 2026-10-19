@@ -13,16 +13,22 @@
 [ext_resource type="Script" uid="uid://cce4052u4yygb" path="res://scripts/ui/robot_equipment_drop.gd" id="12_equipment_drop"]
 [ext_resource type="Theme" uid="uid://dusbxqn3cho4s" path="res://styles/buttons.tres" id="13_spycl"]
 [ext_resource type="Script" uid="uid://d2k5m0cpjhw1u" path="res://scripts/ui/ui_scene_button.gd" id="14_nulr8"]
-[ext_resource type="Script" path="res://scripts/ui/robot_equipment_preview.gd" id="15_equipment_preview"]
+[ext_resource type="Script" uid="uid://c6v46ddvqbuly" path="res://scripts/ui/robot_equipment_preview.gd" id="15_equipment_preview"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d8qye"]
 content_margin_left = 0.0
 content_margin_top = 0.0
 content_margin_right = 0.0
 content_margin_bottom = 0.0
-bg_color = Color(0.1, 0.1, 0.1, 0.6)
+bg_color = Color(0.101960786, 0.101960786, 0.101960786, 0)
 border_color = Color(1, 1, 1, 0.75)
 corner_detail = 1
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_spycl"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nulr8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sxw43"]
 
 [node name="Garage" type="Control" unique_id=468656869]
 layout_mode = 3
@@ -92,13 +98,17 @@ script = ExtResource("10_inventory")
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 22
-theme_override_constants/margin_right = 11
+theme_override_constants/margin_right = 12
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer" unique_id=1085941650]
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer" unique_id=1865378733]
+layout_mode = 2
+theme_override_constants/margin_top = 27
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2" unique_id=1085941650]
 layout_mode = 2
 script = ExtResource("11_side_tabs")
 
-[node name="TabContainer2" type="TabContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer" unique_id=249565875]
+[node name="TabContainer2" type="TabContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer" unique_id=249565875]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/side_margin = 0
@@ -113,13 +123,13 @@ theme_override_styles/tab_focus = SubResource("StyleBoxFlat_d8qye")
 current_tab = 0
 tabs_visible = false
 
-[node name="robot1" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2" unique_id=2113432495]
+[node name="robot1" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer/TabContainer2" unique_id=2113432495]
 layout_mode = 2
 script = ExtResource("12_equipment_drop")
 metadata/_tab_index = 0
 metadata/_tab_name = ""
 
-[node name="EquipmentPreview" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2/robot1" unique_id=1523984160]
+[node name="EquipmentPreview" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer/TabContainer2/robot1" unique_id=1523984160]
 custom_maximum_size = Vector2(60, 100)
 layout_mode = 1
 anchors_preset = 15
@@ -134,14 +144,14 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("15_equipment_preview")
 
-[node name="robot2" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2" unique_id=1045187979]
+[node name="robot2" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer/TabContainer2" unique_id=1045187979]
 visible = false
 layout_mode = 2
 script = ExtResource("12_equipment_drop")
 metadata/_tab_index = 1
 metadata/_tab_name = ""
 
-[node name="EquipmentPreview" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2/robot2" unique_id=490467583]
+[node name="EquipmentPreview" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer/TabContainer2/robot2" unique_id=490467583]
 custom_maximum_size = Vector2(60, 100)
 layout_mode = 1
 anchors_preset = 15
@@ -156,14 +166,14 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("15_equipment_preview")
 
-[node name="robot3" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2" unique_id=2127662024]
+[node name="robot3" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer/TabContainer2" unique_id=2127662024]
 visible = false
 layout_mode = 2
 script = ExtResource("12_equipment_drop")
 metadata/_tab_index = 2
 metadata/_tab_name = ""
 
-[node name="EquipmentPreview" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2/robot3" unique_id=427945239]
+[node name="EquipmentPreview" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer/TabContainer2/robot3" unique_id=427945239]
 custom_maximum_size = Vector2(60, 100)
 layout_mode = 1
 anchors_preset = 15
@@ -178,34 +188,50 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("15_equipment_preview")
 
-[node name="TabButtons" type="VBoxContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1441514338]
+[node name="TabButtons" type="VBoxContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer" unique_id=1441514338]
 layout_mode = 2
-size_flags_vertical = 4
+size_flags_vertical = 0
 theme_override_constants/separation = 4
 
-[node name="Robot1" type="TextureButton" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabButtons" unique_id=1062727773]
+[node name="Robot1" type="TextureButton" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer/TabButtons" unique_id=1062727773]
 layout_mode = 2
 tooltip_text = "Robot 1"
 toggle_mode = true
 texture_normal = ExtResource("2_gnlqp")
 
-[node name="Robot2" type="TextureButton" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabButtons" unique_id=767822516]
+[node name="Robot2" type="TextureButton" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer/TabButtons" unique_id=767822516]
 layout_mode = 2
 tooltip_text = "Robot 2"
 toggle_mode = true
 texture_normal = ExtResource("2_gnlqp")
 
-[node name="Robot3" type="TextureButton" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabButtons" unique_id=587732376]
+[node name="Robot3" type="TextureButton" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer/TabButtons" unique_id=587732376]
 layout_mode = 2
 tooltip_text = "Robot 3"
 toggle_mode = true
 texture_normal = ExtResource("2_gnlqp")
 
-[node name="robotname" type="LineEdit" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer" unique_id=2081708074]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer" unique_id=1962565366]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 20
+
+[node name="robotname" type="LineEdit" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer" unique_id=2081708074]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.105882354, 0.09803922, 0.09411765, 1)
+theme_override_colors/font_uneditable_color = Color(1, 1, 1, 0)
+theme_override_colors/font_selected_color = Color(0.105882354, 0.09803922, 0.09411765, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0)
+theme_override_colors/font_placeholder_color = Color(0.8745098, 0.8745098, 0.8745098, 0)
+theme_override_colors/caret_color = Color(0.95, 0.95, 0.95, 1)
 theme_override_font_sizes/font_size = 8
+theme_override_styles/normal = SubResource("StyleBoxEmpty_spycl")
+theme_override_styles/read_only = SubResource("StyleBoxEmpty_nulr8")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_sxw43")
 text = "Wally"
 alignment = 1
 

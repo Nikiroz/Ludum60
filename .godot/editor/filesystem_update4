@@ -29,3 +29,5 @@ res://tests/test_equipment.gd
 res://scripts/ui/robot_equipment_preview.gd
 res://item_pack/items/base_basic.tres
 res://item_pack/items/leg_basic.tres
+res://tests/test_pause.gd
+res://scripts/ui/robot_equipment_drop.gd

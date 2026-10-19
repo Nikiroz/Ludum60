@@ -47,6 +47,8 @@ func _run() -> void:
 
 	_escape()
 	_expect(paused and settings.visible, "Escape did not open the menu and pause gameplay")
+	var music: AudioStreamPlayer = root.get_node("ControllerGame/BackgroundMusic")
+	_expect(music.playing and not music.stream_paused and music.can_process(), "Settings pause stopped the background music")
 	var time_before := running.time_left
 	await create_timer(0.1).timeout
 	_expect(is_equal_approx(running.time_left, time_before), "Timer counted down while menu was open")

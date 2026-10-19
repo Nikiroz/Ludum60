@@ -14,6 +14,7 @@ var _dragged_item: GridInventoryItemData
 var _drop_origin := Vector2i.ZERO
 var _show_drop := false
 var _drop_valid := false
+var _drop_item: GridInventoryItemData
 
 
 func _ready() -> void:
@@ -110,10 +111,18 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 
 
 func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
-	if not data is Dictionary or data.get("inventory") != self:
+	if not data is Dictionary:
+		return false
+	var item := data.get("item") as GridInventoryItemData
+	var inventory_move: bool = data.get("inventory") == self and ControllerGame.collected_items.has(item)
+	var equipment_return: bool = data.has("equipment") and ControllerGame.can_unequip_item(
+		data.get("unit") as BattleUnit, data.get("slot", &""), item
+	)
+	if not inventory_move and not equipment_return:
 		return false
 	_drop_origin = _cell_at(at_position) - data.grab_offset
-	_drop_valid = can_place_item(data.item, _drop_origin)
+	_drop_item = item
+	_drop_valid = can_place_item(item, _drop_origin)
 	_show_drop = true
 	queue_redraw()
 	return _drop_valid
@@ -121,7 +130,10 @@ func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
 
 func _drop_data(at_position: Vector2, data: Variant) -> void:
 	if _can_drop_data(at_position, data):
-		ControllerGame.inventory_positions[data.item] = _drop_origin
+		if data.get("inventory") == self:
+			ControllerGame.inventory_positions[data.item] = _drop_origin
+		else:
+			ControllerGame.unequip_item(data.unit, data.slot, data.item, _drop_origin)
 	queue_redraw()
 
 
@@ -134,6 +146,7 @@ func _gui_input(event: InputEvent) -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_DRAG_END:
 		_dragged_item = null
+		_drop_item = null
 		_show_drop = false
 		queue_redraw()
 	elif what == NOTIFICATION_MOUSE_EXIT:
@@ -154,7 +167,7 @@ func _draw() -> void:
 		var origin: Vector2i = ControllerGame.inventory_positions[item]
 		var tint := Color(1, 1, 1, 0.25 if item == _dragged_item else 1.0)
 		draw_texture_rect(texture, Rect2(Vector2(origin) * CELL_SIZE, Vector2(item.grid_size) * CELL_SIZE), false, tint)
-	if _show_drop and _dragged_item != null:
+	if _show_drop and _drop_item != null:
 		var color := Color(0.3, 1.0, 0.4, 0.45) if _drop_valid else Color(1.0, 0.2, 0.2, 0.45)
-		for offset in _dragged_item.occupied_cells:
+		for offset in _drop_item.occupied_cells:
 			draw_rect(Rect2(Vector2(_drop_origin + offset) * CELL_SIZE, Vector2.ONE * CELL_SIZE), color)

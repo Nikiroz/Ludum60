@@ -1,7 +1,7 @@
 extends Control
 
-@onready var robot_tabs: TabContainer = $VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2
-@onready var robot_name: LineEdit = $VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/robotname
+@onready var robot_tabs: TabContainer = $VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer/TabContainer2
+@onready var robot_name: LineEdit = $VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer/robotname
 @onready var health_label: Label = %Health
 @onready var damage_label: Label = %Damage
 @onready var speed_label: Label = %Speed

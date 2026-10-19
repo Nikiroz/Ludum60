@@ -3,6 +3,8 @@ extends Resource
 ## Exportable data asset for an item occupying arbitrary cells in a 3x3 grid.
 ## Keep the item_pack folder at res://item_pack/ when moving into the game.
 
+enum BodyPart { NONE, HEAD, BODY, HANDS, LEGS }
+
 @export var item_id: String = ""
 @export var display_name: String = ""
 ## Built-in equipment: excluded from scrapyard loot and discarded when replaced.
@@ -10,8 +12,14 @@ extends Resource
 ## String path keeps the exported asset independent of the editor's texture-import state.
 ## Example: res://item_pack/sprites/iron_sword.png
 @export_file("*.png") var sprite_path: String = ""
-## Optional texture path for the robot preview, displayed at its original pixel size.
+## NONE keeps older items compatible until their body part is selected.
+@export var body_part: BodyPart = BodyPart.NONE
+## Separate image displayed on the unit when this item is equipped.
+## Optional for existing items; copied to res://item_pack/unit_sprites/<id>.png.
 @export_file("*.png") var unit_sprite_path: String = ""
+## Hands use independent images; no automatic mirroring is applied.
+@export_file("*.png") var left_hand_sprite_path: String = ""
+@export_file("*.png") var right_hand_sprite_path: String = ""
 @export var occupied_cells: Array[Vector2i] = []
 @export var grid_size: Vector2i = Vector2i(3, 3)
 
@@ -36,15 +44,25 @@ func get_stat_bonuses() -> Dictionary:
 
 
 func get_equipment_slot(left_hand: bool = true) -> StringName:
+    match body_part:
+        BodyPart.HEAD:
+            return &"head"
+        BodyPart.BODY:
+            return &"torso"
+        BodyPart.HANDS:
+            return &"left_hand" if left_hand else &"right_hand"
+        BodyPart.LEGS:
+            return &"legs"
+    # Older resources may not yet have a body part selected.
     match item_id.get_slice("_", 0):
         "head":
             return &"head"
         "base":
             return &"torso"
-        "leg":
-            return &"legs"
         "hand":
             return &"left_hand" if left_hand else &"right_hand"
+        "leg":
+            return &"legs"
     return &""
 
 
@@ -59,6 +77,18 @@ func get_texture() -> Texture2D:
 
 
 func get_unit_texture() -> Texture2D:
-    if not unit_sprite_path.is_empty() and ResourceLoader.exists(unit_sprite_path):
-        return load(unit_sprite_path) as Texture2D
-    return get_texture()
+    if unit_sprite_path.is_empty():
+        return null
+    return load(unit_sprite_path) as Texture2D
+
+
+func get_left_hand_texture() -> Texture2D:
+    if left_hand_sprite_path.is_empty():
+        return null
+    return load(left_hand_sprite_path) as Texture2D
+
+
+func get_right_hand_texture() -> Texture2D:
+    if right_hand_sprite_path.is_empty():
+        return null
+    return load(right_hand_sprite_path) as Texture2D
