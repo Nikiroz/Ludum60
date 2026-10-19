@@ -327,6 +327,8 @@ func _finish_battle(victory: bool) -> void:
 	_log_event("ПОБЕДА: босс повержен." if victory else "ПОРАЖЕНИЕ: все юниты погибли.")
 	_restore_unit_stats()
 	round_finished.emit()
+	if victory:
+		ControllerGame.show_victory_dialog()
 
 
 func _restore_unit_stats() -> void:

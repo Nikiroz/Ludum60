@@ -40,6 +40,7 @@ func _boss(health: float = 9999.0, damage: float = 0.0, pattern: Array = [1], cr
 
 
 func _battle(army: Array, boss: BossData) -> Node:
+	_main.get_node("MenuLayer/VictoryDialog").hide()
 	var battle := _battle_scene.instantiate()
 	battle.generate_demo_units_on_start = false
 	battle.set_units(army)
@@ -78,6 +79,7 @@ func _run() -> void:
 	await process_frame
 	var row: HBoxContainer = battle.get_node("MarginContainer/HBoxContainer")
 	var slot: Control = row.get_child(0)
+	_expect(slot.health_label.text == "100" and slot.health_bar.max_value == 100.0 and slot.health_bar.value == 100.0, "Robot does not show only its current health over a full HP bar")
 	_expect(slot.size.is_equal_approx(Vector2(36, 60)), "Robot visual changed the slot hit area")
 	_expect(slot.icon.size.is_equal_approx(Vector2(95, 100)), "Robot visual is not 95 by 100")
 	_expect(slot.equipment_preview.unit == attacker and slot.icon.texture == null, "Battle robot does not show its assembled equipment")
@@ -88,12 +90,15 @@ func _run() -> void:
 	attacker.equip_item(head, &"head")
 	_expect(slot.equipment_preview.get_node("head").texture == head.get_unit_texture(), "Battle robot did not update its equipped part")
 	var boss_view: Control = battle.get_node("MarginContainer2").get_child(0)
+	_expect(boss_view.health_label.text == "9999" and boss_view.health_bar.max_value == 9999.0, "Boss HP bar has the wrong text or maximum")
 	_expect(boss_view.icon.texture == BossData.HEALTH_SPRITES[0] and not boss_view.equipment_preview.visible, "Boss does not show its healthy sprite")
 	_expect(boss_view.icon.size.is_equal_approx(Vector2(123, 120)), "Boss sprite was resized from its native dimensions")
-	_expect(start_button.visible, "Start button is missing during preparation")
+	_expect(start_button.visible and not start_button.disabled, "Start button is missing or disabled during preparation")
+	_expect(not battle.get_node("GarageButton").visible, "Garage button is visible during preparation")
 	slot._start_drag()
 	_expect(slot.active_slot == slot, "Preparation drag did not start")
 	_expect(slot._preview_equipment != null and slot._preview_equipment.unit == attacker, "Drag preview lost the assembled robot")
+	_expect(slot._preview_health_bar != null and slot._preview_health_bar.value == 100.0 and slot._preview_health_label.text == "100", "Dragging lost the health bar or its numeric value")
 	for part in [&"head", &"torso", &"legs"]:
 		var original: Sprite2D = slot.equipment_preview.get_node(NodePath(part))
 		var dragged: Sprite2D = slot._preview_equipment.get_node(NodePath(part))
@@ -101,9 +106,11 @@ func _run() -> void:
 		_expect(dragged.position.is_equal_approx(original.position) and dragged.scale.is_equal_approx(Vector2.ONE), "Dragging moved or resized a robot part")
 	_expect(is_zero_approx(slot.icon.modulate.a), "Dragging did not hide the original assembled robot")
 	start_button.pressed.emit()
-	_expect(not start_button.visible, "Start button stayed visible")
+	_expect(start_button.visible and start_button.disabled, "Starting battle did not leave its start button visible and disabled")
+	_expect(not battle.get_node("GarageButton").visible, "Garage button is visible during combat")
 	_expect(slot.active_slot == null, "Starting battle did not cancel the active drag")
 	_expect(slot._preview_layer == null, "Drag preview was not released")
+	_expect(slot._preview_health_bar == null and slot.health_bar.visible, "Cancelling drag did not restore the health bar")
 	_expect(slot._preview_equipment == null and is_equal_approx(slot.icon.modulate.a, 1.0), "Cancelling drag did not restore the assembled robot")
 	for view in row.get_children():
 		_expect(not view.dragging_enabled, "A battle slot remained draggable")
@@ -139,6 +146,7 @@ func _run() -> void:
 		boss.health = sample[0]
 		await process_frame
 		_expect(boss_view.icon.texture == BossData.HEALTH_SPRITES[sample[1]], "Wrong boss sprite at health %.2f" % sample[0])
+		_expect(boss_view.health_bar.max_value == 500.0 and is_equal_approx(boss_view.health_bar.value, clampf(sample[0], 0.0, 500.0)), "Boss HP bar lost its maximum or displayed the wrong remaining health")
 		_expect(boss_view.icon.size.is_equal_approx(Vector2(123, 120)) and is_equal_approx(boss_view.icon.position.y + boss_view.icon.size.y, boss_floor), "Boss sprite changed size or floor alignment between states")
 	boss.health = 500.0
 	_expect(battle.start_battle(), "Boss sprite checks prevented starting combat")
@@ -162,6 +170,9 @@ func _run() -> void:
 	_step(battle)
 	_expect(is_equal_approx(boss.health, 990.0), "1.5 attacks/s should attack once on tick 1")
 	_expect(is_equal_approx(attacker.health, 93.0), "Boss must attack once per tick regardless of speed")
+	await process_frame
+	var damaged_slot: Control = battle.get_node("MarginContainer/HBoxContainer").get_child(0)
+	_expect(damaged_slot.health_bar.max_value == 100.0 and damaged_slot.health_bar.value == 93.0 and damaged_slot.health_label.text == "93", "Damage did not update the numeric HP and bar while preserving its maximum")
 	_step(battle)
 	_expect(is_equal_approx(boss.health, 970.0), "1.5 attacks/s should attack twice on tick 2")
 	_expect(is_equal_approx(attacker.health, 93.0) and is_equal_approx(second.health, 100.0), "Empty target damaged a unit")
@@ -210,7 +221,8 @@ func _run() -> void:
 	_expect(boss.health == 0.0 and attacker.health == 100.0, "Dead boss retaliated or retained negative HP")
 	_expect(battle.get_node("MarginContainer2").get_child_count() == 0, "Dead boss sprite remained on the field")
 	_expect(battle.get_node("BattleTimer").is_stopped() and ended.size() == 1, "Victory did not stop and finish the battle")
-	_expect(not start_button.visible, "Start button returned after victory")
+	_expect(start_button.visible and start_button.disabled, "Victory did not leave the start button visible and disabled")
+	_expect(battle.get_node("GarageButton").visible, "Victory did not show the garage button")
 	_expect(_has_log(battle, "ПОБЕДА"), "Victory was not logged")
 	_step(battle)
 	_expect(ended.size() == 1 and battle.tick_count == 1, "Finished battle continued ticking")
@@ -227,9 +239,10 @@ func _run() -> void:
 	_expect(row.get_child_count() == 4, "Death changed fixed slot numbering")
 	_expect(row.get_child(0).icon.texture.resource_path.ends_with("dummy_blank.png"), "Dead unit sprite remained")
 	_expect(not row.get_child(0).equipment_preview.visible and row.get_child(0).equipment_preview.unit == null, "Dead robot's assembled parts remained on the field")
-	_expect(not row.get_child(0).debug_stats.visible, "Dead unit stats remained visible")
+	_expect(not row.get_child(0).health_bar.visible, "Dead unit health bar remained visible")
 	_expect(battle.get_node("BattleTimer").is_stopped() and _has_log(battle, "ПОРАЖЕНИЕ"), "Defeat did not stop the battle")
-	_expect(not start_button.visible, "Start button returned after defeat")
+	_expect(start_button.visible and start_button.disabled, "Defeat did not leave the start button visible and disabled")
+	_expect(battle.get_node("GarageButton").visible, "Defeat did not show the garage button")
 	battle.free()
 
 	# Invalid and empty patterns safely consume or skip the boss turn.
@@ -252,7 +265,7 @@ func _run() -> void:
 	battle = _battle([_unit(0.0)], _boss())
 	start_button = battle.get_node("StarBattleButton")
 	_expect(not battle.start_battle(), "Battle started without a living army")
-	_expect(start_button.visible and battle.get_node("BattleTimer").is_stopped(), "Rejected start changed battle UI or timer")
+	_expect(start_button.visible and not start_button.disabled and battle.get_node("BattleTimer").is_stopped(), "Rejected start changed battle UI or timer")
 	_expect(battle.units[0] == null, "Already dead unit remained on the field")
 	battle.free()
 	battle = _battle([_unit()], null)

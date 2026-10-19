@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dlxcemoturann"]
 
 [ext_resource type="Texture2D" uid="uid://di3f1pp5jb27w" path="res://sprites/mocup/image_2026-10-19_23-27-23.png" id="1_1g8jr"]
+[ext_resource type="Texture2D" uid="uid://bvpxgpxgf6ekq" path="res://sprites/mocup/menu_merged-sheet.png" id="4_m1kxf"]
 [ext_resource type="Script" uid="uid://dexwaw3i4exg1" path="res://scripts/ui/ui_show_button.gd" id="6_rcqid"]
 [ext_resource type="Theme" uid="uid://kxx26dlcfs5b" path="res://styles/main_buttons.tres" id="6_rtw2f"]
 
@@ -71,6 +72,10 @@ text = "Credits"
 alignment = 0
 script = ExtResource("6_rcqid")
 nodeName = "Credits"
+
+[node name="MenuMergedSheet" type="Sprite2D" parent="MarginContainer" unique_id=14663985]
+position = Vector2(162, 92)
+texture = ExtResource("4_m1kxf")
 
 [connection signal="pressed" from="MarginContainer/Buttons/NewGame" to="MarginContainer/Buttons/NewGame" method="_on_pressed"]
 [connection signal="pressed" from="MarginContainer/Buttons/Settings_button" to="MarginContainer/Buttons/Settings_button" method="_on_pressed"]

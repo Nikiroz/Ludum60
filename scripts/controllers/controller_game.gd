@@ -124,7 +124,37 @@ func _on_battle_round_finished() -> void:
 func set_drag_cursor(dragging: bool) -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN if dragging else Input.MOUSE_MODE_VISIBLE
 
+func show_victory_dialog() -> void:
+	var main := get_tree().current_scene
+	if main == null or Transition.transitioning:
+		return
+	var dialog = main.get_node_or_null("MenuLayer/VictoryDialog")
+	if dialog != null:
+		dialog.open()
+
+func return_to_main_menu() -> void:
+	var main := get_tree().current_scene
+	if main == null:
+		return
+	var main_menu := main.get_node_or_null("MenuLayer/MainMenu") as Control
+	if main_menu == null:
+		return
+	for panel_name in ["Settings", "Warning", "Credits", "VictoryDialog"]:
+		var panel := main.get_node_or_null("MenuLayer/" + panel_name) as Control
+		if panel != null:
+			panel.hide()
+	if is_instance_valid(Transition.gameplay_scene):
+		Transition.gameplay_scene.process_mode = Node.PROCESS_MODE_DISABLED
+		Transition.gameplay_scene.queue_free()
+	Transition.gameplay_scene = null
+	isMainMenu = true
+	main_menu.show()
+
 func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
+		show_victory_dialog()
+		get_viewport().set_input_as_handled()
+		return
 	if isMainMenu:
 		return
 

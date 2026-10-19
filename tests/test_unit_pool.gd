@@ -85,7 +85,8 @@ func _run() -> void:
 			_expect(battle.units[index] == original_units[index], "Opening battle regenerated a pooled unit")
 		_expect(battle.units[0].damage == 7.0, "Opening battle reset a unit's stats")
 		_expect(controller.units.size() == 3 and battle.units.size() == 4, "Battle empty slot changed the controller pool")
-		_expect(battle.get_node("MarginContainer/HBoxContainer").get_child(0).debug_stats.text.begins_with(new_name + "\n"), "Battle did not display the edited name")
+		var slot: Control = battle.get_node("MarginContainer/HBoxContainer").get_child(0)
+		_expect(slot.unit.name == new_name and slot.health_label.text == "1", "Battle lost the edited name or showed text other than current HP")
 		battle.free()
 		var another_garage = load("res://scenes/garage.tscn").instantiate()
 		main.add_child(another_garage)
@@ -124,6 +125,7 @@ func _run() -> void:
 			_expect(original_units[index].attack_speed == 1.0 and original_units[index].crit_chance == 0.0, "Finished battle did not restore stats")
 		_expect(original_units[0].damage == 7.0, "Finishing battle discarded a pre-battle improvement")
 		_expect(controller.scrapyard_available, "Stat restoration prevented reopening the scrapyard")
+		main.get_node("MenuLayer/VictoryDialog").hide()
 		battle.free()
 
 	controller.reset_progress()

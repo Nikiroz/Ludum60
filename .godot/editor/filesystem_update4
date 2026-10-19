@@ -32,3 +32,6 @@ res://item_pack/items/leg_basic.tres
 res://tests/test_pause.gd
 res://scripts/ui/robot_equipment_drop.gd
 res://scripts/boss_unit.gd
+res://scripts/ui/ui_start_battle_button.gd
+res://scripts/ui/pause_menu.gd
+res://scripts/ui/ui_back_to_menu.gd

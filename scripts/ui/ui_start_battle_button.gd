@@ -4,8 +4,12 @@ extends UIButton
 
 
 func _ready() -> void:
-	_battle.connect("battle_started", hide)
-	_battle.connect("round_finished", hide)
+	_battle.connect("battle_started", _disable)
+	_battle.connect("round_finished", _disable)
+
+
+func _disable() -> void:
+	disabled = true
 
 
 func _on_pressed() -> void:

@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cetha4v8rfyp3" path="res://scenes/ui/credits.tscn" id="3_tefeu"]
 [ext_resource type="PackedScene" uid="uid://birdb0lniku25" path="res://scenes/ui/warning.tscn" id="4_o6xl0"]
 [ext_resource type="Script" path="res://scripts/ui/pause_menu.gd" id="6_pause_menu"]
+[ext_resource type="PackedScene" path="res://scenes/ui/victory_dialog.tscn" id="7_victory_dialog"]
 
 [node name="Main" type="Node" unique_id=1672023872]
 
@@ -23,3 +24,5 @@ visible = false
 
 [node name="Warning" parent="MenuLayer" unique_id=1943961518 instance=ExtResource("4_o6xl0")]
 visible = false
+
+[node name="VictoryDialog" parent="MenuLayer" instance=ExtResource("7_victory_dialog")]

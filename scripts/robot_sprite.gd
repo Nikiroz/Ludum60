@@ -8,6 +8,8 @@ const EMPTY_SLOT_SPRITE: Texture2D = preload("res://sprites/robots/dummy_blank.p
 
 var dragging_enabled := true:
 	set(value):
+		if dragging_enabled and not value and unit != null:
+			_maximum_health = maxf(unit.health, 0.0)
 		dragging_enabled = value
 		if not value and active_slot == self:
 			_clear_drag()
@@ -29,7 +31,8 @@ var shift_duration: float = 0.2
 @onready var icon: TextureRect = $CombatMotion/Icon
 @onready var equipment_preview: Control = $CombatMotion/Icon/EquipmentPreview
 @onready var _icon_rest_position: Vector2 = icon.position
-@onready var debug_stats: Label = $CombatMotion/Icon/DebugStats
+@onready var health_bar: ProgressBar = $CombatMotion/Icon/HealthBar
+@onready var health_label: Label = $CombatMotion/Icon/HealthBar/Value
 @onready var target_arrow: TextureRect = $TargetArrow
 
 var unit: BattleUnit:
@@ -38,17 +41,20 @@ var unit: BattleUnit:
 			if active_slot == self:
 				_clear_drag()
 			_reset_combat_animation()
+			_maximum_health = maxf(value.health, 0.0) if value != null else 0.0
 		unit = value
 		if is_instance_valid(icon):
 			_update_appearance()
-		_update_debug_stats()
+		_update_health()
 
 static var active_slot: DraggableSlot = null
 
 var _preview_layer: CanvasLayer
 var _preview: TextureRect
 var _preview_equipment: Control
-var _preview_debug_stats: Label
+var _preview_health_bar: ProgressBar
+var _preview_health_label: Label
+var _maximum_health := 0.0
 var _drag_cursor: TextureRect
 
 var _original_index: int
@@ -75,7 +81,7 @@ func _ready() -> void:
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_update_appearance()
 
-	_update_debug_stats()
+	_update_health()
 
 
 func _update_appearance() -> void:
@@ -94,30 +100,37 @@ func _update_appearance() -> void:
 		icon.offset_top = floor_offset - sprite_size.y
 		icon.offset_bottom = floor_offset
 		_icon_rest_position = icon.position
-		debug_stats.position.y = sprite_size.y
 	else:
 		icon.texture = null if assembled else unit.sprite
 
 
-func _update_debug_stats() -> void:
-	if not is_instance_valid(debug_stats):
+func _update_health() -> void:
+	if not is_instance_valid(health_bar):
 		return
 
-	debug_stats.visible = unit != null and active_slot != self
+	health_bar.visible = unit != null and active_slot != self
 	if unit == null:
 		return
 
-	var stats_text := "%s\nЖизни:%.0f\nАтк/с:%.2f\nУрон:%.0f\nКрит:%.0f%%" % [
-		unit.name, unit.health, unit.attack_speed, unit.damage, unit.crit_chance * 100.0
-	]
 	if unit is BossUnitData:
-		var targets: PackedStringArray = []
-		for slot_number in unit.attack_sequence:
-			targets.append(str(slot_number))
-		stats_text += "\nЦели:" + " ".join(targets)
-	debug_stats.text = stats_text
-	if is_instance_valid(_preview_debug_stats):
-		_preview_debug_stats.text = stats_text
+		_maximum_health = maxf(unit.max_health, 0.0)
+	elif dragging_enabled:
+		_maximum_health = maxf(unit.health, 0.0)
+	health_bar.max_value = _maximum_health if _maximum_health > 0.0 else 1.0
+	health_bar.value = maxf(unit.health, 0.0)
+	health_label.text = String.num(maxf(unit.health, 0.0), 2).trim_suffix(".0")
+	var sprite_top := 0.0
+	if equipment_preview.visible:
+		sprite_top = icon.size.y
+		for layer in equipment_preview.get_children():
+			if layer is Sprite2D and layer.visible:
+				sprite_top = minf(sprite_top, equipment_preview.position.y + layer.position.y)
+	health_bar.position.y = floorf(sprite_top) - health_bar.size.y - 2.0
+	if is_instance_valid(_preview_health_bar):
+		_preview_health_bar.max_value = health_bar.max_value
+		_preview_health_bar.value = health_bar.value
+		_preview_health_bar.position = health_bar.position
+		_preview_health_label.text = health_label.text
 
 func _gui_input(event: InputEvent) -> void:
 	if not dragging_enabled or unit == null:
@@ -133,6 +146,7 @@ func _start_drag() -> void:
 		return
 
 	_reset_combat_animation()
+	_update_health()
 	active_slot = self
 	_original_index = get_index()
 	_saved_alpha = icon.modulate.a
@@ -164,10 +178,11 @@ func _start_drag() -> void:
 		_preview_equipment.position = equipment_preview.position
 		_preview_equipment.size = equipment_preview.size
 
-	_preview_debug_stats = debug_stats.duplicate() as Label
-	_preview.add_child(_preview_debug_stats)
-	_preview_debug_stats.show()
-	debug_stats.hide()
+	_preview_health_bar = health_bar.duplicate() as ProgressBar
+	_preview.add_child(_preview_health_bar)
+	_preview_health_label = _preview_health_bar.get_node("Value") as Label
+	_preview_health_bar.show()
+	health_bar.hide()
 
 	_drag_cursor = TextureRect.new()
 	_drag_cursor.texture = cursor_drag
@@ -186,7 +201,7 @@ func _start_drag() -> void:
 func _process(_delta: float) -> void:
 	if unit is BossUnitData:
 		icon.texture = unit.get_health_sprite()
-	_update_debug_stats()
+	_update_health()
 	if active_slot != self:
 		return
 
@@ -313,10 +328,11 @@ func _clear_drag() -> void:
 	_preview_layer = null
 	_preview = null
 	_preview_equipment = null
-	_preview_debug_stats = null
+	_preview_health_bar = null
+	_preview_health_label = null
 
 	active_slot = null
-	_update_debug_stats()
+	_update_health()
 
 	ControllerGame.set_drag_cursor(false)
 	_drag_cursor = null
