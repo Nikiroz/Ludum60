@@ -7,13 +7,16 @@
 [ext_resource type="Texture2D" uid="uid://d00xl4qq8kd4g" path="res://sprites/ui/cell_bg.png" id="7_47l8i"]
 [ext_resource type="Theme" uid="uid://cx7xm3yx6xpow" path="res://styles/scroll.tres" id="7_v0fcm"]
 [ext_resource type="Texture2D" uid="uid://cxhgbsvyfea52" path="res://sprites/ui/garage/stats.png" id="8_47l8i"]
-[ext_resource type="Texture2D" uid="uid://66r16n1bi1a5" path="res://sprites/ui/garage/battle_button.png" id="9_oyih7"]
+[ext_resource type="Texture2D" uid="uid://byx84v7n5opin" path="res://sprites/ui/button/ui_fight.png" id="9_fight"]
 [ext_resource type="Script" uid="uid://ckg3p5xnsmbve" path="res://scripts/ui/inventory_grid.gd" id="10_inventory"]
 [ext_resource type="Script" uid="uid://cefdxqlr7hx15" path="res://scripts/ui/side_tabs.gd" id="11_side_tabs"]
 [ext_resource type="Script" uid="uid://cce4052u4yygb" path="res://scripts/ui/robot_equipment_drop.gd" id="12_equipment_drop"]
 [ext_resource type="Theme" uid="uid://dusbxqn3cho4s" path="res://styles/buttons.tres" id="13_spycl"]
 [ext_resource type="Script" uid="uid://d2k5m0cpjhw1u" path="res://scripts/ui/ui_scene_button.gd" id="14_nulr8"]
 [ext_resource type="Script" uid="uid://c6v46ddvqbuly" path="res://scripts/ui/robot_equipment_preview.gd" id="15_equipment_preview"]
+[ext_resource type="Texture2D" uid="uid://dwc8duwkc2keb" path="res://sprites/ui/button/ui_fight_press.png" id="16_fight_press"]
+[ext_resource type="Texture2D" uid="uid://bev1453nobc1c" path="res://sprites/ui/button/ui_scrap.png" id="17_scrap"]
+[ext_resource type="Texture2D" uid="uid://3fgaopy5tnc8" path="res://sprites/ui/button/ui_scrap_press.png" id="18_scrap_press"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d8qye"]
 content_margin_left = 0.0
@@ -29,6 +32,20 @@ corner_detail = 1
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nulr8"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sxw43"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fight"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 14.0
+content_margin_bottom = 4.0
+texture = ExtResource("9_fight")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fight_pressed"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 14.0
+content_margin_bottom = 4.0
+texture = ExtResource("16_fight_press")
 
 [node name="Garage" type="Control" unique_id=468656869]
 layout_mode = 3
@@ -306,26 +323,55 @@ vertical_alignment = 1
 clip_text = true
 
 [node name="BattleButton" type="Button" parent="VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1325151344]
+custom_minimum_size = Vector2(106, 32)
 layout_mode = 2
-icon = ExtResource("9_oyih7")
+size_flags_vertical = 4
+theme = ExtResource("13_spycl")
+theme_override_styles/normal = SubResource("StyleBoxTexture_fight")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_fight_pressed")
+theme_override_styles/hover = SubResource("StyleBoxTexture_fight")
+theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_fight_pressed")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_sxw43")
+text = "To battle!"
 script = ExtResource("14_nulr8")
 scene_path = "res://scenes/battle.tscn"
 
 [node name="ScrapyardButton" type="Button" parent="." unique_id=1273339278]
+custom_minimum_size = Vector2(110, 24)
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 20.0
-offset_top = -45.0
-offset_right = 110.681404
-offset_bottom = -25.0
+offset_left = 24.0
+offset_top = -55.0
+offset_right = 134.0
+offset_bottom = -31.0
 grow_vertical = 2
 rotation = 1.5707964
 theme = ExtResource("13_spycl")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_sxw43")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_sxw43")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_sxw43")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_sxw43")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_sxw43")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_sxw43")
 text = "scrapyard"
 script = ExtResource("14_nulr8")
 scene_path = "res://scenes/scrapyard.tscn"
 
+[node name="Background" type="TextureRect" parent="ScrapyardButton"]
+show_behind_parent = true
+layout_mode = 0
+offset_top = 24.0
+offset_right = 24.0
+offset_bottom = 134.0
+rotation = -1.5707964
+mouse_filter = 2
+texture = ExtResource("17_scrap")
+expand_mode = 1
+stretch_mode = 3
+
 [connection signal="pressed" from="VBoxContainer/MarginContainer2/HBoxContainer/BattleButton" to="VBoxContainer/MarginContainer2/HBoxContainer/BattleButton" method="_on_pressed"]
 [connection signal="pressed" from="ScrapyardButton" to="ScrapyardButton" method="_on_pressed"]
+[connection signal="button_down" from="ScrapyardButton" to="ScrapyardButton/Background" method="set_texture" binds=[ExtResource("18_scrap_press")]]
+[connection signal="button_up" from="ScrapyardButton" to="ScrapyardButton/Background" method="set_texture" binds=[ExtResource("17_scrap")]]

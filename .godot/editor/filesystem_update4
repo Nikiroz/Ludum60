@@ -35,3 +35,5 @@ res://scripts/boss_unit.gd
 res://scripts/ui/ui_start_battle_button.gd
 res://scripts/ui/pause_menu.gd
 res://scripts/ui/ui_back_to_menu.gd
+res://scenes/ui/credits.tscn
+res://tests/test_victory_dialog.gd

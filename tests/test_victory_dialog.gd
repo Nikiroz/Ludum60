@@ -71,9 +71,11 @@ func _run() -> void:
 	var battle_music: AudioStreamPlayer = _controller.get_node("BattleMusic")
 	_expect(not dialog.visible and not paused, "Dialog is open before victory")
 	_key(KEY_F9)
+	_expect(not dialog.visible and not paused, "F9 still opens the victory dialog")
+	_controller.show_victory_dialog()
 	await process_frame
 	await process_frame
-	_expect(dialog.visible and paused and yes.has_focus(), "F9 did not open a focused modal dialog from the main menu")
+	_expect(dialog.visible and paused and yes.has_focus(), "Victory dialog did not open as a focused modal")
 	_expect(dialog.get_node("Panel/VBoxContainer/Message").text == "You won!\nDo you want to continue?" and yes.text == "Yes" and no.text == "No", "Dialog text is not English")
 	_expect(menu_music.playing and not menu_music.stream_paused and menu_music.can_process(), "Popup stopped main menu music")
 	_expect(Rect2(Vector2.ZERO, root.get_visible_rect().size).encloses(dialog.get_node("Panel").get_global_rect()), "Popup does not fit the game viewport")
@@ -102,13 +104,13 @@ func _run() -> void:
 	await process_frame
 	var slot: Control = battle.get_node("MarginContainer/HBoxContainer").get_child(0)
 	slot._start_drag()
-	_key(KEY_F9)
+	_controller.show_victory_dialog()
 	_expect(dialog.visible and slot.active_slot == null and Input.mouse_mode == Input.MOUSE_MODE_VISIBLE, "Debug popup left a robot drag or hidden cursor active")
 	_expect(battle.state == battle.State.PREPARATION and unit.health == 100.0 and not _controller.scrapyard_available, "Debug popup changed battle progress")
 	_click(yes)
 	battle.start_battle()
 	var timer: Timer = battle.get_node("BattleTimer")
-	_key(KEY_F9)
+	_controller.show_victory_dialog()
 	var time_left := timer.time_left
 	await create_timer(0.1).timeout
 	_expect(paused and is_equal_approx(timer.time_left, time_left) and battle.tick_count == 0, "Debug popup allowed combat to advance")
@@ -145,7 +147,7 @@ func _run() -> void:
 	battle.get_node("BattleTimer").stop()
 	battle._on_battle_tick()
 	_expect(unit.health == 93.0, "Debug exit check did not damage the robot")
-	_key(KEY_F9)
+	_controller.show_victory_dialog()
 	_click(no)
 	await process_frame
 	await process_frame

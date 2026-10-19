@@ -115,6 +115,28 @@ theme_override_font_sizes/font_size = 6
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="RobotName" type="Label" parent="CombatMotion/Icon/HealthBar"]
+visible = false
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = -4.0
+offset_top = -10.0
+offset_right = 4.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_gq5a8")
+theme_override_font_sizes/font_size = 6
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
+
 [node name="TargetArrow" type="TextureRect" parent="." unique_id=545300387]
 visible = false
 layout_mode = 1

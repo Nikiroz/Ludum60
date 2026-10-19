@@ -33,6 +33,7 @@ var shift_duration: float = 0.2
 @onready var _icon_rest_position: Vector2 = icon.position
 @onready var health_bar: ProgressBar = $CombatMotion/Icon/HealthBar
 @onready var health_label: Label = $CombatMotion/Icon/HealthBar/Value
+@onready var name_label: Label = $CombatMotion/Icon/HealthBar/RobotName
 @onready var target_arrow: TextureRect = $TargetArrow
 
 var unit: BattleUnit:
@@ -109,6 +110,8 @@ func _update_health() -> void:
 		return
 
 	health_bar.visible = unit != null and active_slot != self
+	name_label.visible = unit != null and not unit is BossUnitData
+	name_label.text = unit.name if name_label.visible else ""
 	if unit == null:
 		return
 
@@ -131,6 +134,9 @@ func _update_health() -> void:
 		_preview_health_bar.value = health_bar.value
 		_preview_health_bar.position = health_bar.position
 		_preview_health_label.text = health_label.text
+		var preview_name: Label = _preview_health_bar.get_node("RobotName")
+		preview_name.text = name_label.text
+		preview_name.visible = name_label.visible
 
 func _gui_input(event: InputEvent) -> void:
 	if not dragging_enabled or unit == null:

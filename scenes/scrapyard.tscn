@@ -11,6 +11,10 @@
 [ext_resource type="Texture2D" uid="uid://ppmpnnh57xcj" path="res://sprites/bg/border.png" id="6_suqf5"]
 [ext_resource type="Theme" uid="uid://dusbxqn3cho4s" path="res://styles/buttons.tres" id="10_wubbp"]
 [ext_resource type="Script" uid="uid://d2k5m0cpjhw1u" path="res://scripts/ui/ui_scene_button.gd" id="11_5o808"]
+[ext_resource type="Texture2D" uid="uid://bev1453nobc1c" path="res://sprites/ui/button/ui_scrap.png" id="12_scrap"]
+[ext_resource type="Texture2D" uid="uid://3fgaopy5tnc8" path="res://sprites/ui/button/ui_scrap_press.png" id="13_scrap_press"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_navigation"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_suqf5"]
 bg_color = Color(0.18431373, 0.28235295, 0.36862746, 1)
@@ -1050,23 +1054,45 @@ custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
 
 [node name="GarageButton" type="Button" parent="." unique_id=920782873]
+custom_minimum_size = Vector2(110, 24)
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = 23.0
-offset_right = 47.22516
-offset_bottom = 43.0
+offset_left = -24.0
+offset_top = 55.0
+offset_right = 86.0
+offset_bottom = 79.0
 grow_horizontal = 0
 grow_vertical = 2
 rotation = -1.5707964
 theme = ExtResource("10_wubbp")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_navigation")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_navigation")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_navigation")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_navigation")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_navigation")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_navigation")
 text = "garage"
 script = ExtResource("11_5o808")
 scene_path = "res://scenes/garage.tscn"
 show_after_round_finished = true
 
+[node name="Background" type="TextureRect" parent="GarageButton"]
+show_behind_parent = true
+layout_mode = 0
+offset_left = 110.0
+offset_right = 134.0
+offset_bottom = 110.0
+rotation = 1.5707964
+mouse_filter = 2
+texture = ExtResource("12_scrap")
+expand_mode = 1
+stretch_mode = 3
+flip_h = true
+
 [connection signal="pressed" from="GarageButton" to="GarageButton" method="_on_pressed"]
+[connection signal="button_down" from="GarageButton" to="GarageButton/Background" method="set_texture" binds=[ExtResource("13_scrap_press")]]
+[connection signal="button_up" from="GarageButton" to="GarageButton/Background" method="set_texture" binds=[ExtResource("12_scrap")]]

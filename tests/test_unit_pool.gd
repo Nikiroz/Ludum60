@@ -86,7 +86,7 @@ func _run() -> void:
 		_expect(battle.units[0].damage == 7.0, "Opening battle reset a unit's stats")
 		_expect(controller.units.size() == 3 and battle.units.size() == 4, "Battle empty slot changed the controller pool")
 		var slot: Control = battle.get_node("MarginContainer/HBoxContainer").get_child(0)
-		_expect(slot.unit.name == new_name and slot.health_label.text == "1", "Battle lost the edited name or showed text other than current HP")
+		_expect(slot.unit.name == new_name and slot.name_label.visible and slot.name_label.text == new_name and slot.health_label.text == "1", "Battle lost the edited name above the numeric HP display")
 		battle.free()
 		var another_garage = load("res://scenes/garage.tscn").instantiate()
 		main.add_child(another_garage)

@@ -6,6 +6,26 @@
 [ext_resource type="Theme" uid="uid://dusbxqn3cho4s" path="res://styles/buttons.tres" id="3_p1qf1"]
 [ext_resource type="Script" uid="uid://cha3ig1kvoa5b" path="res://scripts/ui/ui_start_battle_button.gd" id="4_start_battle"]
 [ext_resource type="Script" uid="uid://d2k5m0cpjhw1u" path="res://scripts/ui/ui_scene_button.gd" id="5_scene_button"]
+[ext_resource type="Texture2D" uid="uid://btrmn3o641snb" path="res://sprites/ui/button/ui_start.png" id="6_start"]
+[ext_resource type="Texture2D" uid="uid://dokq4gih70y6b" path="res://sprites/ui/button/ui_star_presst.png" id="7_start_pressed"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_start"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+texture = ExtResource("6_start")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_start_pressed"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+texture = ExtResource("7_start_pressed")
+expand_margin_top = -1.0
+expand_margin_bottom = -1.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
 
 [node name="Battle" type="Control" unique_id=342407584]
 layout_mode = 3
@@ -24,7 +44,8 @@ texture = ExtResource("2_th188")
 
 [node name="TextureRect2" type="TextureRect" parent="." unique_id=2137194159]
 layout_mode = 1
-offset_right = 320.0
+offset_left = 1.0
+offset_right = 321.0
 offset_bottom = 180.0
 texture = ExtResource("3_6vh42")
 
@@ -62,37 +83,50 @@ one_shot = true
 ignore_time_scale = true
 
 [node name="StarBattleButton" type="Button" parent="." unique_id=1702076129]
+custom_minimum_size = Vector2(106, 32)
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -55.0
-offset_top = -174.0
-offset_right = 44.0
-offset_bottom = -154.0
+offset_left = -59.0
+offset_top = -180.0
+offset_right = 47.0
+offset_bottom = -148.0
 grow_horizontal = 2
 grow_vertical = 0
 theme = ExtResource("3_p1qf1")
+theme_override_styles/normal = SubResource("StyleBoxTexture_start")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_start_pressed")
+theme_override_styles/hover = SubResource("StyleBoxTexture_start")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_start")
+theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_start_pressed")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "Start battle"
 script = ExtResource("4_start_battle")
 
 [node name="GarageButton" type="Button" parent="." unique_id=978319034]
+custom_minimum_size = Vector2(106, 32)
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -193.0
-offset_top = -59.0
-offset_right = -141.0
-offset_bottom = -39.0
+offset_left = -219.0
+offset_top = -54.0
+offset_right = -113.0
+offset_bottom = -22.0
 grow_horizontal = 0
 grow_vertical = 2
-rotation = 0.002085805
 theme = ExtResource("3_p1qf1")
+theme_override_styles/normal = SubResource("StyleBoxTexture_start")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_start_pressed")
+theme_override_styles/hover = SubResource("StyleBoxTexture_start")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_start")
+theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_start_pressed")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "garage"
 script = ExtResource("5_scene_button")
 scene_path = "res://scenes/garage.tscn"
