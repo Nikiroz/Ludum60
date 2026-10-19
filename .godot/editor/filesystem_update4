@@ -16,3 +16,5 @@ res://styles/scroll.tres
 res://scenes/ui/main_menu.tscn
 res://scripts/ui/transition.gd
 res://tests/test_scrapyard.gd
+res://scripts/ui/inventory_grid.gd
+res://tests/test_inventory.gd

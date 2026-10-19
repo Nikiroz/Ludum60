@@ -5,6 +5,7 @@ signal item_collected(item: GridInventoryItemData)
 const CURSOR_NORMAL: Texture2D = preload("res://sprites/cursors/cursor.png")
 
 var collected_items: Array[GridInventoryItemData] = []
+var inventory_positions: Dictionary[GridInventoryItemData, Vector2i] = {}
 var scrapyard_available := true:
 	set(value):
 		scrapyard_available = value
@@ -57,6 +58,7 @@ func add_collected_item(item: GridInventoryItemData) -> void:
 
 func reset_progress() -> void:
 	collected_items.clear()
+	inventory_positions.clear()
 	scrapyard_available = true
 
 func _on_start_battle_pressed() -> void:

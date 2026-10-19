@@ -1,15 +1,15 @@
 res://scenes/ui/navigation.tscn::fd8780edfb123a5d998fd25d25dbfacd::1792357999::res://.godot/exported/133200997/export-6e3c8592700cfb565f1a06440e6e9ad9-navigation.scn
-res://scenes/garage.tscn::7e60abc4d92e7eb5ffc0c019f39579c8::1792408908::res://.godot/exported/133200997/export-82599acbac3df1c1d35c134ae54e2f0b-garage.scn
+res://scenes/garage.tscn::fd1765f5294b38abfaa42c13809497a5::1792419661::res://.godot/exported/133200997/export-82599acbac3df1c1d35c134ae54e2f0b-garage.scn
 res://scenes/main.tscn::468d460a017ea5d6772da90911e3bdf4::1792408397::res://.godot/exported/133200997/export-3ad5c15c4f3250da0cc7c1af1770d85f-main.scn
 res://scenes/battle.tscn::5fc452d786485099f3625475ad908fec::1792403289::res://.godot/exported/133200997/export-d05c42cb8fa14c775531fe94d95302c2-battle.scn
-res://scenes/scrapyard.tscn::5c41a13e5dd0a994129d91b6b7407bbe::1792397441::res://.godot/exported/133200997/export-85c9642a497db23249685e0d62886f68-scrapyard.scn
+res://scenes/scrapyard.tscn::63f470840f7a8c9e3a5666e9cb17dd86::1792418845::res://.godot/exported/133200997/export-85c9642a497db23249685e0d62886f68-scrapyard.scn
 res://styles/buttons.tres::674337efccdc4b80bf9e28a81f88eb56::1792396913::res://.godot/exported/133200997/export-fb92b6793c6aef28e8c86330ca821227-buttons.res
 res://styles/main_buttons.tres::b961a9d74b5011ef5ec854d410c0aeea::1792408489::res://.godot/exported/133200997/export-624e6b4e39445066b2bea9bf32469a2a-main_buttons.res
 res://styles/menu_title.tres::59e585a9366c22493d8ee4dfaac7344e::1790871759::res://.godot/exported/133200997/export-edd7b1abb8db18d3053363d89eb26e9a-menu_title.res
 res://default_bus_layout.tres::20d553e88ea0b2059a6984dcd4a55d91::1792244921::res://.godot/exported/133200997/export-19246414aa9fb561ced4b8dce477acec-default_bus_layout.res
 res://scenes/ui/credits.tscn::ab848135f8eec837e2976a16249080c6::1792243520::res://.godot/exported/133200997/export-1f14c609521b342beafd236e757bed9c-credits.scn
-res://scenes/ui/main_menu.tscn::a06f089f654bed5606808aff5c517957::1792246869::res://.godot/exported/133200997/export-79dd3ab530fc0aed4f9ba21f09ab2efd-main_menu.scn
-res://scenes/ui/settings.tscn::d2854920bd2d804a661200b9bd1d11db::1792244692::res://.godot/exported/133200997/export-596a9cfaa26328034797ad673fabaff8-settings.scn
+res://scenes/ui/main_menu.tscn::7dd388cc4b91510848ad6e9ce6eededb::1792418596::res://.godot/exported/133200997/export-79dd3ab530fc0aed4f9ba21f09ab2efd-main_menu.scn
+res://scenes/ui/settings.tscn::0a43bccd8f051bafdb68606f0b200b98::1792409300::res://.godot/exported/133200997/export-596a9cfaa26328034797ad673fabaff8-settings.scn
 res://scenes/ui/transition.tscn::a98f91ee68e2c46a9b75faf3ad6c0aa2::1792247052::res://.godot/exported/133200997/export-bd572d93f5eebdcb57391a6b42ed971b-transition.scn
 res://scenes/ui/warning.tscn::d92a784929788494bf8b51039a731158::1792243719::res://.godot/exported/133200997/export-2c914b89b013cc99b64580d288d7b2a4-warning.scn
 res://scenes/ui/battle_unit_slot.tscn::1d6f800ca26647ceb47d9405d0477ef2::1792398740::res://.godot/exported/133200997/export-dcc20908b7c6fa826d4721d33cdffc37-battle_unit_slot.scn
@@ -32,3 +32,4 @@ res://item_pack/items/head_electrokettle.tres::afe01bcd07f9dcc92b8a69d4f00545f9:
 res://item_pack/items/head_router.tres::19ca7fe58a9b864fa2bdf3c8cf495454::1792406346::res://.godot/exported/133200997/export-6d89a8c4426a6793623da1011a05a3ab-head_router.res
 res://item_pack/items/leg_bathtub.tres::4baa73b63684277f7a2a6e702ac39f6a::1792406346::res://.godot/exported/133200997/export-974a2b07c9176040267ff5f83db9194a-leg_bathtub.res
 res://item_pack/items/leg_mono.tres::65d65a98fc1c682c5c113b31968f940e::1792406346::res://.godot/exported/133200997/export-100b8f5dfb1812886143815f6552b9f5-leg_mono.res
+res://styles/scroll.tres::4f8f3ea8a49fb4656ba2e47d28f52bf6::1792417323::res://.godot/exported/133200997/export-56c8bd5c9aa36f53086d6d38b1488787-scroll.res
