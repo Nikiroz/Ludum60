@@ -3,6 +3,8 @@ extends Control
 # Back-to-front order keeps the attachment edges under the torso.
 const SLOTS: Array[StringName] = [&"legs", &"left_hand", &"right_hand", &"torso", &"head"]
 
+@export var align_to_bottom := false
+
 var unit: BattleUnit:
 	set(value):
 		if unit != null and unit.equipment_changed.is_connected(_refresh):
@@ -73,5 +75,8 @@ func _layout_parts() -> void:
 	if not has_parts or not bounds.has_area():
 		return
 	var origin := (size - bounds.size) / 2.0 - bounds.position
+	if align_to_bottom:
+		var bottom := positions[&"legs"].y + legs.y if _layers[&"legs"].visible else bounds.end.y
+		origin.y = size.y - bottom
 	for slot in SLOTS:
 		_layers[slot].position = (origin + positions[slot]).round()

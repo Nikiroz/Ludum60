@@ -46,10 +46,12 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("4_equipment_preview")
+align_to_bottom = true
 
 [node name="DebugStats" type="Label" parent="CombatMotion/Icon" unique_id=561281896]
 z_index = 1

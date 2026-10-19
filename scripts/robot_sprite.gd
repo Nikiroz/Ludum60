@@ -147,9 +147,11 @@ func _start_drag() -> void:
 
 	if equipment_preview.visible:
 		_preview_equipment = EquipmentPreview.new()
+		_preview_equipment.align_to_bottom = equipment_preview.align_to_bottom
 		_preview_equipment.unit = unit
 		_preview.add_child(_preview_equipment)
-		_preview_equipment.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		_preview_equipment.position = equipment_preview.position
+		_preview_equipment.size = equipment_preview.size
 
 	_preview_debug_stats = debug_stats.duplicate() as Label
 	_preview.add_child(_preview_debug_stats)

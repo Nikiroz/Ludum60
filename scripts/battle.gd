@@ -224,7 +224,7 @@ func _on_battle_tick() -> void:
 		if attack_count == 0:
 			_log_event("Слот %d копит атаку: %.2f/1." % [index + 1, progress])
 		for attack in range(attack_count):
-			_deal_attack(unit, boss, "Слот %d" % (index + 1), "Босс")
+			_deal_attack(unit, boss, "Слот %d (%s)" % [index + 1, unit.name], "Босс")
 			if boss.health <= 0.0:
 				_log_event("Босс погиб.")
 				_finish_battle(true)
