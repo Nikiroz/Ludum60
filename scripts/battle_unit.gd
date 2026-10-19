@@ -1,6 +1,8 @@
 class_name BattleUnit
 extends RefCounted
 
+signal equipment_changed
+
 const UNIT_NAMES: Array[String] = ["Wally", "Mike", "Cost"]
 const BASIC_TORSO: GridInventoryItemData = preload("res://item_pack/items/base_basic.tres")
 const BASIC_LEGS: GridInventoryItemData = preload("res://item_pack/items/leg_basic.tres")
@@ -28,6 +30,7 @@ func equip_item(item: GridInventoryItemData, slot: StringName) -> GridInventoryI
 		_apply_item_bonuses(previous, -1.0)
 	equipment[slot] = item
 	_apply_item_bonuses(item, 1.0)
+	equipment_changed.emit()
 	return previous
 
 

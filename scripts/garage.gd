@@ -15,11 +15,9 @@ func _ready() -> void:
 	var buttons: VBoxContainer = robot_tabs.get_parent().get_node("TabButtons")
 	for index in range(robot_tabs.get_tab_count()):
 		var tab := robot_tabs.get_tab_control(index)
-		var icon := tab.get_child(0) as TextureRect
 		var unit: BattleUnit = ControllerGame.units[index] if index < ControllerGame.units.size() else null
 		tab.unit = unit
-		icon.texture = unit.sprite if unit != null else null
-		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		tab.get_node("EquipmentPreview").unit = unit
 		buttons.get_child(index).tooltip_text = unit.name if unit != null else "Robot %d" % (index + 1)
 	robot_tabs.tab_changed.connect(_on_robot_selected)
 	robot_name.text_changed.connect(_on_robot_name_changed)

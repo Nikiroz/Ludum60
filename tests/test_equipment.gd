@@ -25,7 +25,10 @@ func _give(id: String, health: float, speed: float, damage: float, crit: float) 
 	var item := GridInventoryItemData.new()
 	item.item_id = id
 	item.display_name = id
+	var sprite_path := "res://item_pack/sprites/%s.png" % id
 	item.sprite_path = "res://item_pack/sprites/head_lamp.png"
+	if ResourceLoader.exists(sprite_path):
+		item.unit_sprite_path = sprite_path
 	item.occupied_cells = [Vector2i.ZERO]
 	item.health_bonus = health
 	item.attack_speed_bonus = speed
@@ -65,6 +68,31 @@ func _drag(item: GridInventoryItemData, left_half: bool = true) -> void:
 	_mouse(finish, false)
 	await process_frame
 	await process_frame
+	_appearance(_tabs.get_current_tab_control().unit)
+
+
+func _appearance(unit: BattleUnit) -> void:
+	var tab := _tabs.get_tab_control(_controller.units.find(unit))
+	var preview: Control = tab.get_node("EquipmentPreview")
+	_expect(preview.mouse_filter == Control.MOUSE_FILTER_IGNORE, "Equipment preview blocks inventory drops")
+	for slot in [&"head", &"torso", &"legs", &"left_hand", &"right_hand"]:
+		var layer: Sprite2D = preview.get_node(NodePath(slot))
+		var item: GridInventoryItemData = unit.equipment.get(slot)
+		_expect(layer.scale.is_equal_approx(Vector2.ONE), "Equipment preview changed the texture's native size")
+		_expect(layer.visible == (item != null), "Equipment preview shows an empty slot or hides equipped gear")
+		var expected_texture: Texture2D = null
+		if item != null:
+			expected_texture = load(item.unit_sprite_path) as Texture2D if ResourceLoader.exists(item.unit_sprite_path) else item.get_texture()
+		_expect(layer.texture == expected_texture, "Equipment preview did not use the item's Unit Sprite")
+	if not preview.is_visible_in_tree():
+		return
+	var torso: Sprite2D = preview.get_node("torso")
+	var legs: Sprite2D = preview.get_node("legs")
+	_expect(legs.position.y > torso.position.y, "Robot legs are not below its torso")
+	if unit.equipment.has(&"head"):
+		_expect(preview.get_node("head").position.y < torso.position.y, "Robot head is not above its torso")
+	if unit.equipment.has(&"left_hand") and unit.equipment.has(&"right_hand"):
+		_expect(preview.get_node("left_hand").position.x < torso.position.x and preview.get_node("right_hand").position.x > torso.position.x, "Robot hands are not on opposite sides of its torso")
 
 
 func _stats(unit: BattleUnit, health: float, speed: float, damage: float, crit: float) -> void:
@@ -93,6 +121,8 @@ func _run() -> void:
 	await _open_garage()
 	var first: BattleUnit = _controller.units[0]
 	var second: BattleUnit = _controller.units[1]
+	for unit in _controller.units:
+		_appearance(unit)
 	var basic_torso: GridInventoryItemData = first.equipment.get(&"torso")
 	var basic_legs: GridInventoryItemData = first.equipment.get(&"legs")
 	for unit in _controller.units:
@@ -168,6 +198,8 @@ func _run() -> void:
 
 	_garage.free()
 	await _open_garage()
+	_appearance(first)
+	_appearance(second)
 	_expect(first.equipment.size() == 5 and first.equipment.get(&"right_hand") == right, "Returning to garage lost equipment")
 	_expect(_grid.items.has(left) and not _grid.items.has(replacement_left), "Returning to garage changed equipped or returned item ownership")
 	var battle = load("res://scenes/battle.tscn").instantiate()
@@ -178,6 +210,16 @@ func _run() -> void:
 	battle.set_units([first])
 	battle.set_boss(boss)
 	_viewport.add_child(battle)
+	await process_frame
+	await process_frame
+	var battle_slot: Control = battle.get_node("MarginContainer/HBoxContainer").get_child(0)
+	var garage_preview: Control = _tabs.get_tab_control(0).get_node("EquipmentPreview")
+	_expect(battle_slot.unit == first and battle_slot.equipment_preview.unit == first, "Battle did not use the robot assembled in the garage")
+	for part in [&"head", &"torso", &"legs", &"left_hand", &"right_hand"]:
+		var garage_part: Sprite2D = garage_preview.get_node(NodePath(part))
+		var battle_part: Sprite2D = battle_slot.equipment_preview.get_node(NodePath(part))
+		_expect(battle_part.texture == garage_part.texture and battle_part.visible, "Garage equipment was lost in the battle view")
+		_expect(battle_part.scale.is_equal_approx(Vector2.ONE), "Battle resized a robot part")
 	_expect(battle.start_battle(), "Equipped robot could not start battle")
 	battle.get_node("BattleTimer").stop()
 	battle.get_node("BattleTimer").timeout.emit()

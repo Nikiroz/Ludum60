@@ -80,13 +80,30 @@ func _run() -> void:
 	var slot: Control = row.get_child(0)
 	_expect(slot.size.is_equal_approx(Vector2(36, 60)), "Robot visual changed the slot hit area")
 	_expect(slot.icon.size.is_equal_approx(Vector2(95, 100)), "Robot visual is not 95 by 100")
+	_expect(slot.equipment_preview.unit == attacker and slot.icon.texture == null, "Battle robot does not show its assembled equipment")
+	var head := GridInventoryItemData.new()
+	head.item_id = "head_router"
+	head.sprite_path = "res://item_pack/sprites/head_lamp.png"
+	head.unit_sprite_path = "res://item_pack/sprites/head_router.png"
+	attacker.equip_item(head, &"head")
+	_expect(slot.equipment_preview.get_node("head").texture == head.get_unit_texture(), "Battle robot did not update its equipped part")
+	var boss_view: Control = battle.get_node("MarginContainer2").get_child(0)
+	_expect(boss_view.icon.texture == boss.sprite and not boss_view.equipment_preview.visible, "Boss no longer shows its own sprite")
 	_expect(start_button.visible, "Start button is missing during preparation")
 	slot._start_drag()
 	_expect(slot.active_slot == slot, "Preparation drag did not start")
+	_expect(slot._preview_equipment != null and slot._preview_equipment.unit == attacker, "Drag preview lost the assembled robot")
+	for part in [&"head", &"torso", &"legs"]:
+		var original: Sprite2D = slot.equipment_preview.get_node(NodePath(part))
+		var dragged: Sprite2D = slot._preview_equipment.get_node(NodePath(part))
+		_expect(dragged.texture == original.texture and dragged.visible, "Dragging lost an equipped part")
+		_expect(dragged.position.is_equal_approx(original.position) and dragged.scale.is_equal_approx(Vector2.ONE), "Dragging moved or resized a robot part")
+	_expect(is_zero_approx(slot.icon.modulate.a), "Dragging did not hide the original assembled robot")
 	start_button.pressed.emit()
 	_expect(not start_button.visible, "Start button stayed visible")
 	_expect(slot.active_slot == null, "Starting battle did not cancel the active drag")
 	_expect(slot._preview_layer == null, "Drag preview was not released")
+	_expect(slot._preview_equipment == null and is_equal_approx(slot.icon.modulate.a, 1.0), "Cancelling drag did not restore the assembled robot")
 	for view in row.get_children():
 		_expect(not view.dragging_enabled, "A battle slot remained draggable")
 	slot._start_drag()
@@ -180,6 +197,7 @@ func _run() -> void:
 	row = battle.get_node("MarginContainer/HBoxContainer")
 	_expect(row.get_child_count() == 4, "Death changed fixed slot numbering")
 	_expect(row.get_child(0).icon.texture.resource_path.ends_with("dummy_blank.png"), "Dead unit sprite remained")
+	_expect(not row.get_child(0).equipment_preview.visible and row.get_child(0).equipment_preview.unit == null, "Dead robot's assembled parts remained on the field")
 	_expect(not row.get_child(0).debug_stats.visible, "Dead unit stats remained visible")
 	_expect(battle.get_node("BattleTimer").is_stopped() and _has_log(battle, "ПОРАЖЕНИЕ"), "Defeat did not stop the battle")
 	_expect(not start_button.visible, "Start button returned after defeat")
@@ -224,7 +242,7 @@ func _run() -> void:
 	slot = row.get_child(0)
 	var second_view: Control = row.get_child(1)
 	var third_view: Control = row.get_child(2)
-	var boss_view: Control = battle.get_node("MarginContainer2").get_child(0)
+	boss_view = battle.get_node("MarginContainer2").get_child(0)
 	var original_slot_position: Vector2 = slot.position
 	battle.start_battle()
 	battle.get_node("BattleTimer").stop()

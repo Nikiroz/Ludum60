@@ -38,9 +38,9 @@ func _run() -> void:
 	var buttons: VBoxContainer = garage.find_child("TabButtons", true, false)
 	for index in range(3):
 		var tab := tabs.get_tab_control(index)
-		var icon := tab.get_child(0) as TextureRect
+		var preview := tab.get_node("EquipmentPreview")
 		_expect(tab.name == "robot%d" % (index + 1), "Robot is assigned to the wrong garage tab")
-		_expect(icon.texture == original_units[index].sprite, "Garage tab does not show its unit's sprite")
+		_expect(preview.unit == original_units[index], "Garage tab does not show its unit's equipment")
 		_expect(buttons.get_child(index).tooltip_text == original_units[index].name, "Garage tab tooltip does not show its unit's name")
 
 	var name_field: LineEdit = garage.find_child("robotname", true, false)

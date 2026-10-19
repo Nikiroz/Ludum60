@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://vjge3cefphbj" path="res://scripts/robot_sprite.gd" id="1_slot"]
 [ext_resource type="FontFile" uid="uid://yd1a2v72shn1" path="res://font/ChixaDemibold.ttf" id="2_gq5a8"]
 [ext_resource type="Texture2D" uid="uid://ddhrvxokgjkuu" path="res://sprites/ui/arrow.png" id="3_arrow"]
+[ext_resource type="Script" path="res://scripts/ui/robot_equipment_preview.gd" id="4_equipment_preview"]
 
 [node name="UnitSlot" type="Control" unique_id=1327401833]
 custom_minimum_size = Vector2(36, 60)
@@ -39,6 +40,16 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 2
 expand_mode = 1
+
+[node name="EquipmentPreview" type="Control" parent="CombatMotion/Icon"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_equipment_preview")
 
 [node name="DebugStats" type="Label" parent="CombatMotion/Icon" unique_id=561281896]
 z_index = 1

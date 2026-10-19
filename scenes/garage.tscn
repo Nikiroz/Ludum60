@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://cce4052u4yygb" path="res://scripts/ui/robot_equipment_drop.gd" id="12_equipment_drop"]
 [ext_resource type="Theme" uid="uid://dusbxqn3cho4s" path="res://styles/buttons.tres" id="13_spycl"]
 [ext_resource type="Script" uid="uid://d2k5m0cpjhw1u" path="res://scripts/ui/ui_scene_button.gd" id="14_nulr8"]
+[ext_resource type="Script" path="res://scripts/ui/robot_equipment_preview.gd" id="15_equipment_preview"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d8qye"]
 content_margin_left = 0.0
@@ -118,7 +119,7 @@ script = ExtResource("12_equipment_drop")
 metadata/_tab_index = 0
 metadata/_tab_name = ""
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2/robot1" unique_id=1523984160]
+[node name="EquipmentPreview" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2/robot1" unique_id=1523984160]
 custom_maximum_size = Vector2(60, 100)
 layout_mode = 1
 anchors_preset = 15
@@ -130,8 +131,8 @@ offset_right = -7.0
 offset_bottom = -7.0
 grow_horizontal = 2
 grow_vertical = 2
-expand_mode = 1
-stretch_mode = 5
+mouse_filter = 2
+script = ExtResource("15_equipment_preview")
 
 [node name="robot2" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2" unique_id=1045187979]
 visible = false
@@ -140,7 +141,7 @@ script = ExtResource("12_equipment_drop")
 metadata/_tab_index = 1
 metadata/_tab_name = ""
 
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2/robot2" unique_id=490467583]
+[node name="EquipmentPreview" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2/robot2" unique_id=490467583]
 custom_maximum_size = Vector2(60, 100)
 layout_mode = 1
 anchors_preset = 15
@@ -152,8 +153,8 @@ offset_right = -7.0
 offset_bottom = -7.0
 grow_horizontal = 2
 grow_vertical = 2
-expand_mode = 1
-stretch_mode = 5
+mouse_filter = 2
+script = ExtResource("15_equipment_preview")
 
 [node name="robot3" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2" unique_id=2127662024]
 visible = false
@@ -162,7 +163,7 @@ script = ExtResource("12_equipment_drop")
 metadata/_tab_index = 2
 metadata/_tab_name = ""
 
-[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2/robot3" unique_id=427945239]
+[node name="EquipmentPreview" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/TabContainer2/robot3" unique_id=427945239]
 custom_maximum_size = Vector2(60, 100)
 layout_mode = 1
 anchors_preset = 15
@@ -174,8 +175,8 @@ offset_right = -7.0
 offset_bottom = -7.0
 grow_horizontal = 2
 grow_vertical = 2
-expand_mode = 1
-stretch_mode = 5
+mouse_filter = 2
+script = ExtResource("15_equipment_preview")
 
 [node name="TabButtons" type="VBoxContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1441514338]
 layout_mode = 2

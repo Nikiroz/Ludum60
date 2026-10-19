@@ -3,6 +3,7 @@ class_name DraggableSlot
 extends Control
 
 const BossUnitData = preload("res://scripts/boss_unit.gd")
+const EquipmentPreview = preload("res://scripts/ui/robot_equipment_preview.gd")
 const EMPTY_SLOT_SPRITE: Texture2D = preload("res://sprites/robots/dummy_blank.png")
 
 var dragging_enabled := true:
@@ -26,6 +27,7 @@ var shift_duration: float = 0.2
 
 @onready var _combat_motion: Control = $CombatMotion
 @onready var icon: TextureRect = $CombatMotion/Icon
+@onready var equipment_preview: Control = $CombatMotion/Icon/EquipmentPreview
 @onready var _icon_rest_position: Vector2 = icon.position
 @onready var debug_stats: Label = $CombatMotion/Icon/DebugStats
 @onready var target_arrow: TextureRect = $TargetArrow
@@ -33,16 +35,19 @@ var shift_duration: float = 0.2
 var unit: BattleUnit:
 	set(value):
 		if unit != value:
+			if active_slot == self:
+				_clear_drag()
 			_reset_combat_animation()
 		unit = value
 		if is_instance_valid(icon):
-			icon.texture = unit.sprite if unit != null else EMPTY_SLOT_SPRITE
+			_update_appearance()
 		_update_debug_stats()
 
 static var active_slot: DraggableSlot = null
 
 var _preview_layer: CanvasLayer
 var _preview: TextureRect
+var _preview_equipment: Control
 var _preview_debug_stats: Label
 var _drag_cursor: TextureRect
 
@@ -68,9 +73,19 @@ func _ready() -> void:
 	mouse_default_cursor_shape = Control.CURSOR_ARROW
 
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon.texture = unit.sprite if unit != null else EMPTY_SLOT_SPRITE
+	_update_appearance()
 
 	_update_debug_stats()
+
+
+func _update_appearance() -> void:
+	var assembled := unit != null and not unit is BossUnitData
+	equipment_preview.unit = unit if assembled else null
+	equipment_preview.visible = assembled
+	if unit == null:
+		icon.texture = EMPTY_SLOT_SPRITE
+	else:
+		icon.texture = null if assembled else unit.sprite
 
 
 func _update_debug_stats() -> void:
@@ -109,7 +124,7 @@ func _start_drag() -> void:
 	_reset_combat_animation()
 	active_slot = self
 	_original_index = get_index()
-	_saved_alpha = icon.self_modulate.a
+	_saved_alpha = icon.modulate.a
 
 	if _shift_tween and _shift_tween.is_running():
 		_shift_tween.kill()
@@ -130,6 +145,12 @@ func _start_drag() -> void:
 
 	_preview_layer.add_child(_preview)
 
+	if equipment_preview.visible:
+		_preview_equipment = EquipmentPreview.new()
+		_preview_equipment.unit = unit
+		_preview.add_child(_preview_equipment)
+		_preview_equipment.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
 	_preview_debug_stats = debug_stats.duplicate() as Label
 	_preview.add_child(_preview_debug_stats)
 	_preview_debug_stats.show()
@@ -142,7 +163,7 @@ func _start_drag() -> void:
 	_drag_cursor.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_preview_layer.add_child(_drag_cursor)
 
-	icon.self_modulate.a = 0.0
+	icon.modulate.a = 0.0
 
 	ControllerGame.set_drag_cursor(true)
 
@@ -269,13 +290,14 @@ func _finish_drag() -> void:
 	_clear_drag()
 
 func _clear_drag() -> void:
-	icon.self_modulate.a = _saved_alpha
+	icon.modulate.a = _saved_alpha
 
 	if is_instance_valid(_preview_layer):
 		_preview_layer.queue_free()
 
 	_preview_layer = null
 	_preview = null
+	_preview_equipment = null
 	_preview_debug_stats = null
 
 	active_slot = null
