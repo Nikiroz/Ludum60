@@ -65,6 +65,8 @@ func set_units(new_units: Array) -> void:
 func set_boss(new_boss: BossUnitData) -> void:
 	_boss_provided = true
 	boss = new_boss
+	if boss != null:
+		boss.max_health = boss.health
 	if is_instance_valid(_boss_container):
 		_rebuild_boss_slot()
 

@@ -11,5 +11,5 @@ body_part = 3
 left_hand_sprite_path = "res://item_pack/unit_sprites/left_hand/hand_hairdryer.png"
 right_hand_sprite_path = "res://item_pack/unit_sprites/right_hand/hand_hairdryer.png"
 occupied_cells = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1)])
-attack_speed_bonus = 14.0
+attack_speed_bonus = 0.14
 damage_bonus = 0.18000000005122274

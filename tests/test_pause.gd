@@ -30,6 +30,13 @@ func _run() -> void:
 	var main = load("res://scenes/main.tscn").instantiate()
 	root.add_child(main)
 	current_scene = main
+	var menu_music: AudioStreamPlayer = root.get_node("ControllerGame/MainMenuMusic")
+	main.get_node("MenuLayer/MainMenu/MarginContainer/Buttons/Settings_button").pressed.emit()
+	_expect(paused and menu_music.playing and not menu_music.stream_paused and menu_music.can_process(), "Main menu settings stopped main menu music")
+	main.get_node("MenuLayer/Settings").hide()
+	main.get_node("MenuLayer/MainMenu/MarginContainer/Buttons/Credits_button").pressed.emit()
+	_expect(menu_music.playing and not menu_music.stream_paused, "Opening credits stopped main menu music")
+	main.get_node("MenuLayer/Credits").hide()
 	root.get_node("ControllerGame").isMainMenu = false
 	main.get_node("MenuLayer/MainMenu").hide()
 	var settings: Control = main.get_node("MenuLayer/Settings")
@@ -70,6 +77,7 @@ func _run() -> void:
 	settings.get_node("Panel/VBoxContainer2/QuitToMainMenu").pressed.emit()
 	warning.get_node("Panel/VBoxContainer/HBoxContainer/yes").pressed.emit()
 	_expect(not paused and root.get_node("ControllerGame").isMainMenu, "Returning to the main menu left gameplay paused")
+	_expect(menu_music.playing and not menu_music.stream_paused and music.stream_paused, "Returning to the main menu through settings did not switch to main menu music")
 	await create_timer(preload("res://sounds/click.wav").get_length() + 0.1).timeout
 	main.free()
 	await process_frame

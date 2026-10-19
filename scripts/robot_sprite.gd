@@ -84,6 +84,17 @@ func _update_appearance() -> void:
 	equipment_preview.visible = assembled
 	if unit == null:
 		icon.texture = EMPTY_SLOT_SPRITE
+	elif unit is BossUnitData:
+		icon.texture = unit.get_health_sprite()
+		# Исходный размер, центр по горизонтали и та же линия пола, что у сборки робота.
+		var sprite_size := icon.texture.get_size()
+		var floor_offset := 50.0 + equipment_preview.offset_bottom
+		icon.offset_left = -sprite_size.x / 2.0
+		icon.offset_right = sprite_size.x / 2.0
+		icon.offset_top = floor_offset - sprite_size.y
+		icon.offset_bottom = floor_offset
+		_icon_rest_position = icon.position
+		debug_stats.position.y = sprite_size.y
 	else:
 		icon.texture = null if assembled else unit.sprite
 
@@ -173,6 +184,8 @@ func _start_drag() -> void:
 	_update_preview()
 
 func _process(_delta: float) -> void:
+	if unit is BossUnitData:
+		icon.texture = unit.get_health_sprite()
 	_update_debug_stats()
 	if active_slot != self:
 		return

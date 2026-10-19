@@ -30,9 +30,10 @@ static func generate_units(count: int = 3) -> Array[BattleUnit]:
 
 
 static func generate_boss() -> BossUnitData:
-	var boss := BossUnitData.new(ROBOT_SPRITES.pick_random())
+	var boss := BossUnitData.new(BossUnitData.HEALTH_SPRITES[0])
 	_randomize_stats(boss)
 	boss.health = 9999.0
+	boss.max_health = boss.health
 	boss.attack_sequence = [1, 2, 3, 4]
 	boss.attack_sequence.shuffle()
 	return boss

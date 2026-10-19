@@ -21,7 +21,10 @@ func _run() -> void:
 	var transition = root.get_node("Transition")
 	var music: AudioStreamPlayer = controller.get_node("BackgroundMusic")
 	var battle_music: AudioStreamPlayer = controller.get_node("BattleMusic")
-	_expect(music.playing and not music.stream_paused and music.bus == &"Music", "Main menu music is missing or uses the wrong bus")
+	var menu_music: AudioStreamPlayer = controller.get_node("MainMenuMusic")
+	_expect(menu_music.playing and not menu_music.stream_paused and menu_music.bus == &"Music", "Main menu music is missing or uses the wrong bus")
+	_expect(menu_music.stream.resource_path == "res://sounds/MUSIC 3.ogg" and menu_music.stream.loop, "Main menu has the wrong track or loop setting")
+	_expect(not music.playing or music.stream_paused, "Gameplay background music is audible in the main menu")
 	_expect(music.stream is AudioStreamOggVorbis and music.stream.loop, "Background music is not looped")
 	_expect(battle_music.stream.resource_path == "res://sounds/MUSIC 2.ogg" and battle_music.stream.loop and battle_music.bus == &"Music", "Battle music has the wrong track, loop setting or bus")
 	_expect(not battle_music.playing or battle_music.stream_paused, "Battle music is audible in the main menu")
@@ -34,6 +37,7 @@ func _run() -> void:
 	main.add_child(garage)
 	controller.set_gameplay_scene(garage)
 	_expect(music.playing and not music.stream_paused, "Garage has no background music")
+	_expect(menu_music.stream_paused, "Main menu music is audible in the garage")
 	_expect(not battle_music.playing or battle_music.stream_paused, "Battle music is audible in the garage")
 	var scrapyard_button: Button = garage.get_node("ScrapyardButton")
 	_expect(controller.scrapyard_available and not scrapyard_button.disabled, "Scrapyard must initially be available")
@@ -42,6 +46,7 @@ func _run() -> void:
 	main.add_child(yard)
 	controller.set_gameplay_scene(yard)
 	_expect(music.playing and not music.stream_paused, "Scrapyard has no background music")
+	_expect(menu_music.stream_paused, "Main menu music is audible in the scrapyard")
 	_expect(not battle_music.playing or battle_music.stream_paused, "Battle music is audible in the scrapyard")
 	await process_frame
 	await process_frame
@@ -78,6 +83,7 @@ func _run() -> void:
 	_expect(is_instance_valid(opened_battle) and opened_battle.scene_file_path == "res://scenes/battle.tscn", "Garage battle button did not open the battle scene")
 	_expect(music.stream_paused, "Background music continued on the battle screen")
 	_expect(battle_music.playing and not battle_music.stream_paused, "Battle screen has no battle music")
+	_expect(menu_music.stream_paused, "Main menu music is audible in battle")
 	opened_battle.get_node("GarageButton").pressed.emit()
 	while transition.transitioning:
 		await process_frame
@@ -121,8 +127,11 @@ func _run() -> void:
 	_expect(battle_music.playing and not battle_music.stream_paused and battle_music.can_process(), "Battle music stopped processing while the game was paused")
 	paused = false
 	controller.isMainMenu = true
-	_expect(music.playing and not music.stream_paused, "Returning to the main menu from battle did not resume background music")
+	_expect(menu_music.playing and not menu_music.stream_paused, "Returning to the main menu from battle did not resume main menu music")
+	_expect(music.stream_paused, "Returning to the main menu did not pause gameplay background music")
 	_expect(battle_music.stream_paused, "Returning to the main menu did not pause battle music")
+	controller.isMainMenu = false
+	_expect(music.playing and not music.stream_paused and menu_music.stream_paused, "Starting a new game did not switch from main menu music to gameplay music")
 	main.free()
 	await process_frame
 	if not _failed:

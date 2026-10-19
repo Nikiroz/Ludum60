@@ -88,7 +88,8 @@ func _run() -> void:
 	attacker.equip_item(head, &"head")
 	_expect(slot.equipment_preview.get_node("head").texture == head.get_unit_texture(), "Battle robot did not update its equipped part")
 	var boss_view: Control = battle.get_node("MarginContainer2").get_child(0)
-	_expect(boss_view.icon.texture == boss.sprite and not boss_view.equipment_preview.visible, "Boss no longer shows its own sprite")
+	_expect(boss_view.icon.texture == BossData.HEALTH_SPRITES[0] and not boss_view.equipment_preview.visible, "Boss does not show its healthy sprite")
+	_expect(boss_view.icon.size.is_equal_approx(Vector2(123, 120)), "Boss sprite was resized from its native dimensions")
 	_expect(start_button.visible, "Start button is missing during preparation")
 	slot._start_drag()
 	_expect(slot.active_slot == slot, "Preparation drag did not start")
@@ -120,6 +121,34 @@ func _run() -> void:
 	_expect(is_equal_approx(boss.health, 9997.0), "Real timer applied wrong damage")
 	_expect(slot.target_arrow.visible, "Boss target arrow is missing")
 	_expect(slot.target_arrow.get_global_rect().position.y >= slot.get_global_rect().end.y, "Arrow is not below its slot")
+	battle.free()
+
+	# Each fifth of the initial boss health selects a new sprite, including exact boundaries.
+	attacker = _unit(100.0, 1.0, 100.0)
+	boss = _boss(500.0, 0.0, [])
+	battle = _battle([attacker], boss)
+	boss_view = battle.get_node("MarginContainer2").get_child(0)
+	await process_frame
+	var boss_floor: float = boss_view.icon.position.y + boss_view.icon.size.y
+	_expect(boss.max_health == 500.0, "Boss sprite thresholds do not use its actual initial health")
+	for sample in [
+		[500.0, 0], [400.01, 0], [400.0, 1], [300.01, 1], [300.0, 2],
+		[200.01, 2], [200.0, 3], [100.01, 3], [100.0, 4], [0.01, 4],
+		[0.0, 4], [-1.0, 4], [600.0, 0],
+	]:
+		boss.health = sample[0]
+		await process_frame
+		_expect(boss_view.icon.texture == BossData.HEALTH_SPRITES[sample[1]], "Wrong boss sprite at health %.2f" % sample[0])
+		_expect(boss_view.icon.size.is_equal_approx(Vector2(123, 120)) and is_equal_approx(boss_view.icon.position.y + boss_view.icon.size.y, boss_floor), "Boss sprite changed size or floor alignment between states")
+	boss.health = 500.0
+	_expect(battle.start_battle(), "Boss sprite checks prevented starting combat")
+	battle.get_node("BattleTimer").stop()
+	for state_index in range(1, 5):
+		_step(battle)
+		await process_frame
+		_expect(boss_view.icon.texture == BossData.HEALTH_SPRITES[state_index], "Damage did not advance the boss sprite")
+	_step(battle)
+	_expect(battle.get_node("MarginContainer2").get_child_count() == 0, "Final boss sprite remained after lethal damage")
 	battle.free()
 
 	# Fractional attack speeds carry progress across ticks; boss cycles slot numbers.
