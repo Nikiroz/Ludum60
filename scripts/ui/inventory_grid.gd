@@ -107,6 +107,7 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 	preview.add_child(icon)
 	set_drag_preview(preview)
 	queue_redraw()
+	ControllerGame.play_one_shot(preload("uid://bpb1s3t6lape4"))
 	return {"inventory": self, "item": item, "grab_offset": _cell_at(at_position) - origin}
 
 
@@ -134,6 +135,7 @@ func _drop_data(at_position: Vector2, data: Variant) -> void:
 			ControllerGame.inventory_positions[data.item] = _drop_origin
 		else:
 			ControllerGame.unequip_item(data.unit, data.slot, data.item, _drop_origin)
+	ControllerGame.play_one_shot(preload("uid://b1w02ybn8bxbf"))
 	queue_redraw()
 
 

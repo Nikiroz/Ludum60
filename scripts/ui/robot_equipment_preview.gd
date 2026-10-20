@@ -2,6 +2,7 @@ extends Control
 
 # Back-to-front order keeps the attachment edges under the torso.
 const SLOTS: Array[StringName] = [&"legs", &"left_hand", &"right_hand", &"torso", &"head"]
+const DebugStats = preload("res://scripts/ui/robot_debug_stats.gd")
 
 @export var align_to_bottom := false
 
@@ -13,10 +14,12 @@ var unit: BattleUnit:
 		if unit != null:
 			unit.equipment_changed.connect(_refresh)
 		if is_node_ready():
+			_debug_stats.unit = unit
 			_refresh()
 
 var _layers: Dictionary[StringName, Sprite2D] = {}
 var _images: Dictionary[StringName, Image] = {}
+var _debug_stats: Label
 
 
 func _ready() -> void:
@@ -29,6 +32,11 @@ func _ready() -> void:
 		layer.region_enabled = true
 		add_child(layer)
 		_layers[slot] = layer
+	_debug_stats = DebugStats.new()
+	_debug_stats.name = "DebugStats"
+	_debug_stats.unit = unit
+	add_child(_debug_stats)
+	_debug_stats.resized.connect(_layout_parts)
 	resized.connect(_layout_parts)
 	_refresh()
 
@@ -107,3 +115,4 @@ func _layout_parts() -> void:
 		origin.y = size.y - bottom
 	for slot in SLOTS:
 		_layers[slot].position = (origin + positions[slot]).round()
+	_debug_stats.position = (origin + bounds.get_center() - _debug_stats.size / 2.0).round()

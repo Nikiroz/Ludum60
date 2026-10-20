@@ -352,14 +352,14 @@ theme = ExtResource("13_spycl")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_sxw43")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_sxw43")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_sxw43")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_sxw43")
 theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_sxw43")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_sxw43")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_sxw43")
 text = "scrapyard"
 script = ExtResource("14_nulr8")
 scene_path = "res://scenes/scrapyard.tscn"
 
-[node name="Background" type="TextureRect" parent="ScrapyardButton"]
+[node name="Background" type="TextureRect" parent="ScrapyardButton" unique_id=371638732]
 show_behind_parent = true
 layout_mode = 0
 offset_top = 24.0
@@ -372,6 +372,6 @@ expand_mode = 1
 stretch_mode = 3
 
 [connection signal="pressed" from="VBoxContainer/MarginContainer2/HBoxContainer/BattleButton" to="VBoxContainer/MarginContainer2/HBoxContainer/BattleButton" method="_on_pressed"]
+[connection signal="button_down" from="ScrapyardButton" to="ScrapyardButton/Background" method="set_texture" binds= [ExtResource("18_scrap_press")]]
+[connection signal="button_up" from="ScrapyardButton" to="ScrapyardButton/Background" method="set_texture" binds= [ExtResource("17_scrap")]]
 [connection signal="pressed" from="ScrapyardButton" to="ScrapyardButton" method="_on_pressed"]
-[connection signal="button_down" from="ScrapyardButton" to="ScrapyardButton/Background" method="set_texture" binds=[ExtResource("18_scrap_press")]]
-[connection signal="button_up" from="ScrapyardButton" to="ScrapyardButton/Background" method="set_texture" binds=[ExtResource("17_scrap")]]

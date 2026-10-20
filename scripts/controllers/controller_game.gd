@@ -3,6 +3,9 @@ extends Node
 signal item_collected(item: GridInventoryItemData)
 signal inventory_changed
 signal scrapyard_availability_changed
+signal debug_mode_changed
+
+enum MusicMode { MAIN_MENU, BACKGROUND, BATTLE }
 
 const CURSOR_NORMAL: Texture2D = preload("res://sprites/cursors/cursor.png")
 const BACKGROUND_MUSIC: AudioStreamOggVorbis = preload("res://sounds/MUSIC 1.ogg")
@@ -13,6 +16,14 @@ const UnitGenerator = preload("res://scripts/temporary_unit_generator.gd")
 var _background_music: AudioStreamPlayer
 var _battle_music: AudioStreamPlayer
 var _main_menu_music: AudioStreamPlayer
+var _active_music: AudioStreamPlayer
+var debug_mode := false:
+	set(value):
+		if debug_mode == value:
+			return
+		debug_mode = value
+		debug_mode_changed.emit()
+
 var units: Array[BattleUnit] = []
 var collected_items: Array[GridInventoryItemData] = []
 var inventory_positions: Dictionary[GridInventoryItemData, Vector2i] = {}
@@ -25,14 +36,14 @@ var isMainMenu := true:
 	set(value):
 		isMainMenu = value
 		_update_quit_to_main_menu_visibility()
-		_play_music(_main_menu_music if isMainMenu else _background_music)
+		play_music(MusicMode.MAIN_MENU if isMainMenu else MusicMode.BACKGROUND)
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_background_music = _create_music_player("BackgroundMusic", BACKGROUND_MUSIC)
 	_battle_music = _create_music_player("BattleMusic", BATTLE_MUSIC)
 	_main_menu_music = _create_music_player("MainMenuMusic", MAIN_MENU_MUSIC)
-	_play_music(_main_menu_music if isMainMenu else _background_music)
+	play_music(MusicMode.MAIN_MENU if isMainMenu else MusicMode.BACKGROUND)
 	Input.set_custom_mouse_cursor(CURSOR_NORMAL, Input.CURSOR_ARROW)
 	set_drag_cursor(false)
 	call_deferred("_update_quit_to_main_menu_visibility")
@@ -53,21 +64,38 @@ func _create_music_player(player_name: String, stream: AudioStreamOggVorbis) -> 
 
 func set_gameplay_scene(scene: Node) -> void:
 	var location := scene.scene_file_path.get_file().get_basename()
-	_play_music(_battle_music if location == "battle" else _background_music)
+	play_music(MusicMode.BATTLE if location == "battle" else MusicMode.BACKGROUND)
 	if location == "scrapyard":
 		scrapyard_available = false
 	elif location == "battle":
 		scene.connect("round_finished", _on_battle_round_finished)
 
-func _play_music(active_player: AudioStreamPlayer) -> void:
+func play_music(mode: MusicMode) -> void:
+	var active_player: AudioStreamPlayer
+	match mode:
+		MusicMode.MAIN_MENU:
+			active_player = _main_menu_music
+		MusicMode.BACKGROUND:
+			active_player = _background_music
+		MusicMode.BATTLE:
+			active_player = _battle_music
 	if not is_instance_valid(active_player):
 		return
+	if _active_music == active_player and active_player.has_stream_playback() and not active_player.stream_paused:
+		return
+
 	for player in [_background_music, _battle_music, _main_menu_music]:
-		if not is_instance_valid(player):
+		if not is_instance_valid(player) or player == active_player:
 			continue
-		if player == active_player and not player.playing:
-			player.play()
-		player.stream_paused = player != active_player
+		if player.has_stream_playback() and not player.stream_paused:
+			player.stream_paused = true
+
+	# Paused streams report playing == false; keep their playback and position.
+	if active_player.has_stream_playback():
+		active_player.stream_paused = false
+	else:
+		active_player.play()
+	_active_music = active_player
 
 func add_collected_item(item: GridInventoryItemData) -> void:
 	var collected := item.duplicate(true) as GridInventoryItemData
@@ -149,6 +177,14 @@ func return_to_main_menu() -> void:
 	Transition.gameplay_scene = null
 	isMainMenu = true
 	main_menu.show()
+
+func _input(event: InputEvent) -> void:
+	if not event is InputEventKey or not event.pressed or event.echo:
+		return
+	if event.keycode != KEY_F9 and event.physical_keycode != KEY_F9:
+		return
+	debug_mode = not debug_mode
+	get_viewport().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if isMainMenu:

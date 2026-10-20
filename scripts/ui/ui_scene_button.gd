@@ -18,6 +18,7 @@ func _update_scrapyard_availability() -> void:
 
 
 func _on_pressed() -> void:
+	
 	if Transition.transitioning or scene_path.is_empty():
 		return
 	super._on_pressed()

@@ -10,7 +10,6 @@ extends Control
 var _active_unit: BattleUnit
 var _active_robot_index := -1
 
-
 func _ready() -> void:
 	var buttons: VBoxContainer = robot_tabs.get_parent().get_node("TabButtons")
 	for index in range(robot_tabs.get_tab_count()):
@@ -46,7 +45,6 @@ func _update_robot_stats() -> void:
 
 func _on_robot_name_changed(_new_name: String) -> void:
 	_save_robot_name()
-
 
 func _save_robot_name() -> void:
 	if _active_unit == null:

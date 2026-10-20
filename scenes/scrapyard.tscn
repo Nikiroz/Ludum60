@@ -11,10 +11,12 @@
 [ext_resource type="Texture2D" uid="uid://ppmpnnh57xcj" path="res://sprites/bg/border.png" id="6_suqf5"]
 [ext_resource type="Theme" uid="uid://dusbxqn3cho4s" path="res://styles/buttons.tres" id="10_wubbp"]
 [ext_resource type="Script" uid="uid://d2k5m0cpjhw1u" path="res://scripts/ui/ui_scene_button.gd" id="11_5o808"]
+[ext_resource type="AudioStream" uid="uid://d1qru7aqjl8uq" path="res://sounds/SFX 1/TRASH-001.ogg" id="12_8jmiw"]
 [ext_resource type="Texture2D" uid="uid://bev1453nobc1c" path="res://sprites/ui/button/ui_scrap.png" id="12_scrap"]
+[ext_resource type="AudioStream" uid="uid://dn4n7iionvfsu" path="res://sounds/SFX 1/TRASH-002.ogg" id="13_n3taq"]
 [ext_resource type="Texture2D" uid="uid://3fgaopy5tnc8" path="res://sprites/ui/button/ui_scrap_press.png" id="13_scrap_press"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_navigation"]
+[ext_resource type="AudioStream" uid="uid://pd5qdf0lj8gs" path="res://sounds/SFX 1/TRASH-003.ogg" id="14_582h4"]
+[ext_resource type="AudioStream" uid="uid://c1vymuny1ujth" path="res://sounds/SFX 1/TRASH-004.ogg" id="15_ip7ae"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_suqf5"]
 bg_color = Color(0.18431373, 0.28235295, 0.36862746, 1)
@@ -33,6 +35,8 @@ corner_detail = 6
 expand_margin_top = 4.0
 expand_margin_bottom = 2.0
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_navigation"]
+
 [node name="Scrapyard" type="Control" unique_id=338103327]
 layout_mode = 3
 anchors_preset = 15
@@ -42,6 +46,7 @@ grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(379, 10)
 script = ExtResource("1_qxv53")
+trash_sounds = Array[AudioStream]([ExtResource("12_8jmiw"), ExtResource("13_n3taq"), ExtResource("14_582h4"), ExtResource("15_ip7ae")])
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=638044542]
 layout_mode = 1
@@ -1072,15 +1077,15 @@ theme = ExtResource("10_wubbp")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_navigation")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_navigation")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_navigation")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_navigation")
 theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_navigation")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_navigation")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_navigation")
 text = "garage"
 script = ExtResource("11_5o808")
 scene_path = "res://scenes/garage.tscn"
 show_after_round_finished = true
 
-[node name="Background" type="TextureRect" parent="GarageButton"]
+[node name="Background" type="TextureRect" parent="GarageButton" unique_id=1599008371]
 show_behind_parent = true
 layout_mode = 0
 offset_left = 110.0
@@ -1093,6 +1098,6 @@ expand_mode = 1
 stretch_mode = 3
 flip_h = true
 
+[connection signal="button_down" from="GarageButton" to="GarageButton/Background" method="set_texture" binds= [ExtResource("13_scrap_press")]]
+[connection signal="button_up" from="GarageButton" to="GarageButton/Background" method="set_texture" binds= [ExtResource("12_scrap")]]
 [connection signal="pressed" from="GarageButton" to="GarageButton" method="_on_pressed"]
-[connection signal="button_down" from="GarageButton" to="GarageButton/Background" method="set_texture" binds=[ExtResource("13_scrap_press")]]
-[connection signal="button_up" from="GarageButton" to="GarageButton/Background" method="set_texture" binds=[ExtResource("12_scrap")]]

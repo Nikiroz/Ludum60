@@ -4,6 +4,7 @@ extends Control
 
 const BossUnitData = preload("res://scripts/boss_unit.gd")
 const EquipmentPreview = preload("res://scripts/ui/robot_equipment_preview.gd")
+const DebugStats = preload("res://scripts/ui/robot_debug_stats.gd")
 const EMPTY_SLOT_SPRITE: Texture2D = preload("res://sprites/robots/dummy_blank.png")
 
 var dragging_enabled := true:
@@ -55,6 +56,7 @@ var _preview: TextureRect
 var _preview_equipment: Control
 var _preview_health_bar: ProgressBar
 var _preview_health_label: Label
+var _boss_debug_stats: Label
 var _maximum_health := 0.0
 var _drag_cursor: TextureRect
 
@@ -80,6 +82,10 @@ func _ready() -> void:
 	mouse_default_cursor_shape = Control.CURSOR_ARROW
 
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_boss_debug_stats = DebugStats.new()
+	_boss_debug_stats.name = "DebugStats"
+	icon.add_child(_boss_debug_stats)
+	_boss_debug_stats.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
 	_update_appearance()
 
 	_update_health()
@@ -87,6 +93,7 @@ func _ready() -> void:
 
 func _update_appearance() -> void:
 	var assembled := unit != null and not unit is BossUnitData
+	_boss_debug_stats.unit = unit if unit is BossUnitData else null
 	equipment_preview.unit = unit if assembled else null
 	equipment_preview.visible = assembled
 	if unit == null:

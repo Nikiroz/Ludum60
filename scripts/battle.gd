@@ -11,10 +11,11 @@ const UNIT_SLOT_SCENE: PackedScene = preload("res://scenes/ui/battle_unit_slot.t
 const MIN_UNIT_SLOTS := 4
 const TICK_SECONDS := 1.0
 const CRIT_MULTIPLIER := 2.0
+const DEBUG_CLICK_DAMAGE := 100.0
 
 @export var generate_demo_units_on_start := true
 @export_range(0.0, 0.2, 0.01) var attack_animation_stagger: float = 0.08
-
+@export var punch_sounds: Array[AudioStream] = []
 @onready var _unit_slots: HBoxContainer = $MarginContainer/HBoxContainer
 @onready var _boss_container: MarginContainer = $MarginContainer2
 @onready var _battle_timer: Timer = $BattleTimer
@@ -39,6 +40,7 @@ func _ready() -> void:
 	_battle_timer.ignore_time_scale = true
 	_battle_timer.timeout.connect(_on_battle_timeout)
 	_unit_slots.child_order_changed.connect(_on_unit_order_changed)
+	ControllerGame.debug_mode_changed.connect(_update_boss_debug_input)
 	if generate_demo_units_on_start and not _units_provided:
 		set_units(ControllerGame.units)
 	else:
@@ -142,6 +144,29 @@ func _rebuild_boss_slot() -> void:
 	slot.unit = boss
 	slot.dragging_enabled = false
 	_boss_container.add_child(slot)
+	slot.icon.gui_input.connect(_on_boss_gui_input)
+	_update_boss_debug_input()
+
+
+func _update_boss_debug_input() -> void:
+	for slot in _boss_container.get_children():
+		slot.icon.mouse_filter = Control.MOUSE_FILTER_STOP if ControllerGame.debug_mode else Control.MOUSE_FILTER_IGNORE
+		slot.icon.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND if ControllerGame.debug_mode else Control.CURSOR_ARROW
+
+
+func _on_boss_gui_input(event: InputEvent) -> void:
+	if not ControllerGame.debug_mode or get_tree().paused or state not in [State.PREPARATION, State.FIGHTING]:
+		return
+	if not event is InputEventMouseButton or not event.pressed or event.button_index != MOUSE_BUTTON_LEFT:
+		return
+	if boss == null or boss.health <= 0.0:
+		return
+	accept_event()
+	boss.health = maxf(boss.health - DEBUG_CLICK_DAMAGE, 0.0)
+	_find_unit_view(boss).play_hit()
+	_log_event("Отладочный удар -> Босс: урон %.2f; осталось жизней %.2f." % [DEBUG_CLICK_DAMAGE, boss.health])
+	if boss.health <= 0.0:
+		_finish_battle(true)
 
 
 func _on_unit_order_changed() -> void:
@@ -259,7 +284,9 @@ func _boss_attack() -> void:
 		return
 	_deal_attack(boss, target, "Босс", "Слот %d" % slot_number)
 	_remove_dead_units()
-
+	if not punch_sounds.is_empty():
+		var sound: AudioStream = punch_sounds.pick_random()
+		ControllerGame.play_one_shot(sound)
 
 func _deal_attack(attacker: BattleUnit, target: BattleUnit, attacker_name: String, target_name: String) -> void:
 	var critical := randf() < clampf(attacker.crit_chance, 0.0, 1.0)
@@ -273,7 +300,9 @@ func _deal_attack(attacker: BattleUnit, target: BattleUnit, attacker_name: Strin
 	_log_event("%s -> %s: урон %.2f%s; осталось жизней %.2f." % [
 		attacker_name, target_name, damage, " (КРИТ x2)" if critical else "", target.health
 	])
-
+	if not punch_sounds.is_empty():
+		var sound: AudioStream = punch_sounds.pick_random()
+		ControllerGame.play_one_shot(sound)
 
 func _find_unit_view(unit: BattleUnit) -> DraggableSlot:
 	for slot in _unit_slots.get_children():
@@ -325,6 +354,10 @@ func _finish_battle(victory: bool) -> void:
 	if boss != null and boss.health <= 0.0:
 		_rebuild_boss_slot()
 	_log_event("ПОБЕДА: босс повержен." if victory else "ПОРАЖЕНИЕ: все юниты погибли.")
+	if victory:
+		ControllerGame.play_one_shot(preload("uid://bnimep0a8hcls"))
+	else:
+		ControllerGame.play_one_shot(preload("uid://b4mfanx6w5yup"))
 	_restore_unit_stats()
 	round_finished.emit()
 	if victory:

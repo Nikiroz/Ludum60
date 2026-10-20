@@ -7,7 +7,7 @@ const ItemCatalog = preload("res://scripts/item_catalog.gd")
 const ITEM_COUNT := 8
 
 @export var game_time: float = 30.0
-
+@export var trash_sounds: Array[AudioStream] = []
 @onready var timer: Timer = $VBoxContainer/Control2/Timer/Timer
 @onready var timer_label: Label = $VBoxContainer/Control2/Timer
 @onready var timer_slider: HSlider = $VBoxContainer/Control2/Control/MarginContainer/HSlider
@@ -48,7 +48,9 @@ func _ready() -> void:
 
 	timer.wait_time = game_time
 	timer.one_shot = true
-	timer.timeout.connect(end_game)
+	timer.timeout.connect(func () -> void: 
+		end_game() 
+		ControllerGame.play_one_shot(preload("uid://d0ikcbhy4meec")))
 	timer.start()
 	update_timer_ui()
 
@@ -130,10 +132,7 @@ func load_available_items() -> Array[GridInventoryItemData]:
 
 	return result
 
-func get_free_positions(
-	item: GridInventoryItemData,
-	occupied: Dictionary
-) -> Array[Vector2i]:
+func get_free_positions(item: GridInventoryItemData,occupied: Dictionary) -> Array[Vector2i]:
 
 	var positions: Array[Vector2i] = []
 
@@ -161,7 +160,6 @@ func get_free_positions(
 				positions.append(origin)
 
 	return positions
-
 
 func spawn_random_items() -> void:
 	var available_items := load_available_items()
@@ -222,10 +220,7 @@ func spawn_random_items() -> void:
 
 	print("Spawned items: ", hidden_items.size())
 
-func place_item(
-	item: GridInventoryItemData,
-	origin: Vector2i
-) -> void:
+func place_item(item: GridInventoryItemData,origin: Vector2i) -> void:
 
 	var columns: int = field.columns
 
@@ -283,6 +278,10 @@ func _on_cell_clicked(cell: FieldCell) -> void:
 	if hidden != null:
 		if is_item_revealed(hidden):
 			collect_item(hidden)
+			
+	if not trash_sounds.is_empty():
+		var sound: AudioStream = trash_sounds.pick_random()
+		ControllerGame.play_one_shot(sound)
 
 func is_item_revealed(hidden: HiddenItem) -> bool:
 	for cell in hidden.cells:
@@ -297,7 +296,6 @@ func collect_item(hidden: HiddenItem) -> void:
 		return
 
 	var slot: TextureRect = inventory_slots[next_inventory_slot]
-
 
 	var icon := TextureRect.new()
 	icon.texture = hidden.data.get_texture()
@@ -322,25 +320,12 @@ func collect_item(hidden: HiddenItem) -> void:
 	hidden_items.erase(hidden)
 
 	if collected_items.size() >= ITEM_COUNT:
-		win_game()
+		end_game()
+
+	ControllerGame.play_one_shot(preload("uid://dgopqhqch8r0o"))
 
 	print("Collected: ", hidden.data.display_name)
 	print("Collected total: ", collected_items.size())
-
-func win_game() -> void:
-	if game_over:
-		return
-
-	game_over = true
-
-	update_timer_ui()
-	timer.stop()
-
-	for cell in field_cells:
-		cell.mouse_filter = Control.MOUSE_FILTER_IGNORE
-
-	print("YOU WIN!")
-	round_finished.emit()
 
 func end_game() -> void:
 	if game_over:

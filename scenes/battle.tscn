@@ -1,11 +1,15 @@
 [gd_scene format=3 uid="uid://cywpr57l471rg"]
 
 [ext_resource type="Script" uid="uid://cllj5g7p1yn1y" path="res://scripts/battle.gd" id="1_4k1nj"]
+[ext_resource type="AudioStream" uid="uid://c8x3ussfydedw" path="res://sounds/SFX 1/PUNCH-001.ogg" id="2_03edq"]
 [ext_resource type="Texture2D" uid="uid://dy8k0y5o3ywww" path="res://sprites/bg/battle.png" id="2_th188"]
 [ext_resource type="Texture2D" uid="uid://ogfjp4m5sauh" path="res://sprites/mocup/screen366_ui.png" id="3_6vh42"]
+[ext_resource type="AudioStream" uid="uid://bi57eh03ditk3" path="res://sounds/SFX 1/PUNCH-002.ogg" id="3_22uqi"]
 [ext_resource type="Theme" uid="uid://dusbxqn3cho4s" path="res://styles/buttons.tres" id="3_p1qf1"]
+[ext_resource type="AudioStream" uid="uid://gn43yqd7gq2i" path="res://sounds/SFX 1/PUNCH-003.ogg" id="4_6ni85"]
 [ext_resource type="Script" uid="uid://cha3ig1kvoa5b" path="res://scripts/ui/ui_start_battle_button.gd" id="4_start_battle"]
 [ext_resource type="Script" uid="uid://d2k5m0cpjhw1u" path="res://scripts/ui/ui_scene_button.gd" id="5_scene_button"]
+[ext_resource type="AudioStream" uid="uid://bfdn22h3kgwow" path="res://sounds/SFX 1/PUNCH-004.ogg" id="5_vceff"]
 [ext_resource type="Texture2D" uid="uid://btrmn3o641snb" path="res://sprites/ui/button/ui_start.png" id="6_start"]
 [ext_resource type="Texture2D" uid="uid://dokq4gih70y6b" path="res://sprites/ui/button/ui_star_presst.png" id="7_start_pressed"]
 
@@ -35,6 +39,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_4k1nj")
+punch_sounds = Array[AudioStream]([ExtResource("2_03edq"), ExtResource("3_22uqi"), ExtResource("4_6ni85"), ExtResource("5_vceff")])
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=2054473994]
 layout_mode = 1

@@ -32,6 +32,7 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 	preview.add_child(icon)
 	set_drag_preview(preview)
 	_dragged_slot = slot
+	ControllerGame.play_one_shot(preload("uid://bpb1s3t6lape4"))
 	$EquipmentPreview.get_node(NodePath(slot)).modulate.a = 0.25
 	return {"equipment": self, "unit": unit, "slot": slot, "item": item, "grab_offset": grab_offset}
 
@@ -57,6 +58,7 @@ func _drop_data(at_position: Vector2, data: Variant) -> void:
 	if _can_drop_data(at_position, data):
 		ControllerGame.equip_item(unit, data.item, _left_hand)
 	_show_drop = false
+	ControllerGame.play_one_shot(preload("uid://cyhdsnc7rlc5w")) 
 	queue_redraw()
 
 

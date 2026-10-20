@@ -22,6 +22,7 @@ func _run() -> void:
 	var music: AudioStreamPlayer = controller.get_node("BackgroundMusic")
 	var battle_music: AudioStreamPlayer = controller.get_node("BattleMusic")
 	var menu_music: AudioStreamPlayer = controller.get_node("MainMenuMusic")
+	var menu_playback := menu_music.get_stream_playback()
 	_expect(menu_music.playing and not menu_music.stream_paused and menu_music.bus == &"Music", "Main menu music is missing or uses the wrong bus")
 	_expect(menu_music.stream.resource_path == "res://sounds/MUSIC 3.ogg" and menu_music.stream.loop, "Main menu has the wrong track or loop setting")
 	_expect(not music.playing or music.stream_paused, "Gameplay background music is audible in the main menu")
@@ -39,6 +40,10 @@ func _run() -> void:
 	_expect(music.playing and not music.stream_paused, "Garage has no background music")
 	_expect(menu_music.stream_paused, "Main menu music is audible in the garage")
 	_expect(not battle_music.playing or battle_music.stream_paused, "Battle music is audible in the garage")
+	music.seek(8.0)
+	await create_timer(0.1).timeout
+	var background_playback := music.get_stream_playback()
+	var background_position := music.get_playback_position()
 	var scrapyard_button: Button = garage.get_node("ScrapyardButton")
 	_expect(controller.scrapyard_available and not scrapyard_button.disabled, "Scrapyard must initially be available")
 
@@ -46,6 +51,7 @@ func _run() -> void:
 	main.add_child(yard)
 	controller.set_gameplay_scene(yard)
 	_expect(music.playing and not music.stream_paused, "Scrapyard has no background music")
+	_expect(music.get_stream_playback() == background_playback and music.get_playback_position() >= background_position, "Entering the scrapyard restarted or rewound background music")
 	_expect(menu_music.stream_paused, "Main menu music is audible in the scrapyard")
 	_expect(not battle_music.playing or battle_music.stream_paused, "Battle music is audible in the scrapyard")
 	await process_frame
@@ -71,6 +77,8 @@ func _run() -> void:
 	garage = load("res://scenes/garage.tscn").instantiate()
 	main.add_child(garage)
 	controller.set_gameplay_scene(garage)
+	_expect(music.get_stream_playback() == background_playback and music.get_playback_position() >= background_position, "Returning from the scrapyard restarted or rewound background music")
+	_expect(music.get_parent() == controller, "Background music depends on a gameplay scene")
 	scrapyard_button = garage.get_node("ScrapyardButton")
 	_expect(scrapyard_button.visible and scrapyard_button.disabled, "Garage did not show the unavailable scrapyard")
 	transition.change_scene("res://scenes/scrapyard.tscn")
@@ -83,6 +91,7 @@ func _run() -> void:
 	_expect(is_instance_valid(opened_battle) and opened_battle.scene_file_path == "res://scenes/battle.tscn", "Garage battle button did not open the battle scene")
 	_expect(music.stream_paused, "Background music continued on the battle screen")
 	_expect(battle_music.playing and not battle_music.stream_paused, "Battle screen has no battle music")
+	var battle_playback := battle_music.get_stream_playback()
 	_expect(menu_music.stream_paused, "Main menu music is audible in battle")
 	_expect(not opened_battle.get_node("GarageButton").visible, "Battle preparation showed the garage button")
 	opened_battle.get_node("StarBattleButton").pressed.emit()
@@ -98,6 +107,7 @@ func _run() -> void:
 	garage = transition.gameplay_scene
 	_expect(is_instance_valid(garage) and garage.scene_file_path == "res://scenes/garage.tscn", "Battle garage button did not return to the garage")
 	_expect(music.playing and not music.stream_paused, "Returning from battle did not resume the background music")
+	_expect(music.get_stream_playback() == background_playback and music.get_playback_position() >= background_position, "Returning from battle restarted or rewound background music")
 	_expect(battle_music.stream_paused, "Returning from battle did not pause battle music")
 	garage.free()
 
@@ -107,6 +117,7 @@ func _run() -> void:
 		main.add_child(battle)
 		controller.set_gameplay_scene(battle)
 		_expect(battle_music.playing and not battle_music.stream_paused, "Battle preparation has no battle music")
+		_expect(battle_music.get_stream_playback() == battle_playback, "Opening another battle restarted battle music")
 		_expect(not controller.scrapyard_available, "Battle preparation reopened the scrapyard")
 		var start_button: Button = battle.get_node("StarBattleButton")
 		_expect(start_button.visible and not start_button.disabled, "Battle preparation hid or disabled its start button")
@@ -141,10 +152,17 @@ func _run() -> void:
 	paused = false
 	controller.isMainMenu = true
 	_expect(menu_music.playing and not menu_music.stream_paused, "Returning to the main menu from battle did not resume main menu music")
+	_expect(menu_music.get_stream_playback() == menu_playback, "Returning to the main menu restarted menu music")
 	_expect(music.stream_paused, "Returning to the main menu did not pause gameplay background music")
 	_expect(battle_music.stream_paused, "Returning to the main menu did not pause battle music")
+	background_playback = music.get_stream_playback()
+	await create_timer(0.1).timeout
+	background_position = music.get_playback_position()
+	await create_timer(0.1).timeout
+	_expect(is_equal_approx(music.get_playback_position(), background_position), "Inactive background music did not stay paused in the main menu")
 	controller.isMainMenu = false
 	_expect(music.playing and not music.stream_paused and menu_music.stream_paused, "Starting a new game did not switch from main menu music to gameplay music")
+	_expect(music.get_stream_playback() == background_playback and music.get_playback_position() >= background_position, "Returning from the main menu restarted or rewound background music")
 	main.free()
 	await process_frame
 	if not _failed:
