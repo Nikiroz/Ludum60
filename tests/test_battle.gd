@@ -86,7 +86,7 @@ func _run() -> void:
 	head.sprite_path = "res://item_pack/sprites/head_lamp.png"
 	head.unit_sprite_path = "res://item_pack/sprites/head_router.png"
 	attacker.equip_item(head, &"head")
-	_expect(slot.equipment_preview.get_node("head").texture == head.get_unit_texture(), "Battle robot did not update its equipped part")
+	_expect(slot.equipment_preview.get_node("head").texture.get_image().get_data() == head.get_unit_texture().get_image().get_data(), "Battle robot did not update its equipped part")
 	var boss_view: Control = battle.get_node("MarginContainer2").get_child(0)
 	_expect(boss_view.health_label.text == "9999" and boss_view.health_bar.max_value == 9999.0, "Boss HP bar has the wrong text or maximum")
 	_expect(boss_view.icon.texture == BossData.HEALTH_SPRITES[0] and not boss_view.equipment_preview.visible, "Boss does not show its healthy sprite")
@@ -100,7 +100,7 @@ func _run() -> void:
 	for part in [&"head", &"torso", &"legs"]:
 		var original: Sprite2D = slot.equipment_preview.get_node(NodePath(part))
 		var dragged: Sprite2D = slot._preview_equipment.get_node(NodePath(part))
-		_expect(dragged.texture == original.texture and dragged.visible, "Dragging lost an equipped part")
+		_expect(dragged.texture.get_image().get_data() == original.texture.get_image().get_data() and dragged.visible, "Dragging lost an equipped part")
 		_expect(dragged.position.is_equal_approx(original.position) and dragged.scale.is_equal_approx(Vector2.ONE), "Dragging moved or resized a robot part")
 	_expect(is_zero_approx(slot.icon.modulate.a), "Dragging did not hide the original assembled robot")
 	start_button.pressed.emit()

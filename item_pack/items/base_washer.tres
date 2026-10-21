@@ -10,5 +10,11 @@ sprite_path = "res://item_pack/sprites/base_washer.png"
 body_part = 2
 unit_sprite_path = "res://item_pack/unit_sprites/base_washer.png"
 occupied_cells = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(0, 2), Vector2i(1, 2), Vector2i(2, 2)])
+attachment_points = {
+"head": Vector2i(20, 2),
+"left_hand": Vector2i(34, 9),
+"legs": Vector2i(21, 30),
+"right_hand": Vector2i(7, 10)
+}
 health_bonus = 32.0
 damage_bonus = 12.0

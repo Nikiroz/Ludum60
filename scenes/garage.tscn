@@ -317,7 +317,6 @@ vertical_alignment = 1
 clip_text = true
 
 [node name="BattleButton" type="Button" parent="VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1325151344]
-visible = false
 custom_minimum_size = Vector2(106, 32)
 layout_mode = 2
 size_flags_vertical = 4

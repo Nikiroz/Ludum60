@@ -54,13 +54,14 @@ func _motion(position: Vector2, relative: Vector2) -> void:
 	_viewport.push_input(event, true)
 
 
-func _drag(item: GridInventoryItemData, left_half: bool = true) -> void:
+func _drag(item: GridInventoryItemData, left_hand: bool = true) -> void:
 	_grid.get_parent().scroll_vertical = 0
 	await process_frame
 	var origin: Vector2i = _controller.inventory_positions[item]
 	var start: Vector2 = _grid.global_position + Vector2(origin) * 12 + Vector2(6, 6)
 	var page: Control = _tabs.get_current_tab_control()
-	var finish: Vector2 = page.global_position + page.size * Vector2(0.25 if left_half else 0.75, 0.65)
+	# Authored sockets refer to the front-facing robot's own left/right hands.
+	var finish: Vector2 = page.global_position + page.size * Vector2(0.75 if left_hand else 0.25, 0.65)
 	_mouse(start, true)
 	_motion(start + Vector2(12, 0), Vector2(12, 0))
 	_expect(_viewport.gui_is_dragging(), "Inventory item did not start dragging")
@@ -69,6 +70,32 @@ func _drag(item: GridInventoryItemData, left_half: bool = true) -> void:
 	await process_frame
 	await process_frame
 	_appearance(_tabs.get_current_tab_control().unit)
+
+
+func _same_texture(first: Texture2D, second: Texture2D) -> bool:
+	if first == null or second == null:
+		return first == second
+	var first_image := first.get_image()
+	var second_image := second.get_image()
+	first_image.convert(Image.FORMAT_RGBA8)
+	second_image.convert(Image.FORMAT_RGBA8)
+	return first_image.get_size() == second_image.get_size() and first_image.get_data() == second_image.get_data()
+
+
+func _connections(preview: Control, unit: BattleUnit) -> void:
+	var torso: Sprite2D = preview.get_node("torso")
+	var torso_item: GridInventoryItemData = unit.equipment[&"torso"]
+	var sockets := torso_item.get_attachment_points("", Vector2i(torso.texture.get_size()))
+	for slot in [&"head", &"legs", &"left_hand", &"right_hand"]:
+		var layer: Sprite2D = preview.get_node(NodePath(slot))
+		if not layer.visible:
+			continue
+		var item: GridInventoryItemData = unit.equipment[slot]
+		var side := "left" if slot == &"left_hand" else "right" if slot == &"right_hand" else ""
+		var points := item.get_attachment_points(side, Vector2i(layer.texture.get_size()))
+		var socket := torso.to_global(Vector2(sockets[slot]) - torso.region_rect.position)
+		var connection := layer.to_global(Vector2(points.body) - layer.region_rect.position)
+		_expect(connection.is_equal_approx(socket), "Equipment attachment does not match its torso socket: " + slot)
 
 
 func _appearance(unit: BattleUnit) -> void:
@@ -88,18 +115,10 @@ func _appearance(unit: BattleUnit) -> void:
 			elif slot == &"right_hand":
 				texture_path = item.right_hand_sprite_path
 			if not texture_path.is_empty():
-				expected_texture = load(texture_path) as Texture2D
+				expected_texture = ImageTexture.create_from_image(Image.load_from_file(ProjectSettings.globalize_path(texture_path)))
 		_expect(layer.visible == (expected_texture != null), "Equipment preview shows an empty slot or hides equipped gear")
-		_expect(layer.texture == expected_texture, "Equipment preview did not use the item's Unit Sprite")
-	if not preview.is_visible_in_tree():
-		return
-	var torso: Sprite2D = preview.get_node("torso")
-	var legs: Sprite2D = preview.get_node("legs")
-	_expect(legs.position.y > torso.position.y, "Robot legs are not below its torso")
-	if unit.equipment.has(&"head"):
-		_expect(preview.get_node("head").position.y < torso.position.y, "Robot head is not above its torso")
-	if unit.equipment.has(&"left_hand") and unit.equipment.has(&"right_hand"):
-		_expect(preview.get_node("left_hand").position.x < torso.position.x and preview.get_node("right_hand").position.x > torso.position.x, "Robot hands are not on opposite sides of its torso")
+		_expect(_same_texture(layer.texture, expected_texture), "Equipment preview did not use the item's Unit Sprite")
+	_connections(preview, unit)
 
 
 func _stats(unit: BattleUnit, health: float, speed: float, damage: float, crit: float) -> void:
@@ -225,8 +244,12 @@ func _run() -> void:
 	for part in [&"head", &"torso", &"legs", &"left_hand", &"right_hand"]:
 		var garage_part: Sprite2D = garage_preview.get_node(NodePath(part))
 		var battle_part: Sprite2D = battle_slot.equipment_preview.get_node(NodePath(part))
-		_expect(battle_part.texture == garage_part.texture and battle_part.visible, "Garage equipment was lost in the battle view")
+		_expect(_same_texture(battle_part.texture, garage_part.texture) and battle_part.visible, "Garage equipment was lost in the battle view")
 		_expect(battle_part.scale.is_equal_approx(Vector2.ONE), "Battle resized a robot part")
+	_connections(battle_slot.equipment_preview, first)
+	battle_slot._start_drag()
+	_connections(battle_slot._preview_equipment, first)
+	battle_slot._clear_drag()
 	_expect(battle.start_battle(), "Equipped robot could not start battle")
 	battle.get_node("BattleTimer").stop()
 	battle.get_node("BattleTimer").timeout.emit()

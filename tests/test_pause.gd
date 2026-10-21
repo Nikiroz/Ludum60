@@ -16,27 +16,73 @@ func _expect(condition: bool, message: String) -> void:
 		push_error(message)
 
 
-func _escape() -> void:
+func _key(keycode: Key) -> void:
 	var event := InputEventKey.new()
-	event.keycode = KEY_ESCAPE
+	event.keycode = keycode
 	event.pressed = true
 	root.push_input(event)
 	event = InputEventKey.new()
-	event.keycode = KEY_ESCAPE
+	event.keycode = keycode
 	root.push_input(event)
+
+
+func _escape() -> void:
+	_key(KEY_ESCAPE)
+
+
+func _click(button: Button) -> void:
+	var point := button.get_global_rect().get_center()
+	var motion := InputEventMouseMotion.new()
+	motion.position = point
+	root.push_input(motion)
+	for pressed in [true, false]:
+		var event := InputEventMouseButton.new()
+		event.position = point
+		event.button_index = MOUSE_BUTTON_LEFT
+		event.pressed = pressed
+		root.push_input(event)
 
 
 func _run() -> void:
 	var main = load("res://scenes/main.tscn").instantiate()
 	root.add_child(main)
 	current_scene = main
+	await process_frame
+	await process_frame
 	var menu_music: AudioStreamPlayer = root.get_node("ControllerGame/MainMenuMusic")
-	main.get_node("MenuLayer/MainMenu/MarginContainer/Buttons/Settings_button").pressed.emit()
+	var main_menu: Control = main.get_node("MenuLayer/MainMenu")
+	var settings_button: Button = main_menu.get_node("MarginContainer/Buttons/Settings_button")
+	settings_button.grab_focus()
+	_click(settings_button)
 	_expect(paused and menu_music.playing and not menu_music.stream_paused and menu_music.can_process(), "Main menu settings stopped main menu music")
-	main.get_node("MenuLayer/Settings").hide()
-	main.get_node("MenuLayer/MainMenu/MarginContainer/Buttons/Credits_button").pressed.emit()
+	_expect(not settings_button.has_focus() and not main_menu.can_process(), "Settings left the background menu focused or processing")
+	_expect(settings_button.get_draw_mode() not in [BaseButton.DRAW_HOVER, BaseButton.DRAW_PRESSED, BaseButton.DRAW_HOVER_PRESSED], "Clicked settings button stays visually highlighted behind the panel")
+	_expect(settings_button.get_theme_stylebox("disabled") == settings_button.get_theme_stylebox("normal") and settings_button.get_theme_color("font_disabled_color") == settings_button.get_theme_color("font_color"), "Background button does not use its idle appearance")
+	_key(KEY_TAB)
+	var focused := root.gui_get_focus_owner()
+	_expect(focused == null or not main_menu.is_ancestor_of(focused), "Tab focused a button behind settings")
+	var layer: Control = main_menu.get_node("Paralax_3")
+	var background_position := layer.position
+	await create_timer(0.1).timeout
+	_expect(layer.position.is_equal_approx(background_position), "Parallax moved behind the settings menu")
+	_click(main.get_node("MenuLayer/Settings/Panel/VBoxContainer2/Button2"))
+	_expect(main_menu.can_process(), "Closing settings did not resume the main menu")
+	_expect(not settings_button.disabled and settings_button.focus_mode == Control.FOCUS_ALL, "Closing settings did not restore main menu interaction")
+	var credits_button: Button = main_menu.get_node("MarginContainer/Buttons/Credits_button")
+	credits_button.grab_focus()
+	_click(credits_button)
 	_expect(menu_music.playing and not menu_music.stream_paused, "Opening credits stopped main menu music")
-	main.get_node("MenuLayer/Credits").hide()
+	_expect(not credits_button.has_focus() and not main_menu.can_process(), "Credits left the background menu focused or processing")
+	_expect(credits_button.get_draw_mode() not in [BaseButton.DRAW_HOVER, BaseButton.DRAW_PRESSED, BaseButton.DRAW_HOVER_PRESSED], "Clicked credits button stays visually highlighted behind the panel")
+	_key(KEY_TAB)
+	focused = root.gui_get_focus_owner()
+	_expect(focused == null or not main_menu.is_ancestor_of(focused), "Tab focused a button behind credits")
+	background_position = layer.position
+	await create_timer(0.1).timeout
+	_expect(layer.position.is_equal_approx(background_position), "Parallax moved behind credits")
+	_click(main.get_node("MenuLayer/Credits/Panel/VBoxContainer2/Button"))
+	_expect(main_menu.can_process(), "Closing credits did not resume the main menu")
+	_expect(not credits_button.disabled and credits_button.focus_mode == Control.FOCUS_ALL, "Closing credits did not restore main menu interaction")
 	root.get_node("ControllerGame").isMainMenu = false
 	main.get_node("MenuLayer/MainMenu").hide()
 	var settings: Control = main.get_node("MenuLayer/Settings")

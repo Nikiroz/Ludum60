@@ -1,7 +1,7 @@
 extends Control
 
-# Back-to-front order keeps the attachment edges under the torso.
-const SLOTS: Array[StringName] = [&"legs", &"left_hand", &"right_hand", &"torso", &"head"]
+# Back-to-front order also determines which overlapping part receives a grab.
+const SLOTS: Array[StringName] = [&"legs", &"left_hand", &"torso", &"right_hand", &"head"]
 const DebugStats = preload("res://scripts/ui/robot_debug_stats.gd")
 
 @export var align_to_bottom := false
@@ -19,6 +19,7 @@ var unit: BattleUnit:
 
 var _layers: Dictionary[StringName, Sprite2D] = {}
 var _images: Dictionary[StringName, Image] = {}
+var _attachment_points: Dictionary[StringName, Dictionary] = {}
 var _debug_stats: Label
 
 
@@ -58,8 +59,11 @@ func _refresh() -> void:
 		if layer.texture != null:
 			_images[slot] = layer.texture.get_image()
 			layer.region_rect = _images[slot].get_used_rect()
+			var hand_side := "left" if slot == &"left_hand" else "right" if slot == &"right_hand" else ""
+			_attachment_points[slot] = item.get_attachment_points(hand_side, _images[slot].get_size())
 		else:
 			_images.erase(slot)
+			_attachment_points.erase(slot)
 	_layout_parts()
 
 
@@ -70,7 +74,7 @@ func get_slot_at(at_position: Vector2) -> StringName:
 		var layer := _layers[slot]
 		if not layer.visible:
 			continue
-		var local := layer.get_transform().affine_inverse() * at_position
+		var local := layer.get_transform().affine_inverse() * at_position - layer.offset
 		if not Rect2(Vector2.ZERO, layer.region_rect.size).has_point(local):
 			continue
 		var pixel := Vector2i(local.floor()) + Vector2i(layer.region_rect.position)
@@ -84,35 +88,47 @@ func _part_size(slot: StringName) -> Vector2:
 	return layer.region_rect.size if layer.visible else Vector2.ZERO
 
 
+func _attachment_offset(slot: StringName, point_name: StringName) -> Vector2:
+	var layer := _layers[slot]
+	if not layer.visible:
+		return Vector2.ZERO
+	# Authored points belong to the full PNG; sprites display only its opaque region.
+	var pixel := Vector2(_attachment_points[slot].get(point_name, Vector2i.ZERO))
+	return layer.transform.basis_xform(pixel - layer.region_rect.position + layer.offset)
+
+
+func get_attachment_position(slot: StringName, point_name: StringName) -> Vector2:
+	return _layers[slot].position + _attachment_offset(slot, point_name)
+
+
 func _layout_parts() -> void:
 	if _layers.is_empty():
 		return
-	var torso := _part_size(&"torso")
-	var legs := _part_size(&"legs")
-	var head := _part_size(&"head")
-	var left := _part_size(&"left_hand")
-	var right := _part_size(&"right_hand")
-	var positions: Dictionary[StringName, Vector2] = {
-		&"torso": Vector2(-torso.x / 2.0, 0),
-		&"legs": Vector2(-legs.x / 2.0, torso.y - 3),
-		&"head": Vector2(-head.x / 2.0, 2 - head.y),
-		&"left_hand": Vector2(-torso.x / 2.0 - left.x + 4, torso.y * 0.4 - left.y / 2.0),
-		&"right_hand": Vector2(torso.x / 2.0 - 4, torso.y * 0.4 - right.y / 2.0),
-	}
+	var positions: Dictionary[StringName, Vector2] = {&"torso": Vector2.ZERO}
+	for slot in SLOTS:
+		if slot != &"torso":
+			positions[slot] = _attachment_offset(&"torso", slot) - _attachment_offset(slot, &"body")
 	var bounds := Rect2()
+	var legs_bounds := Rect2()
 	var has_parts := false
 	for slot in SLOTS:
 		if not _layers[slot].visible:
 			continue
-		var part := Rect2(positions[slot], _part_size(slot))
+		var part_transform := _layers[slot].transform
+		part_transform.origin = positions[slot]
+		var part := part_transform * Rect2(_layers[slot].offset, _part_size(slot))
+		if slot == &"legs":
+			legs_bounds = part
 		bounds = bounds.merge(part) if has_parts else part
 		has_parts = true
 	if not has_parts or not bounds.has_area():
 		return
 	var origin := (size - bounds.size) / 2.0 - bounds.position
 	if align_to_bottom:
-		var bottom := positions[&"legs"].y + legs.y if _layers[&"legs"].visible else bounds.end.y
+		var bottom := legs_bounds.end.y if _layers[&"legs"].visible else bounds.end.y
 		origin.y = size.y - bottom
+	# Round the entire assembly together so connected points remain coincident.
+	origin = origin.round()
 	for slot in SLOTS:
-		_layers[slot].position = (origin + positions[slot]).round()
+		_layers[slot].position = origin + positions[slot]
 	_debug_stats.position = (origin + bounds.get_center() - _debug_stats.size / 2.0).round()

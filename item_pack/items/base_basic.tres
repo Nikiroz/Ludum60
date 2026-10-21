@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="GridInventoryItemData" format=3]
+[gd_resource type="Resource" script_class="GridInventoryItemData" format=3 uid="uid://d257373238uh6"]
 
-[ext_resource type="Script" path="res://item_pack/item_data.gd" id="1_om60q"]
+[ext_resource type="Script" uid="uid://b5v34017s5c7i" path="res://item_pack/item_data.gd" id="1_om60q"]
 
 [resource]
 script = ExtResource("1_om60q")
@@ -11,3 +11,9 @@ sprite_path = "res://item_pack/sprites/base_basic.png"
 body_part = 2
 unit_sprite_path = "res://item_pack/unit_sprites/base_basic.png"
 occupied_cells = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(0, 2), Vector2i(1, 2), Vector2i(2, 2)])
+attachment_points = {
+"head": Vector2i(15, 0),
+"left_hand": Vector2i(25, 4),
+"legs": Vector2i(12, 25),
+"right_hand": Vector2i(0, 13)
+}

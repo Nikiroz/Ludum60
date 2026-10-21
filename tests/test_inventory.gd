@@ -51,7 +51,7 @@ func _run() -> void:
 	await process_frame
 	var grid = garage.find_child("HeadsContainer", true, false)
 	_expect(grid != null and grid.items.size() == 2, "Found items did not appear in HeadsContainer")
-	var texture_ref: WeakRef = weakref(first.get_texture())
+	var texture_ref: WeakRef = weakref(grid._textures[first.sprite_path])
 	await process_frame
 	_expect(texture_ref.get_ref() != null, "Inventory released the texture after drawing, leaving white rectangles")
 	var first_origin: Vector2i = controller.inventory_positions[first]

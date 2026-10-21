@@ -10,4 +10,7 @@ sprite_path = "res://item_pack/sprites/head_cellphone.png"
 body_part = 1
 unit_sprite_path = "res://item_pack/unit_sprites/head_cellphone.png"
 occupied_cells = Array[Vector2i]([Vector2i(0, 0)])
+attachment_points = {
+"body": Vector2i(14, 17)
+}
 crit_chance_bonus = 0.34

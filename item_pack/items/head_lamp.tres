@@ -10,5 +10,8 @@ sprite_path = "res://item_pack/sprites/head_lamp.png"
 body_part = 1
 unit_sprite_path = "res://item_pack/unit_sprites/head_lamp.png"
 occupied_cells = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, 1)])
-attack_speed_bonus = 0.56
+attachment_points = {
+"body": Vector2i(6, 26)
+}
+attack_speed_bonus = 56.0
 crit_chance_bonus = 0.44
