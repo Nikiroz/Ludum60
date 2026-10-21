@@ -5,7 +5,6 @@ signal round_finished
 
 enum State { PREPARATION, FIGHTING, VICTORY, DEFEAT }
 
-const TemporaryUnitGenerator = preload("res://scripts/temporary_unit_generator.gd")
 const BossUnitData = preload("res://scripts/boss_unit.gd")
 const UNIT_SLOT_SCENE: PackedScene = preload("res://scenes/ui/battle_unit_slot.tscn")
 const MIN_UNIT_SLOTS := 4
@@ -13,7 +12,6 @@ const TICK_SECONDS := 1.0
 const CRIT_MULTIPLIER := 2.0
 const DEBUG_CLICK_DAMAGE := 100.0
 
-@export var generate_demo_units_on_start := true
 @export_range(0.0, 0.2, 0.01) var attack_animation_stagger: float = 0.08
 @export var punch_sounds: Array[AudioStream] = []
 @onready var _unit_slots: HBoxContainer = $MarginContainer/HBoxContainer
@@ -41,12 +39,12 @@ func _ready() -> void:
 	_battle_timer.timeout.connect(_on_battle_timeout)
 	_unit_slots.child_order_changed.connect(_on_unit_order_changed)
 	ControllerGame.debug_mode_changed.connect(_update_boss_debug_input)
-	if generate_demo_units_on_start and not _units_provided:
+	if not _units_provided:
 		set_units(ControllerGame.units)
 	else:
 		_rebuild_unit_slots()
-	if generate_demo_units_on_start and not _boss_provided:
-		set_boss(TemporaryUnitGenerator.generate_boss())
+	if not _boss_provided:
+		set_boss(BossUnitData.new())
 	else:
 		_rebuild_boss_slot()
 	_log_event("Подготовка: юнитов %d, слотов %d, босс %s." % [

@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://3p2nn0t14v6h" path="res://scripts/garage.gd" id="1_47l8i"]
 [ext_resource type="Texture2D" uid="uid://b80dnnraacuc0" path="res://sprites/mocup/screen2_base.png" id="1_f50xb"]
-[ext_resource type="Texture2D" uid="uid://dd38cu5vqkvxx" path="res://sprites/mocup/screen2_buttons.png" id="2_6thhw"]
 [ext_resource type="Texture2D" uid="uid://c2h7kk68cse5f" path="res://sprites/ui/garage/active_ico_2.png" id="2_gnlqp"]
 [ext_resource type="Texture2D" uid="uid://d00xl4qq8kd4g" path="res://sprites/ui/cell_bg.png" id="7_47l8i"]
 [ext_resource type="Theme" uid="uid://cx7xm3yx6xpow" path="res://styles/scroll.tres" id="7_v0fcm"]
@@ -59,11 +58,6 @@ script = ExtResource("1_47l8i")
 [node name="Screen2Base" type="Sprite2D" parent="." unique_id=1192245377]
 position = Vector2(160, 90)
 texture = ExtResource("1_f50xb")
-
-[node name="Screen2Buttons" type="Sprite2D" parent="." unique_id=237531954]
-visible = false
-position = Vector2(160, 90)
-texture = ExtResource("2_6thhw")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=323282248]
 layout_mode = 1
@@ -323,6 +317,7 @@ vertical_alignment = 1
 clip_text = true
 
 [node name="BattleButton" type="Button" parent="VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1325151344]
+visible = false
 custom_minimum_size = Vector2(106, 32)
 layout_mode = 2
 size_flags_vertical = 4

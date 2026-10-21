@@ -1,7 +1,11 @@
 [gd_scene format=3 uid="uid://dlxcemoturann"]
 
-[ext_resource type="Texture2D" uid="uid://di3f1pp5jb27w" path="res://sprites/mocup/image_2026-10-19_23-27-23.png" id="1_1g8jr"]
+[ext_resource type="Texture2D" uid="uid://vvqeyub13rc8" path="res://sprites/ui/main_menu/menu_L4.png" id="1_wb0q5"]
+[ext_resource type="Texture2D" uid="uid://dsuja124erfqe" path="res://sprites/ui/main_menu/menu_L3.png" id="2_q85j6"]
+[ext_resource type="Texture2D" uid="uid://c703iqiw8wxn1" path="res://sprites/ui/main_menu/menu_L2.png" id="3_8g5eo"]
+[ext_resource type="Texture2D" uid="uid://inq7pdw6t0en" path="res://sprites/ui/main_menu/menu_L1.png" id="4_7suek"]
 [ext_resource type="Texture2D" uid="uid://bvpxgpxgf6ekq" path="res://sprites/mocup/menu_merged-sheet.png" id="4_m1kxf"]
+[ext_resource type="Texture2D" uid="uid://bt8xad1sg7wtg" path="res://sprites/ui/main_menu/logo.png" id="5_otr3d"]
 [ext_resource type="Script" uid="uid://dexwaw3i4exg1" path="res://scripts/ui/ui_show_button.gd" id="6_rcqid"]
 [ext_resource type="Theme" uid="uid://kxx26dlcfs5b" path="res://styles/main_buttons.tres" id="6_rtw2f"]
 
@@ -24,14 +28,69 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Bg2" type="TextureRect" parent="." unique_id=565672521]
+[node name="Bg" type="TextureRect" parent="." unique_id=125799953]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
+offset_left = -164.0
+offset_top = -192.0
+offset_right = 164.0
 grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("1_1g8jr")
+grow_vertical = 0
+texture = ExtResource("1_wb0q5")
+
+[node name="Paralax_1" type="TextureRect" parent="." unique_id=1944706544]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -164.0
+offset_top = -192.0
+offset_right = 164.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("2_q85j6")
+
+[node name="Paralax_2" type="TextureRect" parent="." unique_id=1142477938]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -164.0
+offset_top = -192.0
+offset_right = 164.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("3_8g5eo")
+
+[node name="Paralax_3" type="TextureRect" parent="." unique_id=609709500]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -164.0
+offset_top = -192.0
+offset_right = 164.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("4_7suek")
+
+[node name="Logo" type="TextureRect" parent="." unique_id=743466140]
+layout_mode = 1
+offset_left = 14.0
+offset_top = 4.0
+offset_right = 151.0
+offset_bottom = 67.0
+texture = ExtResource("5_otr3d")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=944139333]
 layout_mode = 1
@@ -73,7 +132,7 @@ alignment = 0
 script = ExtResource("6_rcqid")
 nodeName = "Credits"
 
-[node name="MenuMergedSheet" type="Sprite2D" parent="MarginContainer" unique_id=14663985]
+[node name="Robot" type="Sprite2D" parent="MarginContainer" unique_id=14663985]
 position = Vector2(162, 92)
 texture = ExtResource("4_m1kxf")
 

@@ -11,7 +11,6 @@ const CURSOR_NORMAL: Texture2D = preload("res://sprites/cursors/cursor.png")
 const BACKGROUND_MUSIC: AudioStreamOggVorbis = preload("res://sounds/MUSIC 1.ogg")
 const BATTLE_MUSIC: AudioStreamOggVorbis = preload("res://sounds/MUSIC 2.ogg")
 const MAIN_MENU_MUSIC: AudioStreamOggVorbis = preload("res://sounds/MUSIC 3.ogg")
-const UnitGenerator = preload("res://scripts/temporary_unit_generator.gd")
 
 var _background_music: AudioStreamPlayer
 var _battle_music: AudioStreamPlayer
@@ -122,7 +121,15 @@ func equip_item(unit: BattleUnit, item: GridInventoryItemData, left_hand: bool =
 	return true
 
 func reset_progress() -> void:
-	units = UnitGenerator.generate_units(3)
+	units.clear()
+	var names: Array[String] = BattleUnit.UNIT_NAMES.duplicate()
+	names.shuffle()
+	for unit_name in names:
+		var unit := BattleUnit.new()
+		unit.name = unit_name
+		unit.health = 1.0
+		unit.damage = 1.0
+		units.append(unit)
 	collected_items.clear()
 	inventory_positions.clear()
 	scrapyard_available = true

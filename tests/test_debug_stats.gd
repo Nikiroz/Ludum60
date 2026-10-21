@@ -114,7 +114,6 @@ func _run() -> void:
 	boss.attack_sequence.clear()
 	unit.health = 100.0
 	battle = load("res://scenes/battle.tscn").instantiate()
-	battle.generate_demo_units_on_start = false
 	battle.set_units([unit])
 	battle.set_boss(boss)
 	main.add_child(battle)

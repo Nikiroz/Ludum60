@@ -48,7 +48,6 @@ func _battle(health: float = 10.0, damage: float = 0.0) -> Node:
 	boss.crit_chance = 0.0
 	boss.attack_sequence.assign([1])
 	var battle = load("res://scenes/battle.tscn").instantiate()
-	battle.generate_demo_units_on_start = false
 	battle.set_units([_controller.units[0]])
 	battle.set_boss(boss)
 	_main.add_child(battle)

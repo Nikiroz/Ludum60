@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cahsb6efy6c2k"
-path="res://.godot/imported/righthand_tv.png-52e799cc8b270b61ef2e867d7355824a.ctex"
+uid="uid://bt8xad1sg7wtg"
+path="res://.godot/imported/logo.png-150bf2f8fc3b216b92cbb6fd448af6be.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/botpart/righthand_tv.png"
-dest_files=["res://.godot/imported/righthand_tv.png-52e799cc8b270b61ef2e867d7355824a.ctex"]
+source_file="res://sprites/ui/main_menu/logo.png"
+dest_files=["res://.godot/imported/logo.png-150bf2f8fc3b216b92cbb6fd448af6be.ctex"]
 
 [params]
 

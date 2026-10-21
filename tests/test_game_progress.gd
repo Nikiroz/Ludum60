@@ -159,7 +159,8 @@ func _run() -> void:
 	await create_timer(0.1).timeout
 	background_position = music.get_playback_position()
 	await create_timer(0.1).timeout
-	_expect(is_equal_approx(music.get_playback_position(), background_position), "Inactive background music did not stay paused in the main menu")
+	# The mixer can finish one queued audio buffer after pausing.
+	_expect(music.stream_paused and not music.playing and absf(music.get_playback_position() - background_position) < 0.05, "Inactive background music did not stay paused in the main menu")
 	controller.isMainMenu = false
 	_expect(music.playing and not music.stream_paused and menu_music.stream_paused, "Starting a new game did not switch from main menu music to gameplay music")
 	_expect(music.get_stream_playback() == background_playback and music.get_playback_position() >= background_position, "Returning from the main menu restarted or rewound background music")

@@ -26,12 +26,12 @@ func _run() -> void:
 	main.get_node("MenuLayer/MainMenu/MarginContainer/Buttons/NewGame").pressed.emit()
 	_expect(controller.units.size() == 3, "New game did not create exactly three units")
 	var original_units: Array[BattleUnit] = controller.units.duplicate()
-	var sprites: Array[Texture2D] = []
+	var names: Array[String] = []
 	for unit in original_units:
 		_expect(unit.health == 1.0 and unit.attack_speed == 1.0 and unit.damage == 1.0 and unit.crit_chance == 0.0, "Starting unit has incorrect stats")
-		_expect(unit.name in ["Wally", "Mike", "Cost"], "Starting unit lost its random name")
-		_expect(unit.sprite != null and not sprites.has(unit.sprite), "Starting robot sprites are missing or repeated")
-		sprites.append(unit.sprite)
+		_expect(unit.name in ["Wally", "Mike", "Cost"] and not names.has(unit.name), "Starting unit names are missing or repeated")
+		_expect(unit.sprite == null and unit.equipment.has(&"torso") and unit.equipment.has(&"legs"), "Starting robot depends on a demo sprite or has no basic equipment")
+		names.append(unit.name)
 	await create_timer(1.0).timeout
 	var garage = root.get_node("Transition").gameplay_scene
 	var tabs: TabContainer = garage.find_child("TabContainer2", true, false)

@@ -5,7 +5,6 @@ extends Control
 const BossUnitData = preload("res://scripts/boss_unit.gd")
 const EquipmentPreview = preload("res://scripts/ui/robot_equipment_preview.gd")
 const DebugStats = preload("res://scripts/ui/robot_debug_stats.gd")
-const EMPTY_SLOT_SPRITE: Texture2D = preload("res://sprites/robots/dummy_blank.png")
 
 var dragging_enabled := true:
 	set(value):
@@ -97,7 +96,7 @@ func _update_appearance() -> void:
 	equipment_preview.unit = unit if assembled else null
 	equipment_preview.visible = assembled
 	if unit == null:
-		icon.texture = EMPTY_SLOT_SPRITE
+		icon.texture = null
 	elif unit is BossUnitData:
 		icon.texture = unit.get_health_sprite()
 		# Исходный размер, центр по горизонтали и та же линия пола, что у сборки робота.

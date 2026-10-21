@@ -15,6 +15,17 @@ var max_health: float = 100.0
 var attack_sequence: Array[int] = []
 
 
+func _init(p_sprite: Texture2D = null) -> void:
+	super(p_sprite if p_sprite != null else HEALTH_SPRITES[0])
+	health = 9999.0
+	max_health = health
+	attack_speed = randf_range(0.5, 2.0)
+	damage = randi_range(5, 25)
+	crit_chance = randf_range(0.0, 1.0)
+	attack_sequence.assign([1, 2, 3, 4])
+	attack_sequence.shuffle()
+
+
 func get_health_sprite() -> Texture2D:
 	var ratio := clampf(health / max_health, 0.0, 1.0) if max_health > 0.0 else 0.0
 	var state := clampi(HEALTH_SPRITES.size() - ceili(ratio * HEALTH_SPRITES.size()), 0, HEALTH_SPRITES.size() - 1)

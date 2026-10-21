@@ -2,7 +2,6 @@
 extends SceneTree
 
 const BossData = preload("res://scripts/boss_unit.gd")
-const ROBOT_TEXTURE: Texture2D = preload("res://sprites/robots/dummy1.png")
 
 var _main: Node
 var _battle_scene: PackedScene
@@ -22,7 +21,7 @@ func _expect(condition: bool, message: String) -> void:
 
 
 func _unit(health: float = 100.0, speed: float = 1.0, damage: float = 10.0, crit: float = 0.0) -> BattleUnit:
-	var unit := BattleUnit.new(ROBOT_TEXTURE)
+	var unit := BattleUnit.new()
 	unit.health = health
 	unit.attack_speed = speed
 	unit.damage = damage
@@ -31,7 +30,7 @@ func _unit(health: float = 100.0, speed: float = 1.0, damage: float = 10.0, crit
 
 
 func _boss(health: float = 9999.0, damage: float = 0.0, pattern: Array = [1], crit: float = 0.0) -> BossData:
-	var boss := BossData.new(ROBOT_TEXTURE)
+	var boss := BossData.new()
 	boss.health = health
 	boss.damage = damage
 	boss.attack_sequence.assign(pattern)
@@ -42,7 +41,6 @@ func _boss(health: float = 9999.0, damage: float = 0.0, pattern: Array = [1], cr
 func _battle(army: Array, boss: BossData) -> Node:
 	_main.get_node("MenuLayer/VictoryDialog").hide()
 	var battle := _battle_scene.instantiate()
-	battle.generate_demo_units_on_start = false
 	battle.set_units(army)
 	battle.set_boss(boss)
 	_main.add_child(battle)
@@ -237,7 +235,7 @@ func _run() -> void:
 	_expect(attacker.health == 5.0 and battle.units[0] == null, "Defeat did not restore the removed unit's health")
 	row = battle.get_node("MarginContainer/HBoxContainer")
 	_expect(row.get_child_count() == 4, "Death changed fixed slot numbering")
-	_expect(row.get_child(0).icon.texture.resource_path.ends_with("dummy_blank.png"), "Dead unit sprite remained")
+	_expect(row.get_child(0).icon.texture == null, "Dead unit sprite remained")
 	_expect(not row.get_child(0).equipment_preview.visible and row.get_child(0).equipment_preview.unit == null, "Dead robot's assembled parts remained on the field")
 	_expect(not row.get_child(0).health_bar.visible, "Dead unit health bar remained visible")
 	_expect(battle.get_node("BattleTimer").is_stopped() and _has_log(battle, "ПОРАЖЕНИЕ"), "Defeat did not stop the battle")
