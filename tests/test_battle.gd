@@ -59,6 +59,14 @@ func _has_log(battle: Node, text: String) -> bool:
 	return false
 
 
+func _playing_sounds(stream: AudioStream) -> int:
+	var count := 0
+	for player in root.find_children("*", "AudioStreamPlayer", true, false):
+		if player.stream == stream and player.playing:
+			count += 1
+	return count
+
+
 func _run() -> void:
 	create_timer(15).timeout.connect(func() -> void: quit(1))
 	# Load gameplay after autoloads have initialized.
@@ -137,14 +145,14 @@ func _run() -> void:
 	var boss_floor: float = boss_view.icon.position.y + boss_view.icon.size.y
 	_expect(boss.max_health == 500.0, "Boss sprite thresholds do not use its actual initial health")
 	for sample in [
-		[500.0, 0], [400.01, 0], [400.0, 1], [300.01, 1], [300.0, 2],
-		[200.01, 2], [200.0, 3], [100.01, 3], [100.0, 4], [0.01, 4],
+		[500.0, 0], [400.5, 0], [400.49, 1], [300.5, 1], [300.0, 2],
+		[200.5, 2], [200.0, 3], [100.5, 3], [100.0, 4], [0.5, 4],
 		[0.0, 4], [-1.0, 4], [600.0, 0],
 	]:
 		boss.health = sample[0]
 		await process_frame
 		_expect(boss_view.icon.texture == BossData.HEALTH_SPRITES[sample[1]], "Wrong boss sprite at health %.2f" % sample[0])
-		_expect(boss_view.health_bar.max_value == 500.0 and is_equal_approx(boss_view.health_bar.value, clampf(sample[0], 0.0, 500.0)), "Boss HP bar lost its maximum or displayed the wrong remaining health")
+		_expect(boss_view.health_bar.max_value == 500.0 and boss_view.health_bar.value == clampf(roundf(sample[0]), 0.0, 500.0), "Boss HP bar lost its maximum or displayed the wrong rounded health")
 		_expect(boss_view.icon.size.is_equal_approx(Vector2(123, 120)) and is_equal_approx(boss_view.icon.position.y + boss_view.icon.size.y, boss_floor), "Boss sprite changed size or floor alignment between states")
 	boss.health = 500.0
 	_expect(battle.start_battle(), "Boss sprite checks prevented starting combat")
@@ -197,14 +205,141 @@ func _run() -> void:
 	battle.free()
 
 	# Both sides use the stored critical chance and double critical damage.
-	attacker = _unit(100.0, 1.0, 10.0, 1.0)
-	boss = _boss(100.0, 5.0, [1], 1.0)
+	attacker = _unit(100.4, 1.0, 10.5, 1.0)
+	boss = _boss(100.5, 5.5, [1], 1.0)
 	battle = _battle([attacker], boss)
 	battle.start_battle()
 	battle.get_node("BattleTimer").stop()
 	_step(battle)
-	_expect(is_equal_approx(boss.health, 80.0) and is_equal_approx(attacker.health, 90.0), "Critical damage is not doubled")
+	_expect(boss.health == 79.0 and attacker.health == 88.0 and boss.max_health == 101.0, "Critical attacks did not use rounded integer damage and health")
 	_expect(_has_log(battle, "КРИТ x2"), "Critical hit was not logged")
+	battle.free()
+
+	# Damage numbers appear over the target on impact, rise, fade and clean up.
+	attacker = _unit(100.0, 1.0, 10.0)
+	boss = _boss(1000.0, 5.0, [1], 1.0)
+	battle = _battle([attacker], boss)
+	battle.attack_animation_stagger = 0.0
+	battle._damage_number_rng.seed = 12345
+	await process_frame
+	await process_frame
+	slot = battle.get_node("MarginContainer/HBoxContainer").get_child(0)
+	boss_view = battle.get_node("MarginContainer2").get_child(0)
+	slot.attack_dash_duration = 0.2
+	boss_view.attack_dash_duration = 0.2
+	battle.start_battle()
+	battle.get_node("BattleTimer").stop()
+	_step(battle)
+	var numbers: Control = battle.get_node("DamageNumbers")
+	_expect(numbers.get_child_count() == 2, "Each damaged target must receive a damage number")
+	var normal_number: Label = numbers.get_child(0)
+	var critical_number: Label = numbers.get_child(1)
+	_expect(normal_number.text == "-10" and normal_number.get_theme_color("font_color") == Color.WHITE, "Normal damage must be white with a minus sign")
+	_expect(critical_number.text == "-10" and critical_number.get_theme_color("font_color") == Color.RED, "Critical damage must show the doubled amount in red")
+	_expect(slot.icon.get_global_rect().has_point(critical_number.get_global_rect().get_center()), "Received damage is not positioned in front of the robot")
+	_expect(not normal_number.get_global_rect().get_center().is_equal_approx(boss_view.get_damage_number_position()), "Boss damage number was not spread away from the sprite center")
+	_expect(numbers.z_index > slot.z_index and normal_number.mouse_filter == Control.MOUSE_FILTER_IGNORE, "Damage numbers must draw above robots without intercepting input")
+	var number_origin := critical_number.position
+	var boss_number_origin := normal_number.position
+	_expect(normal_number.modulate.a == 0.0 and critical_number.modulate.a == 0.0, "Damage numbers appeared before impact")
+	await create_timer(0.08).timeout
+	_expect(normal_number.modulate.a == 0.0, "Damage number appeared while the attacker was still approaching")
+	await create_timer(0.4).timeout
+	_expect(normal_number.modulate.a > 0.0 and normal_number.modulate.a < 1.0, "Damage number did not appear and begin fading after impact")
+	_expect(critical_number.position.y < number_origin.y and is_equal_approx(critical_number.position.x, number_origin.x), "Robot damage number did not float straight upward")
+	_expect(normal_number.position.y < boss_number_origin.y and not is_equal_approx(normal_number.position.x, boss_number_origin.x), "Boss damage number did not drift sideways while rising")
+	var number_position := normal_number.position
+	var number_alpha := normal_number.modulate.a
+	paused = true
+	await create_timer(0.15).timeout
+	_expect(normal_number.position.is_equal_approx(number_position) and is_equal_approx(normal_number.modulate.a, number_alpha), "Damage number animation continued while battle was paused")
+	paused = false
+	await create_timer(0.8).timeout
+	_expect(numbers.get_child_count() == 0, "Faded damage numbers remained in the scene")
+	boss.damage = 1000.0
+	boss.crit_chance = 0.0
+	_step(battle)
+	_expect(battle.units[0] == null, "Lethal-damage test did not remove its robot")
+	await create_timer(0.3).timeout
+	var lethal_number: Label = numbers.get_child(1)
+	_expect(lethal_number.text == "-1000" and lethal_number.modulate.a > 0.0, "Lethal damage disappeared with the robot before it could be displayed")
+	battle.free()
+
+	# Sounds start when numbers first become visible and share a two-sound limit.
+	var punch := AudioStreamWAV.new()
+	punch.mix_rate = 8000
+	var samples := PackedByteArray()
+	samples.resize(4000)
+	samples.fill(128)
+	punch.data = samples
+	attacker = _unit(100.0, 0.0, 1.0)
+	boss = _boss(1000.0, 1.0)
+	battle = _battle([attacker], boss)
+	battle.punch_sounds.assign([punch])
+	battle.attack_animation_stagger = 0.0
+	slot = battle.get_node("MarginContainer/HBoxContainer").get_child(0)
+	boss_view = battle.get_node("MarginContainer2").get_child(0)
+	slot.attack_dash_duration = 0.2
+	boss_view.attack_dash_duration = 0.2
+	battle.start_battle()
+	battle.get_node("BattleTimer").stop()
+	_step(battle)
+	var sound_number: Label = battle.get_node("DamageNumbers").get_child(0)
+	var sound_appearances: Array[bool] = []
+	sound_number.appeared.connect(func() -> void:
+		sound_appearances.append(sound_number.modulate.a > 0.0 and _playing_sounds(punch) == 1)
+	)
+	_expect(_playing_sounds(punch) == 0, "Punch sound started with the attack instead of its impact")
+	await create_timer(0.08).timeout
+	_expect(_playing_sounds(punch) == 0, "Punch sound started before the dash reached its target")
+	await create_timer(0.16).timeout
+	_expect(_playing_sounds(punch) == 1, "One boss attack played more than one punch sound")
+	_expect(sound_appearances == [true], "Punch sound did not start exactly when the damage number first became visible")
+	attacker.attack_speed = 20.0
+	_step(battle)
+	await create_timer(0.24).timeout
+	_expect(_playing_sounds(punch) == 2, "Rapid robot and boss attacks exceeded the shared two-sound limit")
+	_expect(boss.health == 980.0 and attacker.health == 98.0, "Sound limit changed combat damage")
+	await create_timer(0.7).timeout
+	_expect(_playing_sounds(punch) == 0, "Skipped punch sounds were queued for later playback")
+	attacker.attack_speed = 0.0
+	_step(battle)
+	await create_timer(0.24).timeout
+	_expect(_playing_sounds(punch) == 1, "Finished punch sounds did not free a voice for the next attack")
+	battle.free()
+	_expect(_playing_sounds(punch) == 0, "Leaving battle kept a punch sound playing")
+
+	# Restarting a dash keeps sounds in sync with both actual damage numbers.
+	attacker = _unit(100.0, 1.0, 1.0)
+	battle = _battle([attacker], _boss(1000.0, 1.0, [2]))
+	battle.punch_sounds.assign([punch])
+	battle.attack_animation_stagger = 0.0
+	slot = battle.get_node("MarginContainer/HBoxContainer").get_child(0)
+	slot.attack_dash_duration = 0.2
+	battle.start_battle()
+	battle.get_node("BattleTimer").stop()
+	_step(battle)
+	var first_sound_number: Label = battle.get_node("DamageNumbers").get_child(0)
+	await create_timer(0.08).timeout
+	_step(battle)
+	var second_sound_number: Label = battle.get_node("DamageNumbers").get_child(1)
+	await create_timer(0.16).timeout
+	_expect(first_sound_number.modulate.a > 0.0 and second_sound_number.modulate.a == 0.0 and _playing_sounds(punch) == 1, "Restarted dash desynchronized sound from the first damage number")
+	await create_timer(0.08).timeout
+	_expect(second_sound_number.modulate.a > 0.0 and _playing_sounds(punch) == 2, "Second damage number did not play its own sound, or a miss played a punch")
+	battle.free()
+	await create_timer(0.25).timeout
+	_expect(_playing_sounds(punch) == 0, "Leaving battle retained a delayed impact sound")
+
+	# Attacks without damage numbers stay silent, including zero-damage hits.
+	attacker = _unit(100.0, 1.0, 0.0)
+	battle = _battle([attacker], _boss(1000.0, 0.0))
+	battle.punch_sounds.assign([punch])
+	battle.start_battle()
+	battle.get_node("BattleTimer").stop()
+	_step(battle)
+	await create_timer(0.5).timeout
+	_expect(battle.get_node("DamageNumbers").get_child_count() == 0 and _playing_sounds(punch) == 0, "Attack without a damage number played a punch sound")
 	battle.free()
 
 	# Killing the boss ends the battle before its retaliation and removes its view.

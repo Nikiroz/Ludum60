@@ -11,6 +11,7 @@ const CURSOR_NORMAL: Texture2D = preload("res://sprites/cursors/cursor.png")
 const BACKGROUND_MUSIC: AudioStreamOggVorbis = preload("res://sounds/MUSIC 1.ogg")
 const BATTLE_MUSIC: AudioStreamOggVorbis = preload("res://sounds/MUSIC 2.ogg")
 const MAIN_MENU_MUSIC: AudioStreamOggVorbis = preload("res://sounds/MUSIC 3.ogg")
+const ItemCatalog = preload("res://scripts/item_catalog.gd")
 
 var _background_music: AudioStreamPlayer
 var _battle_music: AudioStreamPlayer
@@ -18,6 +19,7 @@ var _main_menu_music: AudioStreamPlayer
 var _active_music: AudioStreamPlayer
 var debug_mode := false:
 	set(value):
+		value = value and not OS.has_feature("web")
 		if debug_mode == value:
 			return
 		debug_mode = value
@@ -101,6 +103,14 @@ func add_collected_item(item: GridInventoryItemData) -> void:
 	collected_items.append(collected)
 	item_collected.emit(collected)
 	inventory_changed.emit()
+
+func add_all_items_to_inventory() -> void:
+	if not debug_mode:
+		return
+	for path in ItemCatalog.get_item_paths():
+		var item := load(path) as GridInventoryItemData
+		if item != null:
+			add_collected_item(item)
 
 func can_equip_item(unit: BattleUnit, item: GridInventoryItemData, left_hand: bool = true) -> bool:
 	return (
@@ -186,11 +196,14 @@ func return_to_main_menu() -> void:
 	main_menu.show()
 
 func _input(event: InputEvent) -> void:
-	if not event is InputEventKey or not event.pressed or event.echo:
+	if OS.has_feature("web") or not event is InputEventKey or not event.pressed or event.echo:
 		return
-	if event.keycode != KEY_F9 and event.physical_keycode != KEY_F9:
+	if event.keycode == KEY_F8 or event.physical_keycode == KEY_F8:
+		add_all_items_to_inventory()
+	elif event.keycode == KEY_F9 or event.physical_keycode == KEY_F9:
+		debug_mode = not debug_mode
+	else:
 		return
-	debug_mode = not debug_mode
 	get_viewport().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:

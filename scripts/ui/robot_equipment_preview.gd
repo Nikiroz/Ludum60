@@ -3,8 +3,10 @@ extends Control
 # Back-to-front order also determines which overlapping part receives a grab.
 const SLOTS: Array[StringName] = [&"legs", &"left_hand", &"torso", &"right_hand", &"head"]
 const DebugStats = preload("res://scripts/ui/robot_debug_stats.gd")
+const SHADOW_TEXTURE: Texture2D = preload("res://sprites/robot_shadow.png")
 
 @export var align_to_bottom := false
+@export var show_shadow := false
 
 var unit: BattleUnit:
 	set(value):
@@ -21,11 +23,20 @@ var _layers: Dictionary[StringName, Sprite2D] = {}
 var _images: Dictionary[StringName, Image] = {}
 var _attachment_points: Dictionary[StringName, Dictionary] = {}
 var _debug_stats: Label
+var _shadow: TextureRect
 
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_shadow = TextureRect.new()
+	_shadow.name = "RobotShadow"
+	_shadow.texture = SHADOW_TEXTURE
+	_shadow.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_shadow.size = SHADOW_TEXTURE.get_size()
+	_shadow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_shadow.visible = false
+	add_child(_shadow)
 	for slot in SLOTS:
 		var layer := Sprite2D.new()
 		layer.name = slot
@@ -121,6 +132,7 @@ func _layout_parts() -> void:
 			legs_bounds = part
 		bounds = bounds.merge(part) if has_parts else part
 		has_parts = true
+	_shadow.visible = show_shadow and has_parts and bounds.has_area()
 	if not has_parts or not bounds.has_area():
 		return
 	var origin := (size - bounds.size) / 2.0 - bounds.position
@@ -129,6 +141,9 @@ func _layout_parts() -> void:
 		origin.y = size.y - bottom
 	# Round the entire assembly together so connected points remain coincident.
 	origin = origin.round()
+	var floor_bounds := legs_bounds if _layers[&"legs"].visible else bounds
+	var feet := Vector2(floor_bounds.get_center().x, floor_bounds.end.y)
+	_shadow.position = (origin + feet - _shadow.size / 2.0).round()
 	for slot in SLOTS:
 		_layers[slot].position = origin + positions[slot]
 	_debug_stats.position = (origin + bounds.get_center() - _debug_stats.size / 2.0).round()

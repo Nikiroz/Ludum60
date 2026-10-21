@@ -8,10 +8,14 @@ const BASIC_TORSO: GridInventoryItemData = preload("res://item_pack/items/base_b
 const BASIC_LEGS: GridInventoryItemData = preload("res://item_pack/items/leg_basic.tres")
 
 var name: String = UNIT_NAMES.pick_random()
-var health: float = 100.0
+var health: float = 100.0:
+	set(value):
+		health = roundf(value)
 # Количество атак в секунду.
 var attack_speed: float = 1.0
-var damage: float = 0.0
+var damage: float = 0.0:
+	set(value):
+		damage = roundf(value)
 # Вероятность от 0.0 до 1.0.
 var crit_chance: float = 0.0
 var sprite: Texture2D
@@ -35,9 +39,10 @@ func equip_item(item: GridInventoryItemData, slot: StringName) -> GridInventoryI
 
 
 func _apply_item_bonuses(item: GridInventoryItemData, multiplier: float) -> void:
-	health += item.health_bonus * multiplier
+	# Round each bonus before applying/removing it so equipment remains reversible.
+	health += roundf(item.health_bonus) * multiplier
 	attack_speed += item.attack_speed_bonus * multiplier
-	damage += item.damage_bonus * multiplier
+	damage += roundf(item.damage_bonus) * multiplier
 	crit_chance += item.crit_chance_bonus * multiplier
 
 

@@ -4,6 +4,7 @@
 [ext_resource type="FontFile" uid="uid://yd1a2v72shn1" path="res://font/ChixaDemibold.ttf" id="2_gq5a8"]
 [ext_resource type="Texture2D" path="res://sprites/ui/fist.png" id="3_fist"]
 [ext_resource type="Script" path="res://scripts/ui/robot_equipment_preview.gd" id="4_equipment_preview"]
+[ext_resource type="Texture2D" path="res://sprites/boss/boss_shadow.png" id="5_boss_shadow"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_background"]
 bg_color = Color(0.25, 0, 0, 1)
@@ -40,6 +41,24 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
+[node name="BossShadow" type="TextureRect" parent="CombatMotion"]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -46.0
+offset_top = -2.0
+offset_right = 46.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("5_boss_shadow")
+expand_mode = 1
+
 [node name="Icon" type="TextureRect" parent="CombatMotion" unique_id=56706549]
 layout_mode = 1
 anchors_preset = 8
@@ -69,6 +88,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("4_equipment_preview")
 align_to_bottom = true
+show_shadow = true
 
 [node name="HealthBar" type="ProgressBar" parent="CombatMotion/Icon"]
 z_index = 1

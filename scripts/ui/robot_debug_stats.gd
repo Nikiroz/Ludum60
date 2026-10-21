@@ -37,6 +37,6 @@ func _update_stats() -> void:
 	set_process(visible)
 	if not visible:
 		return
-	text = "HP %.2f\nDMG %.2f\nATK/s %.2f\nCRIT %.1f%%" % [
+	text = "HP %d\nDMG %d\nATK/s %.2f\nCRIT %.1f%%" % [
 		unit.health, unit.damage, unit.attack_speed, unit.crit_chance * 100.0,
 	]

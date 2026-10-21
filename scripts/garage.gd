@@ -37,8 +37,8 @@ func _on_robot_selected(index: int) -> void:
 
 
 func _update_robot_stats() -> void:
-	health_label.text = String.num(_active_unit.health, 2) if _active_unit != null else ""
-	damage_label.text = String.num(_active_unit.damage, 2) if _active_unit != null else ""
+	health_label.text = str(roundi(_active_unit.health)) if _active_unit != null else ""
+	damage_label.text = str(roundi(_active_unit.damage)) if _active_unit != null else ""
 	speed_label.text = String.num(_active_unit.attack_speed, 2) if _active_unit != null else ""
 	crit_label.text = String.num(_active_unit.crit_chance * 100.0, 2) + "%" if _active_unit != null else ""
 

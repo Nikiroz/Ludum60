@@ -7,6 +7,7 @@ enum State { PREPARATION, FIGHTING, VICTORY, DEFEAT }
 
 const BossUnitData = preload("res://scripts/boss_unit.gd")
 const UNIT_SLOT_SCENE: PackedScene = preload("res://scenes/ui/battle_unit_slot.tscn")
+const DAMAGE_NUMBER_SCENE: PackedScene = preload("res://scenes/ui/damage_number.tscn")
 const MIN_UNIT_SLOTS := 4
 const TICK_SECONDS := 1.0
 const CRIT_MULTIPLIER := 2.0
@@ -17,6 +18,8 @@ const DEBUG_CLICK_DAMAGE := 100.0
 @onready var _unit_slots: HBoxContainer = $MarginContainer/HBoxContainer
 @onready var _boss_container: MarginContainer = $MarginContainer2
 @onready var _battle_timer: Timer = $BattleTimer
+@onready var _punch_players: Array[AudioStreamPlayer] = [$PunchSound1, $PunchSound2]
+@onready var _damage_numbers: Control = $DamageNumbers
 
 # Массив позиций на поле. null означает пустой слот.
 var units: Array[BattleUnit] = []
@@ -30,9 +33,11 @@ var _boss_pattern_index := 0
 var _units_provided := false
 var _boss_provided := false
 var _rebuilding_slots := false
+var _damage_number_rng := RandomNumberGenerator.new()
 
 
 func _ready() -> void:
+	_damage_number_rng.randomize()
 	_battle_timer.wait_time = TICK_SECONDS
 	_battle_timer.one_shot = true
 	_battle_timer.ignore_time_scale = true
@@ -162,7 +167,7 @@ func _on_boss_gui_input(event: InputEvent) -> void:
 	accept_event()
 	boss.health = maxf(boss.health - DEBUG_CLICK_DAMAGE, 0.0)
 	_find_unit_view(boss).play_hit()
-	_log_event("Отладочный удар -> Босс: урон %.2f; осталось жизней %.2f." % [DEBUG_CLICK_DAMAGE, boss.health])
+	_log_event("Отладочный удар -> Босс: урон %d; осталось жизней %d." % [DEBUG_CLICK_DAMAGE, boss.health])
 	if boss.health <= 0.0:
 		_finish_battle(true)
 
@@ -205,13 +210,13 @@ func start_battle() -> bool:
 	for slot in _unit_slots.get_children():
 		(slot as DraggableSlot).dragging_enabled = false
 	_log_event("Битва началась. Расстановка: %s." % _describe_formation())
-	_log_event("Босс: жизни %.2f, урон %.2f, паттерн %s." % [
+	_log_event("Босс: жизни %d, урон %d, паттерн %s." % [
 		boss.health, boss.damage, str(boss.attack_sequence)
 	])
 	for index in range(units.size()):
 		var unit := units[index]
 		if unit != null:
-			_log_event("Слот %d: жизни %.2f, атак/с %.2f, урон %.2f, крит %.1f%%." % [
+			_log_event("Слот %d: жизни %d, атак/с %.2f, урон %d, крит %.1f%%." % [
 				index + 1, unit.health, unit.attack_speed, unit.damage, unit.crit_chance * 100.0
 			])
 	_battle_timer.start(TICK_SECONDS)
@@ -282,25 +287,43 @@ func _boss_attack() -> void:
 		return
 	_deal_attack(boss, target, "Босс", "Слот %d" % slot_number)
 	_remove_dead_units()
-	if not punch_sounds.is_empty():
-		var sound: AudioStream = punch_sounds.pick_random()
-		ControllerGame.play_one_shot(sound)
+
 
 func _deal_attack(attacker: BattleUnit, target: BattleUnit, attacker_name: String, target_name: String) -> void:
 	var critical := randf() < clampf(attacker.crit_chance, 0.0, 1.0)
-	var damage := maxf(attacker.damage, 0.0) * (CRIT_MULTIPLIER if critical else 1.0)
+	var damage := roundf(maxf(attacker.damage, 0.0) * (CRIT_MULTIPLIER if critical else 1.0))
 	var impact_delay := _play_attack_animation(attacker)
 	if damage > 0.0:
 		var target_slot := _find_unit_view(target)
 		if target_slot != null:
 			target_slot.play_hit(impact_delay)
+			_show_damage_number(target_slot, damage, critical, impact_delay)
 	target.health = maxf(target.health - damage, 0.0)
-	_log_event("%s -> %s: урон %.2f%s; осталось жизней %.2f." % [
+	_log_event("%s -> %s: урон %d%s; осталось жизней %d." % [
 		attacker_name, target_name, damage, " (КРИТ x2)" if critical else "", target.health
 	])
-	if not punch_sounds.is_empty():
-		var sound: AudioStream = punch_sounds.pick_random()
-		ControllerGame.play_one_shot(sound)
+
+
+func _show_damage_number(target_slot: DraggableSlot, damage: float, critical: bool, impact_delay: float) -> void:
+	var origin := _damage_numbers.get_global_transform().affine_inverse() * target_slot.get_damage_number_position()
+	var number := DAMAGE_NUMBER_SCENE.instantiate()
+	if target_slot.unit is BossUnitData:
+		origin += Vector2(_damage_number_rng.randf_range(-36.0, 36.0), _damage_number_rng.randf_range(-18.0, 18.0))
+		number.float_offset = Vector2(_damage_number_rng.randf_range(-14.0, 14.0), -_damage_number_rng.randf_range(24.0, 36.0))
+	_damage_numbers.add_child(number)
+	number.appeared.connect(_play_punch_sound)
+	number.animate(damage, critical, origin, impact_delay)
+
+
+func _play_punch_sound() -> void:
+	if punch_sounds.is_empty():
+		return
+	for player in _punch_players:
+		if not player.playing:
+			player.stream = punch_sounds.pick_random()
+			player.play()
+			return
+
 
 func _find_unit_view(unit: BattleUnit) -> DraggableSlot:
 	for slot in _unit_slots.get_children():

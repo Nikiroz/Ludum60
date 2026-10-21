@@ -21,7 +21,7 @@ func _run() -> void:
 	var unit := BattleUnit.new()
 	unit.health = 100000.0
 	unit.attack_speed = 50.0
-	unit.damage = 0.01
+	unit.damage = 0.6
 	var boss = load("res://scripts/boss_unit.gd").new()
 	boss.health = 100000.0
 	boss.damage = 0.0
@@ -38,7 +38,7 @@ func _run() -> void:
 	_expect(battle.tick_count == 1, "Attack speed or time scale accelerated the battle clock")
 	await create_timer(1.0, true, false, true).timeout
 	_expect(battle.tick_count == 2, "Battle did not keep a one-second tick interval")
-	_expect(absf(boss.health - 99999.0) < 0.00001, "Two ticks did not apply exactly 100 attacks")
+	_expect(boss.health == 99900.0, "Two ticks did not apply exactly 100 attacks with rounded damage")
 	var timer: Timer = battle.get_node("BattleTimer")
 	paused = true
 	var remaining := timer.time_left

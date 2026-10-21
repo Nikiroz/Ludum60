@@ -139,6 +139,23 @@ func _open_garage() -> void:
 
 func _run() -> void:
 	create_timer(10).timeout.connect(func() -> void: quit(1))
+	# Fractional bonuses round symmetrically when equipment is added and removed.
+	var rounding_unit := BattleUnit.new()
+	rounding_unit.health = 10.0
+	rounding_unit.damage = 5.0
+	var fractional := GridInventoryItemData.new()
+	fractional.health_bonus = 0.5
+	fractional.damage_bonus = 1.5
+	rounding_unit.equip_item(fractional, &"head")
+	_expect(rounding_unit.health == 11.0 and rounding_unit.damage == 7.0, "Fractional equipment bonuses were not rounded to whole stats")
+	rounding_unit.unequip_item(&"head")
+	_expect(rounding_unit.health == 10.0 and rounding_unit.damage == 5.0, "Removing fractional bonuses left a rounding error")
+	fractional.health_bonus = -0.5
+	fractional.damage_bonus = -1.5
+	rounding_unit.equip_item(fractional, &"head")
+	_expect(rounding_unit.health == 9.0 and rounding_unit.damage == 3.0, "Negative fractional bonuses were not rounded symmetrically")
+	rounding_unit.unequip_item(&"head")
+	_expect(rounding_unit.health == 10.0 and rounding_unit.damage == 5.0, "Removing negative fractional bonuses changed the base stats")
 	_controller = root.get_node("ControllerGame")
 	_controller.reset_progress()
 	_viewport = SubViewport.new()

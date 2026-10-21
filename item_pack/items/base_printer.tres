@@ -17,4 +17,4 @@ attachment_points = {
 "right_hand": Vector2i(4, 7)
 }
 health_bonus = 50.0
-attack_speed_bonus = 0.7700000000186265
+attack_speed_bonus = 0.0077

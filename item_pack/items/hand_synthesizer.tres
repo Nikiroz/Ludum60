@@ -13,6 +13,6 @@ right_hand_sprite_path = "res://item_pack/unit_sprites/right_hand/hand_synthesiz
 occupied_cells = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, 1), Vector2i(0, 2)])
 left_hand_attachment_point = Vector2i(24, 7)
 right_hand_attachment_point = Vector2i(25, 6)
-attack_speed_bonus = 1.0
+attack_speed_bonus = 0.01
 damage_bonus = 30.0
 crit_chance_bonus = 0.05

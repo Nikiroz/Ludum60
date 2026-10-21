@@ -28,6 +28,7 @@ var shift_duration: float = 0.2
 @export var cursor_hotspot := Vector2.ZERO
 
 @onready var _combat_motion: Control = $CombatMotion
+@onready var _boss_shadow: TextureRect = $CombatMotion/BossShadow
 @onready var icon: TextureRect = $CombatMotion/Icon
 @onready var equipment_preview: Control = $CombatMotion/Icon/EquipmentPreview
 @onready var _icon_rest_position: Vector2 = icon.position
@@ -92,6 +93,8 @@ func _ready() -> void:
 
 func _update_appearance() -> void:
 	var assembled := unit != null and not unit is BossUnitData
+	_boss_shadow.visible = unit is BossUnitData
+	_boss_shadow.position += Vector2(3, -2)
 	_boss_debug_stats.unit = unit if unit is BossUnitData else null
 	equipment_preview.unit = unit if assembled else null
 	equipment_preview.visible = assembled
@@ -127,7 +130,7 @@ func _update_health() -> void:
 		_maximum_health = maxf(unit.health, 0.0)
 	health_bar.max_value = _maximum_health if _maximum_health > 0.0 else 1.0
 	health_bar.value = maxf(unit.health, 0.0)
-	health_label.text = String.num(maxf(unit.health, 0.0), 2).trim_suffix(".0")
+	health_label.text = str(roundi(maxf(unit.health, 0.0)))
 	var sprite_top := 0.0
 	if equipment_preview.visible:
 		sprite_top = icon.size.y
@@ -185,6 +188,7 @@ func _start_drag() -> void:
 	if equipment_preview.visible:
 		_preview_equipment = EquipmentPreview.new()
 		_preview_equipment.align_to_bottom = equipment_preview.align_to_bottom
+		_preview_equipment.show_shadow = equipment_preview.show_shadow
 		_preview_equipment.unit = unit
 		_preview.add_child(_preview_equipment)
 		_preview_equipment.position = equipment_preview.position
@@ -357,6 +361,20 @@ func _exit_tree() -> void:
 
 func set_targeted(targeted: bool) -> void:
 	target_arrow.visible = targeted
+
+
+func get_damage_number_position() -> Vector2:
+	if equipment_preview.visible:
+		var bounds := Rect2()
+		var has_parts := false
+		for layer in equipment_preview.get_children():
+			if layer is Sprite2D and layer.visible:
+				var part: Rect2 = layer.get_global_transform() * layer.get_rect()
+				bounds = bounds.merge(part) if has_parts else part
+				has_parts = true
+		if has_parts:
+			return bounds.get_center()
+	return icon.get_global_rect().get_center()
 
 
 func play_attack(direction: Vector2, start_delay: float = 0.0) -> float:

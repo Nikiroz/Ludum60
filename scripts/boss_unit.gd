@@ -9,7 +9,9 @@ const HEALTH_SPRITES: Array[Texture2D] = [
 	preload("res://sprites/boss/5.png"),
 ]
 
-var max_health: float = 100.0
+var max_health: float = 100.0:
+	set(value):
+		max_health = roundf(value)
 
 # Номера слотов начинаются с 1. Элементы идут в порядке атак.
 var attack_sequence: Array[int] = []

@@ -88,6 +88,24 @@ theme_override_constants/margin_right = 50
 one_shot = true
 ignore_time_scale = true
 
+[node name="PunchSound1" type="AudioStreamPlayer" parent="."]
+process_mode = 3
+bus = &"Sfx"
+
+[node name="PunchSound2" type="AudioStreamPlayer" parent="."]
+process_mode = 3
+bus = &"Sfx"
+
+[node name="DamageNumbers" type="Control" parent="."]
+z_index = 20
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
 [node name="StarBattleButton" type="Button" parent="." unique_id=1702076129]
 custom_minimum_size = Vector2(106, 32)
 layout_mode = 1
