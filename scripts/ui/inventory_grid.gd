@@ -2,6 +2,7 @@ extends Control
 
 const CELL_TEXTURE: Texture2D = preload("res://sprites/ui/cell_bg.png")
 const CELL_SIZE := 12
+const ITEM_TOOLTIP = preload("res://scripts/ui/item_tooltip.gd")
 
 @export_range(3, 30) var columns := 12
 @export_range(1, 100) var initial_rows := 14
@@ -19,6 +20,7 @@ var _drop_item: GridInventoryItemData
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	theme = ITEM_TOOLTIP.THEME
 	ControllerGame.inventory_changed.connect(_sync_inventory)
 	_sync_inventory()
 
@@ -139,10 +141,12 @@ func _drop_data(at_position: Vector2, data: Variant) -> void:
 	queue_redraw()
 
 
-func _gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion:
-		var item := item_at_cell(_cell_at(event.position))
-		tooltip_text = item.display_name if item != null else ""
+func _get_tooltip(at_position: Vector2) -> String:
+	return ITEM_TOOLTIP.get_text(item_at_cell(_cell_at(at_position)))
+
+
+func _make_custom_tooltip(for_text: String) -> Object:
+	return null if for_text.is_empty() else ITEM_TOOLTIP.new(for_text)
 
 
 func _notification(what: int) -> void:

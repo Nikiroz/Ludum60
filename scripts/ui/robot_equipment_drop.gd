@@ -1,5 +1,7 @@
 extends Control
 
+const ITEM_TOOLTIP = preload("res://scripts/ui/item_tooltip.gd")
+
 var unit: BattleUnit
 var _show_drop := false
 var _hand_item := false
@@ -7,6 +9,10 @@ var _left_hand := true
 var _left_hand_on_left := false
 var _hand_split := 0.0
 var _dragged_slot: StringName = &""
+
+
+func _ready() -> void:
+	theme = ITEM_TOOLTIP.THEME
 
 
 func _slot_at(at_position: Vector2) -> StringName:
@@ -39,10 +45,14 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 	return {"equipment": self, "unit": unit, "slot": slot, "item": item, "grab_offset": grab_offset}
 
 
-func _gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion and unit != null:
-		var item: GridInventoryItemData = unit.equipment.get(_slot_at(event.position))
-		tooltip_text = item.display_name if item != null else ""
+func _get_tooltip(at_position: Vector2) -> String:
+	if unit == null:
+		return ""
+	return ITEM_TOOLTIP.get_text(unit.equipment.get(_slot_at(at_position)))
+
+
+func _make_custom_tooltip(for_text: String) -> Object:
+	return null if for_text.is_empty() else ITEM_TOOLTIP.new(for_text)
 
 
 func _can_drop_data(at_position: Vector2, data: Variant) -> bool:

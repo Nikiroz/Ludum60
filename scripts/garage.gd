@@ -1,5 +1,7 @@
 extends Control
 
+const STATS_TOOLTIP = preload("res://scripts/ui/garage_stats_tooltip.gd")
+
 @onready var robot_tabs: TabContainer = $VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer/TabContainer2
 @onready var robot_name: LineEdit = $VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer/robotname
 @onready var health_label: Label = %Health
@@ -11,6 +13,10 @@ var _active_unit: BattleUnit
 var _active_robot_index := -1
 
 func _ready() -> void:
+	var stats_tooltip := STATS_TOOLTIP.new()
+	stats_tooltip.name = "StatsTooltip"
+	health_label.get_parent().get_parent().add_child(stats_tooltip)
+	stats_tooltip.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var buttons: VBoxContainer = robot_tabs.get_parent().get_node("TabButtons")
 	for index in range(robot_tabs.get_tab_count()):
 		var tab := robot_tabs.get_tab_control(index)
