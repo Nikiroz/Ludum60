@@ -12,7 +12,6 @@ bg_color = Color(0.078431375, 0.078431375, 0.078431375, 0.78431374)
 anti_aliasing = false
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_popup"]
-content_margin_bottom = 50.0
 
 [resource]
 ItemTooltipPanel/base_type = &"PanelContainer"
