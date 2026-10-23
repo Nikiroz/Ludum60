@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://vjge3cefphbj" path="res://scripts/robot_sprite.gd" id="1_slot"]
 [ext_resource type="FontFile" uid="uid://yd1a2v72shn1" path="res://font/ChixaDemibold.ttf" id="2_gq5a8"]
 [ext_resource type="Texture2D" uid="uid://bh7hhgoglqxne" path="res://sprites/ui/fist.png" id="3_fist"]
+[ext_resource type="FontFile" uid="uid://cqqx14m4tqnh0" path="res://font/pixelNumbers-Regular.ttf" id="4_4ybpa"]
 [ext_resource type="Script" uid="uid://c6v46ddvqbuly" path="res://scripts/ui/robot_equipment_preview.gd" id="4_equipment_preview"]
 [ext_resource type="Texture2D" uid="uid://bse8fani6dmqc" path="res://sprites/boss/boss_shadow.png" id="5_boss_shadow"]
 
@@ -129,13 +130,16 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = -1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("2_gq5a8")
-theme_override_font_sizes/font_size = 6
+theme_override_fonts/font = ExtResource("4_4ybpa")
+theme_override_font_sizes/font_size = 8
+text = "000000"
 horizontal_alignment = 1
 vertical_alignment = 1
 

@@ -9,10 +9,19 @@ var _left_hand := true
 var _left_hand_on_left := false
 var _hand_split := 0.0
 var _dragged_slot: StringName = &""
+var _drop_highlight: Control
 
 
 func _ready() -> void:
 	theme = ITEM_TOOLTIP.THEME
+	_drop_highlight = Control.new()
+	_drop_highlight.name = "DropHighlight"
+	_drop_highlight.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_drop_highlight.z_index = 3
+	add_child(_drop_highlight)
+	_drop_highlight.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_drop_highlight.draw.connect(_draw_drop_highlight)
+	_drop_highlight.resized.connect(_drop_highlight.queue_redraw)
 
 
 func _slot_at(at_position: Vector2) -> StringName:
@@ -68,7 +77,7 @@ func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
 	_left_hand = (at_position.x < _hand_split) == _left_hand_on_left
 	_show_drop = ControllerGame.can_equip_item(unit, item, _left_hand)
 	_hand_item = item != null and item.get_equipment_slot() == &"left_hand"
-	queue_redraw()
+	_drop_highlight.queue_redraw()
 	return _show_drop
 
 
@@ -77,7 +86,7 @@ func _drop_data(at_position: Vector2, data: Variant) -> void:
 		ControllerGame.equip_item(unit, data.item, _left_hand)
 	_show_drop = false
 	ControllerGame.play_one_shot(preload("uid://cyhdsnc7rlc5w")) 
-	queue_redraw()
+	_drop_highlight.queue_redraw()
 
 
 func _notification(what: int) -> void:
@@ -86,10 +95,11 @@ func _notification(what: int) -> void:
 		_dragged_slot = &""
 	if what == NOTIFICATION_MOUSE_EXIT or what == NOTIFICATION_DRAG_END:
 		_show_drop = false
-		queue_redraw()
+		if is_instance_valid(_drop_highlight):
+			_drop_highlight.queue_redraw()
 
 
-func _draw() -> void:
+func _draw_drop_highlight() -> void:
 	if not _show_drop:
 		return
 	var region := Rect2(Vector2.ZERO, size)
@@ -99,5 +109,4 @@ func _draw() -> void:
 		else:
 			region.position.x = _hand_split
 			region.size.x -= _hand_split
-	draw_rect(region, Color(0.3, 1.0, 0.4, 0.15))
-	draw_rect(region, Color(0.3, 1.0, 0.4, 0.8), false)
+	_drop_highlight.draw_rect(region, Color(Color("#6faf86"), 0.25))
