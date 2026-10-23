@@ -14,5 +14,5 @@ attachment_points = {
 "body": Vector2i(9, 20)
 }
 health_bonus = 12.0
-attack_speed_bonus = 5.0
+attack_speed_bonus = 0.05000000004656613
 damage_bonus = 8.0

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="GridInventoryItemData" format=3 uid="uid://d257373238uh6"]
+[gd_resource type="Resource" script_class="GridInventoryItemData" format=3 uid="uid://cknnokwf6qv30"]
 
 [ext_resource type="Script" uid="uid://b5v34017s5c7i" path="res://item_pack/item_data.gd" id="1_om60q"]
 
@@ -6,7 +6,6 @@
 script = ExtResource("1_om60q")
 item_id = "base_basic"
 display_name = "base_basic"
-is_service_item = true
 sprite_path = "res://item_pack/sprites/base_basic.png"
 body_part = 2
 unit_sprite_path = "res://item_pack/unit_sprites/base_basic.png"

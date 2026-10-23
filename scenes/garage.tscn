@@ -98,7 +98,6 @@ stretch_mode = 1
 layout_mode = 2
 theme = ExtResource("7_v0fcm")
 horizontal_scroll_mode = 0
-vertical_scroll_mode = 2
 
 [node name="HeadsContainer" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer2/MarginContainer/ScrollContainer" unique_id=365788305]
 layout_mode = 2

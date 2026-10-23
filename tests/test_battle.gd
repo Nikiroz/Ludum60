@@ -78,6 +78,9 @@ func _run() -> void:
 
 	# The real button starts exactly one timer and locks the formation.
 	var attacker := _unit(100.0, 1.0, 2.0)
+	var shadow_legs := attacker.equipment[&"legs"].duplicate(true) as GridInventoryItemData
+	shadow_legs.shadow_sprite_path = "res://sprites/robot_shadow.png"
+	attacker.equip_item(shadow_legs, &"legs")
 	var boss := _boss()
 	var battle := _battle([attacker], boss)
 	var start_button: Button = battle.get_node("StarBattleButton")
@@ -89,6 +92,8 @@ func _run() -> void:
 	_expect(slot.size.is_equal_approx(Vector2(36, 60)), "Robot visual changed the slot hit area")
 	_expect(slot.icon.size.is_equal_approx(Vector2(95, 100)), "Robot visual is not 95 by 100")
 	_expect(slot.equipment_preview.unit == attacker and slot.icon.texture == null, "Battle robot does not show its assembled equipment")
+	var item_shadow: TextureRect = slot.equipment_preview.get_node("RobotShadow")
+	_expect(item_shadow.visible and item_shadow.texture.get_image().get_data() == shadow_legs.get_shadow_texture().get_image().get_data(), "Battle robot does not use its equipped item's shadow")
 	var head := GridInventoryItemData.new()
 	head.item_id = "head_router"
 	head.sprite_path = "res://item_pack/sprites/head_lamp.png"
@@ -104,6 +109,8 @@ func _run() -> void:
 	slot._start_drag()
 	_expect(slot.active_slot == slot, "Preparation drag did not start")
 	_expect(slot._preview_equipment != null and slot._preview_equipment.unit == attacker, "Drag preview lost the assembled robot")
+	var dragged_shadow: TextureRect = slot._preview_equipment.get_node("RobotShadow")
+	_expect(dragged_shadow.visible and dragged_shadow.texture.get_image().get_data() == item_shadow.texture.get_image().get_data() and dragged_shadow.position.is_equal_approx(item_shadow.position), "Dragging lost or moved the item shadow")
 	_expect(slot._preview_health_bar != null and slot._preview_health_bar.value == 100.0 and slot._preview_health_label.text == "100", "Dragging lost the health bar or its numeric value")
 	for part in [&"head", &"torso", &"legs"]:
 		var original: Sprite2D = slot.equipment_preview.get_node(NodePath(part))

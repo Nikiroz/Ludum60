@@ -136,12 +136,45 @@ func _run() -> void:
 	_expect(legacy_hand.get_attachment_points("left", left_size).body == Vector2i((Vector2(left_size) * Vector2(0.2, 0.6)).round()), "Normalized hand point did not migrate to pixels")
 	_expect(legacy_hand.get_attachment_points("right", right_size).body == Vector2i((Vector2(right_size) / 2.0).round()), "Unset hand point did not use its image center")
 	_connections(preview)
+	# Item shadows share the leg's original PNG coordinates without affecting layout.
+	var assembly_bounds := _bounds(preview)
+	var shadow_legs := unit.equipment[&"legs"].duplicate(true) as GridInventoryItemData
+	shadow_legs.shadow_sprite_path = "res://sprites/robot_shadow.png"
+	unit.equip_item(shadow_legs, &"legs")
+	var shadow: TextureRect = preview.get_node("RobotShadow")
+	_expect(not shadow.visible, "A preview with shadows disabled displays an item shadow")
+	preview.show_shadow = true
+	preview._layout_parts()
+	_expect(shadow.visible and shadow.texture.get_image().get_data() == shadow_legs.get_shadow_texture().get_image().get_data(), "Preview did not use the equipped leg's shadow sprite")
+	_expect(shadow.size == shadow.texture.get_size(), "Item shadow was resized from its authored dimensions")
+	_expect(_bounds(preview).is_equal_approx(assembly_bounds), "Item shadow changed the robot's visible bounds")
+	var shadow_point := Vector2(shadow_legs.get_shadow_attachment_points(Vector2i(legs.texture.get_size())).body)
+	_expect((shadow.get_global_transform() * shadow_point).is_equal_approx(_point(preview, &"legs", &"body")), "Shadow does not share the leg's body attachment point")
+	legs.rotation = 0.19
+	legs.scale = Vector2(1.2, 0.8)
+	legs.offset = Vector2(2, -3)
+	preview._layout_parts()
+	_expect((shadow.get_global_transform() * shadow_point).is_equal_approx(_point(preview, &"legs", &"body")), "Transforming legs separated their shadow attachment point")
+	legs.rotation = 0.0
+	legs.scale = Vector2.ONE
+	legs.offset = Vector2.ZERO
+	var replacement_legs := shadow_legs.duplicate(true) as GridInventoryItemData
+	replacement_legs.shadow_sprite_path = "res://item_pack/sprites/head_router.png"
+	unit.equip_item(replacement_legs, &"legs")
+	_expect(shadow.visible and shadow.texture.get_image().get_data() == replacement_legs.get_shadow_texture().get_image().get_data(), "Replacing legs kept the previous item's shadow")
+	replacement_legs.shadow_sprite_path = "res://item_pack/unit_sprites/shadow/missing.png"
+	unit.equip_item(replacement_legs, &"legs")
+	_expect(not shadow.visible and shadow.texture == null, "A missing shadow sprite left the previous shadow visible")
+	unit.equip_item(original_legs, &"legs")
+	_expect(not shadow.visible and shadow.texture == null, "Legs without a shadow sprite use a generic shadow")
 	var missing_head := legacy_head.duplicate(true) as GridInventoryItemData
 	missing_head.unit_sprite_path = ""
 	unit.equip_item(missing_head, &"head")
 	_expect(not head_layer.visible, "A missing texture left a visible equipment layer")
 	_connections(preview)
+	unit.equip_item(shadow_legs, &"legs")
 	preview.unit = null
+	_expect(not shadow.visible and shadow.texture == null, "An empty preview kept its item shadow")
 	for slot in SLOTS:
 		_expect(not preview.get_node(NodePath(slot)).visible, "An empty preview kept equipment visible")
 	preview.free()

@@ -11,11 +11,10 @@ body_part = 2
 unit_sprite_path = "res://item_pack/unit_sprites/base_printer.png"
 occupied_cells = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1)])
 attachment_points = {
-"head": Vector2i(22, 2),
-"left_hand": Vector2i(35, 7),
+"head": Vector2i(19, 2),
+"left_hand": Vector2i(32, 6),
 "legs": Vector2i(19, 23),
-"right_hand": Vector2i(4, 6)
+"right_hand": Vector2i(4, 7)
 }
 health_bonus = 50.0
-attack_speed_bonus = 0.7700000000186265
-damage_bonus = 5.0
+attack_speed_bonus = 0.05000000004656613

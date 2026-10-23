@@ -3,7 +3,6 @@ extends Control
 # Back-to-front order also determines which overlapping part receives a grab.
 const SLOTS: Array[StringName] = [&"right_hand", &"torso", &"legs", &"head", &"left_hand"]
 const DebugStats = preload("res://scripts/ui/robot_debug_stats.gd")
-const SHADOW_TEXTURE: Texture2D = preload("res://sprites/robot_shadow.png")
 
 @export var align_to_bottom := false
 @export var show_shadow := false
@@ -24,6 +23,7 @@ var _images: Dictionary[StringName, Image] = {}
 var _attachment_points: Dictionary[StringName, Dictionary] = {}
 var _debug_stats: Label
 var _shadow: TextureRect
+var _shadow_attachment_point := Vector2.ZERO
 
 
 func _ready() -> void:
@@ -31,9 +31,7 @@ func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_shadow = TextureRect.new()
 	_shadow.name = "RobotShadow"
-	_shadow.texture = SHADOW_TEXTURE
 	_shadow.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	_shadow.size = SHADOW_TEXTURE.get_size()
 	_shadow.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_shadow.visible = false
 	add_child(_shadow)
@@ -77,6 +75,15 @@ func _refresh() -> void:
 		else:
 			_images.erase(slot)
 			_attachment_points.erase(slot)
+	_shadow.texture = null
+	_shadow_attachment_point = Vector2.ZERO
+	var legs_item: GridInventoryItemData = unit.equipment.get(&"legs") if unit != null else null
+	if legs_item != null and _images.has(&"legs"):
+		_shadow.texture = legs_item.get_shadow_texture()
+		if _shadow.texture != null:
+			_shadow.size = _shadow.texture.get_size()
+			var points := legs_item.get_shadow_attachment_points(_images[&"legs"].get_size())
+			_shadow_attachment_point = Vector2(points.get("body", Vector2i.ZERO))
 	_layout_parts()
 
 
@@ -141,7 +148,7 @@ func _layout_parts() -> void:
 			legs_bounds = part
 		bounds = bounds.merge(part) if has_parts else part
 		has_parts = true
-	_shadow.visible = show_shadow and has_parts and bounds.has_area()
+	_shadow.visible = show_shadow and _shadow.texture != null and _layers[&"legs"].visible and has_parts and bounds.has_area()
 	if not has_parts or not bounds.has_area():
 		return
 	var floor_bounds := legs_bounds if _layers[&"legs"].visible else bounds
@@ -155,7 +162,12 @@ func _layout_parts() -> void:
 	# Round the entire assembly together so connected points remain coincident.
 	origin = origin.round()
 	pivot_offset = origin + feet
-	_shadow.position = (origin + feet - _shadow.size / 2.0).round()
 	for slot in SLOTS:
 		_layers[slot].position = origin + positions[slot]
+	if _shadow.visible:
+		var legs_layer := _layers[&"legs"]
+		_shadow.rotation = legs_layer.rotation
+		_shadow.scale = legs_layer.scale
+		# Shadow points use the full leg PNG, independent of its cropped visible region.
+		_shadow.position = get_attachment_position(&"legs", &"body") - legs_layer.transform.basis_xform(_shadow_attachment_point)
 	_debug_stats.position = (origin + bounds.get_center() - _debug_stats.size / 2.0).round()
