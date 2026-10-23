@@ -8,7 +8,10 @@ enum BodyPart { NONE, HEAD, BODY, HANDS, LEGS }
 @export var item_id: String = ""
 @export var display_name: String = ""
 ## Built-in equipment: excluded from scrapyard loot and discarded when replaced.
-@export var is_service_item: bool = false
+## Base parts remain service items even if an imported resource omits the flag.
+@export var is_service_item: bool = false:
+    get:
+        return is_service_item or item_id in ["base_basic", "leg_basic"]
 ## String path keeps the exported asset independent of the editor's texture-import state.
 ## Example: res://item_pack/sprites/iron_sword.png
 @export_file("*.png") var sprite_path: String = ""
@@ -17,6 +20,9 @@ enum BodyPart { NONE, HEAD, BODY, HANDS, LEGS }
 ## Separate image displayed on the unit when this item is equipped.
 ## Optional for existing items; copied to res://item_pack/unit_sprites/<id>.png.
 @export_file("*.png") var unit_sprite_path: String = ""
+## Optional separate shadow tile for LEGS, using the main leg sprite's attachment points.
+## Copied to res://item_pack/unit_sprites/shadow/<id>.png.
+@export_file("*.png") var shadow_sprite_path: String = ""
 ## Hands use independent images; no automatic mirroring is applied.
 @export_file("*.png") var left_hand_sprite_path: String = ""
 @export_file("*.png") var right_hand_sprite_path: String = ""
@@ -146,6 +152,20 @@ func get_texture() -> Texture2D:
 
 func get_unit_texture() -> Texture2D:
     return _load_sprite_texture(unit_sprite_path)
+
+
+func get_shadow_texture() -> Texture2D:
+    if body_part != BodyPart.LEGS:
+        return null
+    return _load_sprite_texture(shadow_sprite_path)
+
+
+## Shadow slots always follow the main leg sprite, in the same pixel coordinates.
+## Pass the MAIN sprite's size, never the shadow size, when supplying a known size.
+func get_shadow_attachment_points(sprite_size: Vector2i = Vector2i.ZERO) -> Dictionary:
+    if body_part != BodyPart.LEGS or shadow_sprite_path.is_empty():
+        return {}
+    return get_attachment_points("", sprite_size)
 
 
 func get_left_hand_texture() -> Texture2D:

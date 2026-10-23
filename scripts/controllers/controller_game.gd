@@ -198,9 +198,9 @@ func return_to_main_menu() -> void:
 func _input(event: InputEvent) -> void:
 	if OS.has_feature("web") or not event is InputEventKey or not event.pressed or event.echo:
 		return
-	if event.keycode == KEY_F8 or event.physical_keycode == KEY_F8:
+	if debug_mode and (event.keycode == KEY_Q or event.physical_keycode == KEY_Q):
 		add_all_items_to_inventory()
-	elif event.keycode == KEY_F9 or event.physical_keycode == KEY_F9:
+	elif event.keycode in [KEY_QUOTELEFT, KEY_ASCIITILDE] or event.physical_keycode == KEY_QUOTELEFT:
 		debug_mode = not debug_mode
 	else:
 		return

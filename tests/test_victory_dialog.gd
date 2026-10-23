@@ -69,8 +69,8 @@ func _run() -> void:
 	var menu_music: AudioStreamPlayer = _controller.get_node("MainMenuMusic")
 	var battle_music: AudioStreamPlayer = _controller.get_node("BattleMusic")
 	_expect(not dialog.visible and not paused, "Dialog is open before victory")
-	_key(KEY_F9)
-	_expect(not dialog.visible and not paused, "F9 still opens the victory dialog")
+	_key(KEY_QUOTELEFT)
+	_expect(not dialog.visible and not paused, "~ still opens the victory dialog")
 	_controller.show_victory_dialog()
 	await process_frame
 	await process_frame
@@ -82,9 +82,9 @@ func _run() -> void:
 	_expect(no.has_focus(), "Tab did not move focus to No")
 	_key(KEY_TAB)
 	_expect(yes.has_focus(), "Tab allowed focus to leave the popup")
-	_key(KEY_F9, true)
+	_key(KEY_QUOTELEFT, true)
 	_key(KEY_ESCAPE)
-	_expect(dialog.visible and not _main.get_node("MenuLayer/Settings").visible, "Repeated F9 or Escape dismissed the popup or opened settings behind it")
+	_expect(dialog.visible and not _main.get_node("MenuLayer/Settings").visible, "Repeated ~ or Escape dismissed the popup or opened settings behind it")
 	_click(yes)
 	_expect(not dialog.visible and not paused and _controller.isMainMenu, "Yes from a debug popup changed the current screen or left it paused")
 

@@ -1,7 +1,7 @@
 extends Control
 
 # Back-to-front order also determines which overlapping part receives a grab.
-const SLOTS: Array[StringName] = [&"legs", &"left_hand", &"torso", &"right_hand", &"head"]
+const SLOTS: Array[StringName] = [&"right_hand", &"torso", &"legs", &"head", &"left_hand"]
 const DebugStats = preload("res://scripts/ui/robot_debug_stats.gd")
 const SHADOW_TEXTURE: Texture2D = preload("res://sprites/robot_shadow.png")
 
@@ -42,10 +42,12 @@ func _ready() -> void:
 		layer.name = slot
 		layer.centered = false
 		layer.region_enabled = true
+		layer.z_index = 1 if slot == &"left_hand" else 0
 		add_child(layer)
 		_layers[slot] = layer
 	_debug_stats = DebugStats.new()
 	_debug_stats.name = "DebugStats"
+	_debug_stats.z_index = 2
 	_debug_stats.unit = unit
 	add_child(_debug_stats)
 	_debug_stats.resized.connect(_layout_parts)
@@ -103,6 +105,12 @@ func _attachment_offset(slot: StringName, point_name: StringName) -> Vector2:
 	var layer := _layers[slot]
 	if not layer.visible:
 		return Vector2.ZERO
+	# Torso sockets were authored from the robot's perspective; hands use screen sides.
+	if slot == &"torso":
+		if point_name == &"left_hand":
+			point_name = &"right_hand"
+		elif point_name == &"right_hand":
+			point_name = &"left_hand"
 	# Authored points belong to the full PNG; sprites display only its opaque region.
 	var pixel := Vector2(_attachment_points[slot].get(point_name, Vector2i.ZERO))
 	return layer.transform.basis_xform(pixel - layer.region_rect.position + layer.offset)
@@ -113,6 +121,7 @@ func get_attachment_position(slot: StringName, point_name: StringName) -> Vector
 
 
 func _layout_parts() -> void:
+	pivot_offset = Vector2(size.x / 2.0, size.y)
 	if _layers.is_empty():
 		return
 	var positions: Dictionary[StringName, Vector2] = {&"torso": Vector2.ZERO}
@@ -135,14 +144,17 @@ func _layout_parts() -> void:
 	_shadow.visible = show_shadow and has_parts and bounds.has_area()
 	if not has_parts or not bounds.has_area():
 		return
-	var origin := (size - bounds.size) / 2.0 - bounds.position
-	if align_to_bottom:
-		var bottom := legs_bounds.end.y if _layers[&"legs"].visible else bounds.end.y
-		origin.y = size.y - bottom
-	# Round the entire assembly together so connected points remain coincident.
-	origin = origin.round()
 	var floor_bounds := legs_bounds if _layers[&"legs"].visible else bounds
 	var feet := Vector2(floor_bounds.get_center().x, floor_bounds.end.y)
+	var origin := (size - bounds.size) / 2.0 - bounds.position
+	if align_to_bottom:
+		# The torso socket fixes the standing axis; leg widths cannot shift the body.
+		if _layers[&"torso"].visible:
+			feet.x = _attachment_offset(&"torso", &"legs").x
+		origin = Vector2(size.x / 2.0, size.y) - feet
+	# Round the entire assembly together so connected points remain coincident.
+	origin = origin.round()
+	pivot_offset = origin + feet
 	_shadow.position = (origin + feet - _shadow.size / 2.0).round()
 	for slot in SLOTS:
 		_layers[slot].position = origin + positions[slot]

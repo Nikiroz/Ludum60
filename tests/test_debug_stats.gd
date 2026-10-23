@@ -58,47 +58,48 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	var tabs: TabContainer = garage.find_child("TabContainer2", true, false)
+	tabs.current_tab = 0
 	var preview: Control = tabs.get_tab_control(0).get_node("EquipmentPreview")
 	var stats: Label = preview.get_node("DebugStats")
-	_expect(not controller.debug_mode and not stats.visible, "Stats are visible before F9")
+	_expect(not controller.debug_mode and not stats.visible, "Stats are visible before ~")
 	garage.find_child("robotname", true, false).grab_focus()
-	# F8 adds a separate copy of every catalog item and updates the open inventory.
+	# Q adds a separate copy of every catalog item and updates the open inventory.
 	var paths := ItemCatalog.get_item_paths()
 	controller.add_collected_item(load("res://item_pack/items/head_lamp.tres"))
 	var existing: GridInventoryItemData = controller.collected_items[0]
 	var existing_position: Vector2i = controller.inventory_positions[existing]
-	_key(KEY_F8)
-	_expect(controller.collected_items.size() == 1, "F8 granted items while debug mode was disabled")
+	_key(KEY_Q)
+	_expect(controller.collected_items.size() == 1, "Q granted items while debug mode was disabled")
 	controller.add_all_items_to_inventory()
 	_expect(controller.collected_items.size() == 1, "Direct item grant bypassed disabled debug mode")
-	_key(KEY_F9)
-	_expect(controller.debug_mode and stats.is_visible_in_tree(), "F9 did not enable debug mode before granting items")
-	_key(KEY_F8)
-	_expect(controller.collected_items.size() == paths.size() + 1, "F8 did not add exactly one full item set")
+	_key(KEY_ASCIITILDE)
+	_expect(controller.debug_mode and stats.is_visible_in_tree(), "~ did not enable debug mode before granting items")
+	_key(KEY_Q)
+	_expect(controller.collected_items.size() == paths.size() + 1, "Q did not add exactly one full item set")
 	var inventory = garage.find_child("HeadsContainer", true, false)
-	_expect(inventory.items.size() == controller.collected_items.size(), "F8 did not update the visible inventory")
-	_expect(controller.collected_items[0] == existing and controller.inventory_positions[existing] == existing_position, "F8 changed an existing item or its inventory position")
+	_expect(inventory.items.size() == controller.collected_items.size(), "Q did not update the visible inventory")
+	_expect(controller.collected_items[0] == existing and controller.inventory_positions[existing] == existing_position, "Q changed an existing item or its inventory position")
 	for index in range(paths.size()):
 		var source := load(paths[index]) as GridInventoryItemData
 		var collected: GridInventoryItemData = controller.collected_items[index + 1]
-		_expect(collected != source and collected.item_id == source.item_id, "F8 omitted an item or reused its source resource: " + paths[index])
-	_key(KEY_F8, true)
-	_expect(controller.collected_items.size() == paths.size() + 1, "Holding F8 repeatedly granted item sets")
+		_expect(collected != source and collected.item_id == source.item_id, "Q omitted an item or reused its source resource: " + paths[index])
+	_key(KEY_Q, true)
+	_expect(controller.collected_items.size() == paths.size() + 1, "Holding Q repeatedly granted item sets")
 	paused = true
-	_key(KEY_F8, false, true)
-	_expect(paused and controller.collected_items.size() == paths.size() * 2 + 1, "Physical F8 did not add another full set while paused")
-	_expect(inventory.items.size() == controller.collected_items.size(), "Paused F8 did not update the inventory")
-	_expect(controller.collected_items[1] != controller.collected_items[paths.size() + 1], "Repeated F8 reused an inventory item instance")
-	_expect(controller.debug_mode, "F8 toggled the F9 debug overlay")
+	_key(KEY_Q, false, true)
+	_expect(paused and controller.collected_items.size() == paths.size() * 2 + 1, "Physical Q did not add another full set while paused")
+	_expect(inventory.items.size() == controller.collected_items.size(), "Paused Q did not update the inventory")
+	_expect(controller.collected_items[1] != controller.collected_items[paths.size() + 1], "Repeated Q reused an inventory item instance")
+	_expect(controller.debug_mode, "Q toggled the ~ debug overlay")
 	paused = false
-	_key(KEY_F9)
-	_key(KEY_F8)
-	_expect(not controller.debug_mode and controller.collected_items.size() == paths.size() * 2 + 1, "F8 kept granting items after disabling debug mode")
-	_key(KEY_F9)
-	_expect(controller.debug_mode and stats.is_visible_in_tree(), "F9 with a focused name field did not show garage stats")
+	_key(KEY_QUOTELEFT)
+	_key(KEY_Q)
+	_expect(not controller.debug_mode and controller.collected_items.size() == paths.size() * 2 + 1, "Q kept granting items after disabling debug mode")
+	_key(KEY_QUOTELEFT)
+	_expect(controller.debug_mode and stats.is_visible_in_tree(), "~ with a focused name field did not show garage stats")
 	_expect(stats.mouse_filter == Control.MOUSE_FILTER_IGNORE, "Overlay intercepts equipment input")
-	_key(KEY_F9, true)
-	_expect(controller.debug_mode, "Held F9 toggled debug mode repeatedly")
+	_key(KEY_QUOTELEFT, true)
+	_expect(controller.debug_mode, "Held ~ toggled debug mode repeatedly")
 	var unit: BattleUnit = controller.units[0]
 	unit.health = 72.25
 	unit.damage = 12.5
@@ -142,10 +143,10 @@ func _run() -> void:
 	_expect(unit.health == 69.0 and stats.text.begins_with("HP 69\n"), "Battle damage did not update robot stats")
 	_expect(boss_stats.text.begins_with("HP %d\n" % boss_slot.unit.health), "Battle damage did not update boss stats")
 	paused = true
-	_key(KEY_F9)
-	_expect(not controller.debug_mode and not stats.visible and not boss_stats.visible, "F9 while paused did not hide all stats")
-	_key(KEY_F9)
-	_expect(controller.debug_mode and stats.visible and boss_stats.visible and paused, "F9 changed gameplay pause state")
+	_key(KEY_QUOTELEFT, false, true)
+	_expect(not controller.debug_mode and not stats.visible and not boss_stats.visible, "~ while paused did not hide all stats")
+	_key(KEY_QUOTELEFT)
+	_expect(controller.debug_mode and stats.visible and boss_stats.visible and paused, "~ changed gameplay pause state")
 	paused = false
 	controller.debug_mode = false
 	battle.free()
@@ -169,7 +170,7 @@ func _run() -> void:
 	_expect(not boss_slot.get_global_rect().has_point(click_point), "Click test does not cover the boss outside its slot")
 	_click(click_point)
 	_expect(boss.health == 250.0, "Clicking the boss outside debug mode dealt damage")
-	_key(KEY_F9)
+	_key(KEY_QUOTELEFT)
 	_click(click_point, MOUSE_BUTTON_RIGHT)
 	_expect(boss.health == 250.0, "Right-clicking the boss dealt debug damage")
 	_click(Vector2(2, 50))

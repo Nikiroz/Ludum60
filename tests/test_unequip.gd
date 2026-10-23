@@ -27,6 +27,7 @@ func _open_garage() -> void:
 	_viewport.add_child(_garage)
 	_grid = _garage.find_child("HeadsContainer", true, false)
 	_tabs = _garage.find_child("TabContainer2", true, false)
+	_tabs.current_tab = 0
 	await process_frame
 	await process_frame
 

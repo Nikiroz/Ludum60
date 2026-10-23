@@ -13,6 +13,8 @@ config_version=5
 config/name="Scrapboys"
 run/main_scene="uid://1nh8ghvdvg5m"
 config/features=PackedStringArray("4.7", "GL Compatibility")
+boot_splash/bg_color=Color(0.17254902, 0.17254902, 0.17254902, 1)
+boot_splash/image="uid://dqdnwf37cofn1"
 config/icon="res://sprites/icon.svg"
 
 [autoload]
@@ -34,7 +36,7 @@ mouse_cursor/tooltip_position_offset=Vector2(4, 6)
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/item_catalog/plugin.cfg")
+enabled=PackedStringArray()
 
 [gui]
 

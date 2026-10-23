@@ -1,0 +1,58 @@
+[gd_resource type="Theme" format=3 uid="uid://b15pjn73y7lbm"]
+
+[ext_resource type="FontFile" uid="uid://vcx3t2gqfd6" path="res://font/PixelOperator-Bold.ttf" id="1_d0fqy"]
+[ext_resource type="Texture2D" uid="uid://bev1453nobc1c" path="res://sprites/ui/button/ui_scrap.png" id="2_tcr2w"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d0fqy"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.3)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d0fqy"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8g5eo"]
+texture = ExtResource("2_tcr2w")
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(110, 0, 109, 25)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_d0fqy"]
+load_path = "res://.godot/imported/ui_scrap.png-28657bbb9f9baaa416032e4e00e0787d.ctex"
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tcr2w"]
+texture = SubResource("CompressedTexture2D_d0fqy")
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(110, 0, 109, 25)
+
+[resource]
+Button/colors/font_color = Color(0.96862745, 0.89411765, 0.8039216, 1)
+Button/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
+Button/colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)
+Button/colors/font_hover_color = Color(0.9764706, 0.88235295, 0.6784314, 1)
+Button/colors/font_hover_pressed_color = Color(0.9764706, 0.88235295, 0.6784314, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/colors/font_pressed_color = Color(0.9764706, 0.88235295, 0.6784314, 1)
+Button/colors/icon_disabled_color = Color(1, 1, 1, 0.4)
+Button/colors/icon_focus_color = Color(1, 1, 1, 1)
+Button/colors/icon_hover_color = Color(1, 1, 1, 1)
+Button/colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+Button/colors/icon_normal_color = Color(1, 1, 1, 1)
+Button/colors/icon_pressed_color = Color(1, 1, 1, 1)
+Button/font_sizes/font_size = 10
+Button/fonts/font = ExtResource("1_d0fqy")
+Button/styles/disabled = SubResource("StyleBoxFlat_d0fqy")
+Button/styles/focus = SubResource("StyleBoxEmpty_d0fqy")
+Button/styles/hover = SubResource("StyleBoxTexture_8g5eo")
+Button/styles/normal = SubResource("StyleBoxTexture_8g5eo")
+Button/styles/pressed = SubResource("StyleBoxTexture_tcr2w")
+Label/colors/font_color = Color(0.78039217, 0.6901961, 0.54509807, 1)
+Label/font_sizes/font_size = 15
+Label/fonts/font = ExtResource("1_d0fqy")

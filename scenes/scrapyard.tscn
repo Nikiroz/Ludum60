@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://cknk80nw3fbir"]
 
 [ext_resource type="Script" uid="uid://bxitp6of0yxta" path="res://scripts/scrapyard.gd" id="1_qxv53"]
-[ext_resource type="FontFile" uid="uid://vcx3t2gqfd6" path="res://font/PixelOperator-Bold.ttf" id="2_ebt5y"]
 [ext_resource type="Texture2D" uid="uid://xeqo407pmt78" path="res://sprites/bg/junkyard_bg.png" id="2_qxv53"]
 [ext_resource type="Texture2D" uid="uid://cobqovy0xsqs7" path="res://sprites/ui/cell.png" id="3_n1w0p"]
 [ext_resource type="Texture2D" uid="uid://1pphag3xajhb" path="res://sprites/bg/progress_bar.png" id="4_7rxug"]
@@ -9,13 +8,12 @@
 [ext_resource type="Script" uid="uid://e1dwdqoh0r6k" path="res://scripts/ui/ui_cell.gd" id="5_ymbfr"]
 [ext_resource type="Texture2D" uid="uid://buuvk53bhts6x" path="res://sprites/bg/items_bar.png" id="6_qxv53"]
 [ext_resource type="Texture2D" uid="uid://ppmpnnh57xcj" path="res://sprites/bg/border.png" id="6_suqf5"]
-[ext_resource type="Theme" uid="uid://dusbxqn3cho4s" path="res://styles/buttons.tres" id="10_wubbp"]
+[ext_resource type="FontFile" uid="uid://cqqx14m4tqnh0" path="res://font/pixelNumbers-Regular.ttf" id="9_mi4xg"]
 [ext_resource type="Script" uid="uid://d2k5m0cpjhw1u" path="res://scripts/ui/ui_scene_button.gd" id="11_5o808"]
 [ext_resource type="AudioStream" uid="uid://d1qru7aqjl8uq" path="res://sounds/SFX 1/TRASH-001.ogg" id="12_8jmiw"]
-[ext_resource type="Texture2D" uid="uid://bev1453nobc1c" path="res://sprites/ui/button/ui_scrap.png" id="12_scrap"]
 [ext_resource type="AudioStream" uid="uid://dn4n7iionvfsu" path="res://sounds/SFX 1/TRASH-002.ogg" id="13_n3taq"]
-[ext_resource type="Texture2D" uid="uid://3fgaopy5tnc8" path="res://sprites/ui/button/ui_scrap_press.png" id="13_scrap_press"]
 [ext_resource type="AudioStream" uid="uid://pd5qdf0lj8gs" path="res://sounds/SFX 1/TRASH-003.ogg" id="14_582h4"]
+[ext_resource type="Theme" uid="uid://b15pjn73y7lbm" path="res://styles/scrap_buttons.tres" id="14_mi4xg"]
 [ext_resource type="AudioStream" uid="uid://c1vymuny1ujth" path="res://sounds/SFX 1/TRASH-004.ogg" id="15_ip7ae"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_suqf5"]
@@ -34,8 +32,6 @@ border_color = Color(0.8, 0.8, 0.8, 0)
 corner_detail = 6
 expand_margin_top = 4.0
 expand_margin_bottom = 2.0
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_navigation"]
 
 [node name="Scrapyard" type="Control" unique_id=338103327]
 layout_mode = 3
@@ -136,12 +132,12 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -160.0
-offset_top = -4.5
+offset_top = -3.5
 offset_right = 160.0
-offset_bottom = 4.5
+offset_bottom = 5.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_fonts/font = ExtResource("2_ebt5y")
+theme_override_fonts/font = ExtResource("9_mi4xg")
 theme_override_font_sizes/font_size = 8
 text = "00:00"
 horizontal_alignment = 1
@@ -1067,37 +1063,16 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = -24.0
-offset_top = 55.0
+offset_top = 36.0
 offset_right = 86.0
-offset_bottom = 79.0
+offset_bottom = 60.0
 grow_horizontal = 0
 grow_vertical = 2
 rotation = -1.5707964
-theme = ExtResource("10_wubbp")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_navigation")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_navigation")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_navigation")
-theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_navigation")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_navigation")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_navigation")
+theme = ExtResource("14_mi4xg")
 text = "garage"
 script = ExtResource("11_5o808")
 scene_path = "res://scenes/garage.tscn"
 show_after_round_finished = true
 
-[node name="Background" type="TextureRect" parent="GarageButton" unique_id=1599008371]
-show_behind_parent = true
-layout_mode = 0
-offset_left = 110.0
-offset_right = 134.0
-offset_bottom = 110.0
-rotation = 1.5707964
-mouse_filter = 2
-texture = ExtResource("12_scrap")
-expand_mode = 1
-stretch_mode = 3
-flip_h = true
-
-[connection signal="button_down" from="GarageButton" to="GarageButton/Background" method="set_texture" binds= [ExtResource("13_scrap_press")]]
-[connection signal="button_up" from="GarageButton" to="GarageButton/Background" method="set_texture" binds= [ExtResource("12_scrap")]]
 [connection signal="pressed" from="GarageButton" to="GarageButton" method="_on_pressed"]

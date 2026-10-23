@@ -60,8 +60,8 @@ func _drag(item: GridInventoryItemData, left_hand: bool = true) -> void:
 	var origin: Vector2i = _controller.inventory_positions[item]
 	var start: Vector2 = _grid.global_position + Vector2(origin) * 12 + Vector2(6, 6)
 	var page: Control = _tabs.get_current_tab_control()
-	# Authored sockets refer to the front-facing robot's own left/right hands.
-	var finish: Vector2 = page.global_position + page.size * Vector2(0.75 if left_hand else 0.25, 0.65)
+	# Hand slots follow their displayed left/right sides.
+	var finish: Vector2 = page.global_position + page.size * Vector2(0.25 if left_hand else 0.75, 0.65)
 	_mouse(start, true)
 	_motion(start + Vector2(12, 0), Vector2(12, 0))
 	_expect(_viewport.gui_is_dragging(), "Inventory item did not start dragging")
@@ -93,7 +93,8 @@ func _connections(preview: Control, unit: BattleUnit) -> void:
 		var item: GridInventoryItemData = unit.equipment[slot]
 		var side := "left" if slot == &"left_hand" else "right" if slot == &"right_hand" else ""
 		var points := item.get_attachment_points(side, Vector2i(layer.texture.get_size()))
-		var socket := torso.to_global(Vector2(sockets[slot]) - torso.region_rect.position)
+		var socket_name: StringName = &"right_hand" if slot == &"left_hand" else &"left_hand" if slot == &"right_hand" else slot
+		var socket := torso.to_global(Vector2(sockets[socket_name]) - torso.region_rect.position)
 		var connection := layer.to_global(Vector2(points.body) - layer.region_rect.position)
 		_expect(connection.is_equal_approx(socket), "Equipment attachment does not match its torso socket: " + slot)
 
@@ -133,6 +134,7 @@ func _open_garage() -> void:
 	_viewport.add_child(_garage)
 	_grid = _garage.find_child("HeadsContainer", true, false)
 	_tabs = _garage.find_child("TabContainer2", true, false)
+	_tabs.current_tab = 0
 	await process_frame
 	await process_frame
 

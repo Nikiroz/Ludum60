@@ -31,7 +31,8 @@ func _connections(preview: Control) -> void:
 	for slot in [&"head", &"legs", &"left_hand", &"right_hand"]:
 		var layer: Sprite2D = preview.get_node(NodePath(slot))
 		if layer.visible:
-			_expect(_point(preview, slot, &"body").is_equal_approx(_point(preview, &"torso", slot)),
+			var socket: StringName = &"right_hand" if slot == &"left_hand" else &"left_hand" if slot == &"right_hand" else slot
+			_expect(_point(preview, slot, &"body").is_equal_approx(_point(preview, &"torso", socket)),
 				"Attachment mismatch: %s / %s" % [preview.unit.equipment[&"torso"].item_id, slot])
 
 
@@ -78,6 +79,18 @@ func _run() -> void:
 	_connections(preview)
 	var legs: Sprite2D = preview.get_node("legs")
 	_expect(is_equal_approx(legs.position.y + legs.region_rect.size.y, preview.size.y), "Feet lost the battle floor")
+	# Replacing asymmetric legs must keep the torso on the same standing axis.
+	var torso_x: float = preview.get_node("torso").position.x
+	var pivot_x := preview.pivot_offset.x
+	var original_legs: GridInventoryItemData = unit.equipment[&"legs"]
+	for item in parts:
+		if item.get_equipment_slot() != &"legs":
+			continue
+		unit.equip_item(item, &"legs")
+		_expect(is_equal_approx(preview.get_node("torso").position.x, torso_x), "Changing legs moved the torso sideways: " + item.item_id)
+		_expect(is_equal_approx(legs.position.y + legs.region_rect.size.y, preview.size.y), "Changing legs lost the battle floor: " + item.item_id)
+		_expect(is_equal_approx(preview.pivot_offset.x, pivot_x), "Changing legs moved the standing pivot: " + item.item_id)
+	unit.equip_item(original_legs, &"legs")
 	var positions: Dictionary = {}
 	for slot in SLOTS:
 		positions[slot] = preview.get_node(NodePath(slot)).position
