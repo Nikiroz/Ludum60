@@ -3,6 +3,7 @@ extends Control
 # Back-to-front order also determines which overlapping part receives a grab.
 const SLOTS: Array[StringName] = [&"right_hand", &"torso", &"legs", &"head", &"left_hand"]
 const DebugStats = preload("res://scripts/ui/robot_debug_stats.gd")
+const ItemEquipment = preload("res://scripts/item_equipment.gd")
 
 @export var align_to_bottom := false
 @export var show_shadow := false
@@ -71,7 +72,7 @@ func _refresh() -> void:
 			_images[slot] = layer.texture.get_image()
 			layer.region_rect = _images[slot].get_used_rect()
 			var hand_side := "left" if slot == &"left_hand" else "right" if slot == &"right_hand" else ""
-			_attachment_points[slot] = item.get_attachment_points(hand_side, _images[slot].get_size())
+			_attachment_points[slot] = ItemEquipment.get_attachment_points(item, hand_side, _images[slot].get_size())
 		else:
 			_images.erase(slot)
 			_attachment_points.erase(slot)

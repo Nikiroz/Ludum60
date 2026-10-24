@@ -1,6 +1,7 @@
 extends PanelContainer
 
 const THEME: Theme = preload("res://styles/item_tooltip.tres")
+const ItemEquipment = preload("res://scripts/item_equipment.gd")
 const STAT_LABELS := {
 	"health": "Health",
 	"attack_speed": "Attack speed",
@@ -41,7 +42,7 @@ func _draw() -> void:
 
 
 static func get_text(item: GridInventoryItemData) -> String:
-	if item == null or item.is_service_item:
+	if item == null or ItemEquipment.is_service_item(item):
 		return ""
 	var lines := PackedStringArray([item.display_name])
 	var bonuses := item.get_stat_bonuses()

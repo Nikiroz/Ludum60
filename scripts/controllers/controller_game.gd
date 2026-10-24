@@ -12,6 +12,7 @@ const BACKGROUND_MUSIC: AudioStreamOggVorbis = preload("res://sounds/MUSIC 1.ogg
 const BATTLE_MUSIC: AudioStreamOggVorbis = preload("res://sounds/MUSIC 2.ogg")
 const MAIN_MENU_MUSIC: AudioStreamOggVorbis = preload("res://sounds/MUSIC 3.ogg")
 const ItemCatalog = preload("res://scripts/item_catalog.gd")
+const ItemEquipment = preload("res://scripts/item_equipment.gd")
 
 var _background_music: AudioStreamPlayer
 var _battle_music: AudioStreamPlayer
@@ -116,16 +117,16 @@ func can_equip_item(unit: BattleUnit, item: GridInventoryItemData, left_hand: bo
 	return (
 		unit != null and units.has(unit)
 		and item != null and collected_items.has(item)
-		and item.get_equipment_slot(left_hand) != &""
+		and ItemEquipment.get_equipment_slot(item, left_hand) != &""
 	)
 
 func equip_item(unit: BattleUnit, item: GridInventoryItemData, left_hand: bool = true) -> bool:
 	if not can_equip_item(unit, item, left_hand):
 		return false
-	var previous := unit.equip_item(item, item.get_equipment_slot(left_hand))
+	var previous := unit.equip_item(item, ItemEquipment.get_equipment_slot(item, left_hand))
 	collected_items.erase(item)
 	inventory_positions.erase(item)
-	if previous != null and not previous.is_service_item:
+	if previous != null and not ItemEquipment.is_service_item(previous):
 		collected_items.append(previous)
 	inventory_changed.emit()
 	return true
@@ -148,7 +149,7 @@ func reset_progress() -> void:
 func can_unequip_item(unit: BattleUnit, slot: StringName, item: GridInventoryItemData) -> bool:
 	return (
 		unit != null and units.has(unit) and item != null
-		and unit.equipment.get(slot) == item and not item.is_service_item
+		and unit.equipment.get(slot) == item and not ItemEquipment.is_service_item(item)
 		and not collected_items.has(item)
 	)
 

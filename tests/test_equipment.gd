@@ -173,6 +173,9 @@ func _run() -> void:
 	for unit in _controller.units:
 		var torso_item: GridInventoryItemData = unit.equipment.get(&"torso")
 		var legs_item: GridInventoryItemData = unit.equipment.get(&"legs")
+		# Imported resources can omit the service flag on built-in base parts.
+		torso_item.is_service_item = false
+		legs_item.is_service_item = false
 		_expect(torso_item != null and torso_item.item_id == "base_basic", "Starting robot is missing its basic torso")
 		_expect(legs_item != null and legs_item.item_id == "leg_basic", "Starting robot is missing its basic legs")
 		_expect(unit.equipment.size() == 2, "Starting robot has unexpected equipment")

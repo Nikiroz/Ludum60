@@ -4,6 +4,7 @@ extends RefCounted
 signal equipment_changed
 
 const UNIT_NAMES: Array[String] = ["Wally", "Mike", "Cost"]
+const ItemEquipment = preload("res://scripts/item_equipment.gd")
 const BASIC_TORSO: GridInventoryItemData = preload("res://item_pack/items/base_basic.tres")
 const BASIC_LEGS: GridInventoryItemData = preload("res://item_pack/items/leg_basic.tres")
 
@@ -48,7 +49,7 @@ func _apply_item_bonuses(item: GridInventoryItemData, multiplier: float) -> void
 
 func unequip_item(slot: StringName) -> GridInventoryItemData:
 	var item: GridInventoryItemData = equipment.get(slot)
-	if item == null or item.is_service_item:
+	if item == null or ItemEquipment.is_service_item(item):
 		return null
 	match slot:
 		&"torso":

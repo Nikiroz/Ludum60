@@ -7,11 +7,7 @@ enum BodyPart { NONE, HEAD, BODY, HANDS, LEGS }
 
 @export var item_id: String = ""
 @export var display_name: String = ""
-## Built-in equipment: excluded from scrapyard loot and discarded when replaced.
-## Base parts remain service items even if an imported resource omits the flag.
-@export var is_service_item: bool = false:
-	get:
-		return is_service_item or item_id in ["base_basic", "leg_basic"]
+@export var is_service_item: bool = false
 ## String path keeps the exported asset independent of the editor's texture-import state.
 ## Example: res://item_pack/sprites/iron_sword.png
 @export_file("*.png") var sprite_path: String = ""
@@ -70,17 +66,16 @@ static func default_attachment_points(part: BodyPart, sprite_size: Vector2i = Ve
 ## For HANDS, pass "left" or "right" to select the corresponding PNG.
 ## Passing a known sprite size avoids loading its PNG to calculate the defaults.
 func get_attachment_points(hand_side: String = "", sprite_size: Vector2i = Vector2i.ZERO) -> Dictionary:
-	var part := _get_body_part()
 	if sprite_size == Vector2i.ZERO:
 		var path := unit_sprite_path
-		if part == BodyPart.HANDS:
+		if body_part == BodyPart.HANDS:
 			path = left_hand_sprite_path if hand_side == "left" else right_hand_sprite_path
 		if not path.is_empty() and FileAccess.file_exists(path):
 			var image := Image.load_from_file(ProjectSettings.globalize_path(path))
 			if image != null:
 				sprite_size = image.get_size()
-	var result := default_attachment_points(part, sprite_size)
-	if part == BodyPart.HANDS:
+	var result := default_attachment_points(body_part, sprite_size)
+	if body_part == BodyPart.HANDS:
 		if hand_side == "left":
 			return {"body": _pixel_attachment_point(left_hand_attachment_point, result.body, sprite_size)}
 		if hand_side == "right":
@@ -111,35 +106,6 @@ func get_stat_bonuses() -> Dictionary:
 		"damage": damage_bonus,
 		"crit_chance": crit_chance_bonus,
 	}
-
-
-func get_equipment_slot(left_hand: bool = true) -> StringName:
-	match _get_body_part():
-		BodyPart.HEAD:
-			return &"head"
-		BodyPart.BODY:
-			return &"torso"
-		BodyPart.HANDS:
-			return &"left_hand" if left_hand else &"right_hand"
-		BodyPart.LEGS:
-			return &"legs"
-	return &""
-
-
-func _get_body_part() -> BodyPart:
-	if body_part != BodyPart.NONE:
-		return body_part
-	# Older resources may not yet have a body part selected.
-	match item_id.get_slice("_", 0):
-		"head":
-			return BodyPart.HEAD
-		"base":
-			return BodyPart.BODY
-		"hand":
-			return BodyPart.HANDS
-		"leg":
-			return BodyPart.LEGS
-	return BodyPart.NONE
 
 
 func occupies(cell: Vector2i) -> bool:

@@ -1,6 +1,7 @@
 extends Control
 
 const ITEM_TOOLTIP = preload("res://scripts/ui/item_tooltip.gd")
+const ItemEquipment = preload("res://scripts/item_equipment.gd")
 
 var unit: BattleUnit
 var _show_drop := false
@@ -76,7 +77,7 @@ func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
 	_hand_split = clampf((left_socket.x + right_socket.x) / 2.0, 0.0, size.x)
 	_left_hand = (at_position.x < _hand_split) == _left_hand_on_left
 	_show_drop = ControllerGame.can_equip_item(unit, item, _left_hand)
-	_hand_item = item != null and item.get_equipment_slot() == &"left_hand"
+	_hand_item = ItemEquipment.get_equipment_slot(item) == &"left_hand"
 	_drop_highlight.queue_redraw()
 	return _show_drop
 

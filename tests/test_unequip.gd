@@ -1,6 +1,8 @@
 # Run with: Godot --headless --path . --script res://tests/test_unequip.gd
 extends SceneTree
 
+const ItemEquipment = preload("res://scripts/item_equipment.gd")
+
 var _failed := false
 var _checks := 0
 var _controller: Node
@@ -115,7 +117,9 @@ func _run() -> void:
 	await _open_garage()
 	for slot in [&"torso", &"legs"]:
 		var basic: GridInventoryItemData = _unit.equipment[slot]
+		basic.is_service_item = false
 		_expect(not _controller.can_unequip_item(_unit, slot, basic), "Basic equipment can be removed")
+		_expect(_unit.unequip_item(slot) == null, "Imported basic equipment can be removed directly")
 		await _drag_part(slot, _inventory_point(Vector2i(6, 2)), false)
 	_expect(_controller.collected_items.is_empty(), "Dragging basic equipment created inventory items")
 
@@ -150,7 +154,7 @@ func _run() -> void:
 		if slots[index] == &"torso" or slots[index] == &"legs":
 			var basic: GridInventoryItemData = _unit.equipment[slots[index]]
 			_expect(basic.item_id == ("base_basic" if slots[index] == &"torso" else "leg_basic"), "Unequipping did not restore the correct basic part")
-			_expect(basic.is_service_item and not _controller.collected_items.has(basic), "Restored basic part entered inventory")
+			_expect(ItemEquipment.is_service_item(basic) and not _controller.collected_items.has(basic), "Restored basic part entered inventory")
 		else:
 			_expect(not _unit.equipment.has(slots[index]), "Unequipped optional slot is still occupied")
 	_expect(_unit.equipment.size() == 2, "Unequipping all items did not leave exactly two basic parts")

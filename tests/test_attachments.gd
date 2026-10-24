@@ -2,6 +2,7 @@
 extends SceneTree
 
 const ItemCatalog = preload("res://scripts/item_catalog.gd")
+const ItemEquipment = preload("res://scripts/item_equipment.gd")
 const SLOTS: Array[StringName] = [&"legs", &"left_hand", &"right_hand", &"torso", &"head"]
 
 var _failed := false
@@ -23,7 +24,7 @@ func _point(preview: Control, slot: StringName, name: StringName) -> Vector2:
 	var layer: Sprite2D = preview.get_node(NodePath(slot))
 	var item: GridInventoryItemData = preview.unit.equipment[slot]
 	var side := "left" if slot == &"left_hand" else "right" if slot == &"right_hand" else ""
-	var points := item.get_attachment_points(side, Vector2i(layer.texture.get_size()))
+	var points := ItemEquipment.get_attachment_points(item, side, Vector2i(layer.texture.get_size()))
 	return layer.to_global(Vector2(points[name]) - layer.region_rect.position + layer.offset)
 
 
@@ -58,7 +59,7 @@ func _run() -> void:
 	var parts: Array[GridInventoryItemData] = []
 	for path in ItemCatalog.get_item_paths():
 		var item := load(path) as GridInventoryItemData
-		if item.get_equipment_slot() == &"torso":
+		if ItemEquipment.get_equipment_slot(item) == &"torso":
 			torsos.append(item)
 		else:
 			parts.append(item)
@@ -66,7 +67,7 @@ func _run() -> void:
 	for torso in torsos:
 		unit.equip_item(torso, &"torso")
 		for item in parts:
-			unit.equip_item(item, item.get_equipment_slot())
+			unit.equip_item(item, ItemEquipment.get_equipment_slot(item))
 			if item.body_part == GridInventoryItemData.BodyPart.HANDS:
 				unit.equip_item(item, &"right_hand")
 			_connections(preview)
@@ -84,7 +85,7 @@ func _run() -> void:
 	var pivot_x := preview.pivot_offset.x
 	var original_legs: GridInventoryItemData = unit.equipment[&"legs"]
 	for item in parts:
-		if item.get_equipment_slot() != &"legs":
+		if ItemEquipment.get_equipment_slot(item) != &"legs":
 			continue
 		unit.equip_item(item, &"legs")
 		_expect(is_equal_approx(preview.get_node("torso").position.x, torso_x), "Changing legs moved the torso sideways: " + item.item_id)
@@ -119,6 +120,7 @@ func _run() -> void:
 	legacy_torso.body_part = GridInventoryItemData.BodyPart.NONE
 	legacy_torso.attachment_points = {}
 	unit.equip_item(legacy_torso, &"torso")
+	_expect(legacy_torso.body_part == GridInventoryItemData.BodyPart.NONE, "Preview changed the source item's body part")
 	var legacy_head := unit.equipment[&"head"].duplicate(true) as GridInventoryItemData
 	legacy_head.attachment_points = {"body": Vector2(0.25, 0.75)}
 	unit.equip_item(legacy_head, &"head")
@@ -165,7 +167,9 @@ func _run() -> void:
 	replacement_legs.shadow_sprite_path = "res://item_pack/unit_sprites/shadow/missing.png"
 	unit.equip_item(replacement_legs, &"legs")
 	_expect(not shadow.visible and shadow.texture == null, "A missing shadow sprite left the previous shadow visible")
-	unit.equip_item(original_legs, &"legs")
+	var unshadowed_legs := original_legs.duplicate(true) as GridInventoryItemData
+	unshadowed_legs.shadow_sprite_path = ""
+	unit.equip_item(unshadowed_legs, &"legs")
 	_expect(not shadow.visible and shadow.texture == null, "Legs without a shadow sprite use a generic shadow")
 	var missing_head := legacy_head.duplicate(true) as GridInventoryItemData
 	missing_head.unit_sprite_path = ""

@@ -4,6 +4,7 @@ extends Control
 signal round_finished
 
 const ItemCatalog = preload("res://scripts/item_catalog.gd")
+const ItemEquipment = preload("res://scripts/item_equipment.gd")
 const ITEM_COUNT := 8
 
 @export var game_time: float = 30.0
@@ -101,7 +102,7 @@ func load_available_items() -> Array[GridInventoryItemData]:
 	for path in ItemCatalog.get_item_paths():
 		var item: GridInventoryItemData = load(path) as GridInventoryItemData
 
-		if item == null or item.is_service_item:
+		if item == null or ItemEquipment.is_service_item(item):
 			continue
 
 		if item.occupied_cells.is_empty():
