@@ -18,6 +18,14 @@ var _background_music: AudioStreamPlayer
 var _battle_music: AudioStreamPlayer
 var _main_menu_music: AudioStreamPlayer
 var _active_music: AudioStreamPlayer
+var gameplay_paused := false:
+	set(value):
+		gameplay_paused = value
+		_update_pause_state()
+var menu_paused := false:
+	set(value):
+		menu_paused = value
+		_update_pause_state()
 var debug_mode := false:
 	set(value):
 		value = value and not OS.has_feature("web")
@@ -65,12 +73,16 @@ func _create_music_player(player_name: String, stream: AudioStreamOggVorbis) -> 
 	return player
 
 func set_gameplay_scene(scene: Node) -> void:
+	gameplay_paused = false
 	var location := scene.scene_file_path.get_file().get_basename()
 	play_music(MusicMode.BATTLE if location == "battle" else MusicMode.BACKGROUND)
 	if location == "scrapyard":
 		scrapyard_available = false
 	elif location == "battle":
 		scene.connect("round_finished", _on_battle_round_finished)
+
+func _update_pause_state() -> void:
+	get_tree().paused = gameplay_paused or menu_paused
 
 func play_music(mode: MusicMode) -> void:
 	var active_player: AudioStreamPlayer
@@ -132,6 +144,7 @@ func equip_item(unit: BattleUnit, item: GridInventoryItemData, left_hand: bool =
 	return true
 
 func reset_progress() -> void:
+	gameplay_paused = false
 	units.clear()
 	var names: Array[String] = BattleUnit.UNIT_NAMES.duplicate()
 	names.shuffle()
@@ -185,6 +198,7 @@ func return_to_main_menu() -> void:
 	var main_menu := main.get_node_or_null("MenuLayer/MainMenu") as Control
 	if main_menu == null:
 		return
+	gameplay_paused = false
 	for panel_name in ["Settings", "Warning", "Credits", "VictoryDialog"]:
 		var panel := main.get_node_or_null("MenuLayer/" + panel_name) as Control
 		if panel != null:

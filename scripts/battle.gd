@@ -20,12 +20,15 @@ const DEBUG_CLICK_DAMAGE := 100.0
 @onready var _battle_timer: Timer = $BattleTimer
 @onready var _punch_players: Array[AudioStreamPlayer] = [$PunchSound1, $PunchSound2]
 @onready var _damage_numbers: Control = $DamageNumbers
+@onready var _speed_button: Button = $SpeedButton
+@onready var _pause_button: Button = $PauseButton
 
 # Массив позиций на поле. null означает пустой слот.
 var units: Array[BattleUnit] = []
 var boss: BossUnitData
 var state: State = State.PREPARATION
 var tick_count := 0
+var battle_speed := 1.0
 var battle_log: Array[String] = []
 var _attack_progress: Dictionary[BattleUnit, float] = {}
 var _initial_unit_stats: Dictionary[BattleUnit, Dictionary] = {}
@@ -219,15 +222,50 @@ func start_battle() -> bool:
 			_log_event("Слот %d: жизни %d, атак/с %.2f, урон %d, крит %.1f%%." % [
 				index + 1, unit.health, unit.attack_speed, unit.damage, unit.crit_chance * 100.0
 			])
-	_battle_timer.start(TICK_SECONDS)
+	_battle_timer.start(TICK_SECONDS / battle_speed)
 	battle_started.emit()
 	return true
+
+
+func _on_back_pressed() -> void:
+	if Transition.transitioning or ControllerGame.menu_paused:
+		return
+	_battle_timer.stop()
+	ControllerGame.gameplay_paused = false
+	_play_control_click()
+	Transition.change_scene("res://scenes/garage.tscn")
+
+
+func _on_speed_pressed() -> void:
+	if Transition.transitioning or ControllerGame.menu_paused:
+		return
+	var previous_speed := battle_speed
+	battle_speed = 3.0 if battle_speed == 1.0 else 1.0
+	if not _battle_timer.is_stopped():
+		# Preserve progress through the current tick when switching speeds.
+		_battle_timer.start(maxf(_battle_timer.time_left * previous_speed / battle_speed, 0.000001))
+	_speed_button.text = "3x" if battle_speed == 3.0 else "1x"
+	_speed_button.set_pressed_no_signal(battle_speed == 3.0)
+	_play_control_click()
+
+
+func _on_pause_pressed() -> void:
+	if Transition.transitioning or ControllerGame.menu_paused:
+		return
+	ControllerGame.gameplay_paused = not ControllerGame.gameplay_paused
+	_pause_button.text = "Resume" if ControllerGame.gameplay_paused else "Pause"
+	_pause_button.set_pressed_no_signal(ControllerGame.gameplay_paused)
+	_play_control_click()
+
+
+func _play_control_click() -> void:
+	ControllerGame.play_one_shot(preload("uid://21gf6qfxd331"))
 
 
 func _on_battle_timeout() -> void:
 	_on_battle_tick()
 	if state == State.FIGHTING:
-		_battle_timer.start(TICK_SECONDS)
+		_battle_timer.start(TICK_SECONDS / battle_speed)
 
 
 func _on_battle_tick() -> void:
@@ -370,6 +408,9 @@ func _set_target_slot(index: int) -> void:
 
 func _finish_battle(victory: bool) -> void:
 	_battle_timer.stop()
+	ControllerGame.gameplay_paused = false
+	_pause_button.text = "Pause"
+	_pause_button.set_pressed_no_signal(false)
 	state = State.VICTORY if victory else State.DEFEAT
 	_set_target_slot(-1)
 	if boss != null and boss.health <= 0.0:
@@ -412,6 +453,7 @@ func _log_event(message: String) -> void:
 
 
 func _exit_tree() -> void:
+	ControllerGame.gameplay_paused = false
 	if state == State.FIGHTING:
 		_log_event("Битва прервана: выход с экрана.")
 		_restore_unit_stats()

@@ -16,7 +16,7 @@ func _ready() -> void:
 
 
 func _update_pause_state() -> void:
-	get_tree().paused = settings.is_visible_in_tree() or warning.is_visible_in_tree() or victory_dialog.is_visible_in_tree()
+	ControllerGame.menu_paused = settings.is_visible_in_tree() or warning.is_visible_in_tree() or victory_dialog.is_visible_in_tree()
 	_update_main_menu_state()
 
 
@@ -31,4 +31,4 @@ func _update_main_menu_state() -> void:
 
 
 func _exit_tree() -> void:
-	get_tree().paused = false
+	ControllerGame.menu_paused = false
