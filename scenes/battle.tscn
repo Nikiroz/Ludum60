@@ -151,8 +151,9 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "Start battle"
 script = ExtResource("4_start_battle")
 
-[node name="BackButton" type="Button" parent="." unique_id=978319034]
+[node name="EscapeButton" type="Button" parent="." unique_id=978319034]
 process_mode = 3
+visible = false
 custom_minimum_size = Vector2(64, 24)
 layout_mode = 1
 offset_left = 4.0
@@ -165,7 +166,7 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_control_pressed")
 theme_override_styles/hover = SubResource("StyleBoxTexture_control")
 theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_control_pressed")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
-text = "Back"
+text = "Escape"
 
 [node name="SpeedButton" type="Button" parent="."]
 process_mode = 3
@@ -208,6 +209,6 @@ toggle_mode = true
 text = "Pause"
 
 [connection signal="pressed" from="StarBattleButton" to="StarBattleButton" method="_on_pressed"]
-[connection signal="pressed" from="BackButton" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="EscapeButton" to="." method="_on_escape_pressed"]
 [connection signal="pressed" from="SpeedButton" to="." method="_on_speed_pressed"]
 [connection signal="pressed" from="PauseButton" to="." method="_on_pause_pressed"]

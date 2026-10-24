@@ -20,6 +20,7 @@ const DEBUG_CLICK_DAMAGE := 100.0
 @onready var _battle_timer: Timer = $BattleTimer
 @onready var _punch_players: Array[AudioStreamPlayer] = [$PunchSound1, $PunchSound2]
 @onready var _damage_numbers: Control = $DamageNumbers
+@onready var _escape_button: Button = $EscapeButton
 @onready var _speed_button: Button = $SpeedButton
 @onready var _pause_button: Button = $PauseButton
 
@@ -223,13 +224,16 @@ func start_battle() -> bool:
 				index + 1, unit.health, unit.attack_speed, unit.damage, unit.crit_chance * 100.0
 			])
 	_battle_timer.start(TICK_SECONDS / battle_speed)
+	_escape_button.show()
 	battle_started.emit()
 	return true
 
 
-func _on_back_pressed() -> void:
-	if Transition.transitioning or ControllerGame.menu_paused:
+func _on_escape_pressed() -> void:
+	if Transition.transitioning or ControllerGame.menu_paused or not _escape_button.visible:
 		return
+	if state == State.FIGHTING:
+		_finish_battle(false, "отряд покинул поле боя")
 	_battle_timer.stop()
 	ControllerGame.gameplay_paused = false
 	_play_control_click()
@@ -406,7 +410,7 @@ func _set_target_slot(index: int) -> void:
 		(_unit_slots.get_child(slot_index) as DraggableSlot).set_targeted(slot_index == index)
 
 
-func _finish_battle(victory: bool) -> void:
+func _finish_battle(victory: bool, defeat_reason: String = "все юниты погибли") -> void:
 	_battle_timer.stop()
 	ControllerGame.gameplay_paused = false
 	_pause_button.text = "Pause"
@@ -415,7 +419,7 @@ func _finish_battle(victory: bool) -> void:
 	_set_target_slot(-1)
 	if boss != null and boss.health <= 0.0:
 		_rebuild_boss_slot()
-	_log_event("ПОБЕДА: босс повержен." if victory else "ПОРАЖЕНИЕ: все юниты погибли.")
+	_log_event("ПОБЕДА: босс повержен." if victory else "ПОРАЖЕНИЕ: %s." % defeat_reason)
 	if victory:
 		ControllerGame.play_one_shot(preload("uid://bnimep0a8hcls"))
 	else:
