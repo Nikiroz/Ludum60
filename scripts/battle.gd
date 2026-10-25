@@ -144,7 +144,7 @@ func _rebuild_boss_slot() -> void:
 		_boss_container.remove_child(slot)
 		slot.queue_free()
 
-	if boss == null or boss.health <= 0.0:
+	if boss == null:
 		return
 
 	var slot := UNIT_SLOT_SCENE.instantiate() as DraggableSlot

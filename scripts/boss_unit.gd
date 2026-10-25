@@ -6,8 +6,8 @@ const HEALTH_SPRITES: Array[Texture2D] = [
 	preload("res://sprites/boss/2.png"),
 	preload("res://sprites/boss/3.png"),
 	preload("res://sprites/boss/4.png"),
-	preload("res://sprites/boss/5.png"),
 ]
+const DEATH_SPRITE: Texture2D = preload("res://sprites/boss/5.png")
 
 var max_health: float = 100.0:
 	set(value):
@@ -29,6 +29,8 @@ func _init(p_sprite: Texture2D = null) -> void:
 
 
 func get_health_sprite() -> Texture2D:
+	if health <= 0.0:
+		return DEATH_SPRITE
 	var ratio := clampf(health / max_health, 0.0, 1.0) if max_health > 0.0 else 0.0
 	var state := clampi(HEALTH_SPRITES.size() - ceili(ratio * HEALTH_SPRITES.size()), 0, HEALTH_SPRITES.size() - 1)
 	return HEALTH_SPRITES[state]

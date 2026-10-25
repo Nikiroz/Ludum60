@@ -118,7 +118,7 @@ func _update_health() -> void:
 	if not is_instance_valid(health_bar):
 		return
 
-	health_bar.visible = unit != null and active_slot != self
+	health_bar.visible = unit != null and unit.health > 0.0 and active_slot != self
 	name_label.visible = unit != null and not unit is BossUnitData
 	name_label.text = unit.name if name_label.visible else ""
 	if unit == null:
