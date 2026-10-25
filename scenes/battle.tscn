@@ -109,15 +109,15 @@ theme_override_constants/margin_right = 50
 one_shot = true
 ignore_time_scale = true
 
-[node name="PunchSound1" type="AudioStreamPlayer" parent="."]
+[node name="PunchSound1" type="AudioStreamPlayer" parent="." unique_id=1709122039]
 process_mode = 3
 bus = &"Sfx"
 
-[node name="PunchSound2" type="AudioStreamPlayer" parent="."]
+[node name="PunchSound2" type="AudioStreamPlayer" parent="." unique_id=2128126961]
 process_mode = 3
 bus = &"Sfx"
 
-[node name="DamageNumbers" type="Control" parent="."]
+[node name="DamageNumbers" type="Control" parent="." unique_id=1361415269]
 z_index = 20
 layout_mode = 1
 anchors_preset = 15
@@ -168,10 +168,11 @@ theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_control_press
 theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "Escape"
 
-[node name="SpeedButton" type="Button" parent="."]
+[node name="SpeedButton" type="Button" parent="." unique_id=798827131]
 process_mode = 3
 custom_minimum_size = Vector2(42, 24)
 layout_mode = 1
+anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -108.0
@@ -188,10 +189,11 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 toggle_mode = true
 text = "1x"
 
-[node name="PauseButton" type="Button" parent="."]
+[node name="PauseButton" type="Button" parent="." unique_id=1154171639]
 process_mode = 3
 custom_minimum_size = Vector2(58, 24)
 layout_mode = 1
+anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -62.0

@@ -12,7 +12,7 @@ const ITEM_COUNT := 8
 @onready var timer: Timer = $VBoxContainer/Control2/Timer/Timer
 @onready var timer_label: Label = $VBoxContainer/Control2/Timer
 @onready var timer_slider: HSlider = $VBoxContainer/Control2/Control/MarginContainer/HSlider
-@onready var field: GridContainer = $VBoxContainer/Control/Field
+@onready var field: GridContainer = $VBoxContainer/GameField/Field
 @onready var items_grid: GridContainer = $VBoxContainer/BottomPanel/Items
 
 class SpawnPlan:
