@@ -8,6 +8,7 @@ signal debug_mode_changed
 enum MusicMode { MAIN_MENU, BACKGROUND, BATTLE }
 
 const CURSOR_NORMAL: Texture2D = preload("res://sprites/cursors/cursor.png")
+const CURSOR_WRITE: Texture2D = preload("res://sprites/cursors/write.png")
 const BACKGROUND_MUSIC: AudioStreamOggVorbis = preload("res://sounds/MUSIC 1.ogg")
 const BATTLE_MUSIC: AudioStreamOggVorbis = preload("res://sounds/MUSIC 2.ogg")
 const MAIN_MENU_MUSIC: AudioStreamOggVorbis = preload("res://sounds/MUSIC 3.ogg")
@@ -191,6 +192,8 @@ func _refresh_mouse_cursor() -> void:
 	# Clear the cached image so macOS reapplies it even when the shape is unchanged.
 	Input.set_custom_mouse_cursor(null, Input.CURSOR_ARROW)
 	Input.set_custom_mouse_cursor(CURSOR_NORMAL, Input.CURSOR_ARROW)
+	Input.set_custom_mouse_cursor(null, Input.CURSOR_IBEAM)
+	Input.set_custom_mouse_cursor(CURSOR_WRITE, Input.CURSOR_IBEAM)
 
 func show_victory_dialog() -> void:
 	var main := get_tree().current_scene
