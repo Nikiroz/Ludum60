@@ -54,8 +54,10 @@ func _ready() -> void:
 	_battle_music = _create_music_player("BattleMusic", BATTLE_MUSIC)
 	_main_menu_music = _create_music_player("MainMenuMusic", MAIN_MENU_MUSIC)
 	play_music(MusicMode.MAIN_MENU if isMainMenu else MusicMode.BACKGROUND)
-	Input.set_custom_mouse_cursor(CURSOR_NORMAL, Input.CURSOR_ARROW)
 	set_drag_cursor(false)
+	get_window().focus_entered.connect(_refresh_mouse_cursor, CONNECT_DEFERRED)
+	get_window().mouse_entered.connect(_refresh_mouse_cursor, CONNECT_DEFERRED)
+	_refresh_mouse_cursor.call_deferred()
 	call_deferred("_update_quit_to_main_menu_visibility")
 
 func _exit_tree() -> void:
@@ -182,6 +184,13 @@ func _on_battle_round_finished() -> void:
 
 func set_drag_cursor(dragging: bool) -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN if dragging else Input.MOUSE_MODE_VISIBLE
+	if not dragging:
+		_refresh_mouse_cursor()
+
+func _refresh_mouse_cursor() -> void:
+	# Clear the cached image so macOS reapplies it even when the shape is unchanged.
+	Input.set_custom_mouse_cursor(null, Input.CURSOR_ARROW)
+	Input.set_custom_mouse_cursor(CURSOR_NORMAL, Input.CURSOR_ARROW)
 
 func show_victory_dialog() -> void:
 	var main := get_tree().current_scene

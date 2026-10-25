@@ -1,6 +1,7 @@
 extends Control
 
 const ITEM_TOOLTIP = preload("res://scripts/ui/item_tooltip.gd")
+const ITEM_DRAG_PREVIEW = preload("res://scripts/ui/item_drag_preview.gd")
 const ItemEquipment = preload("res://scripts/item_equipment.gd")
 
 var unit: BattleUnit
@@ -39,7 +40,7 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 	if not ControllerGame.can_unequip_item(unit, slot, item):
 		return null
 	var grab_offset := item.occupied_cells[0] if not item.occupied_cells.is_empty() else Vector2i.ZERO
-	var preview := Control.new()
+	var preview := ITEM_DRAG_PREVIEW.new()
 	preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var icon := TextureRect.new()
 	icon.texture = item.get_texture()

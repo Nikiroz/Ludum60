@@ -31,7 +31,6 @@ window/size/window_height_override=720
 window/stretch/mode="canvas_items"
 window/stretch/scale_mode="integer"
 window/dpi/allow_hidpi=false
-mouse_cursor/custom_image="uid://blipaivgjbt0y"
 mouse_cursor/tooltip_position_offset=Vector2(4, 6)
 
 [editor_plugins]

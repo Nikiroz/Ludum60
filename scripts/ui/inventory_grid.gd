@@ -3,6 +3,7 @@ extends Control
 const CELL_TEXTURE: Texture2D = preload("res://sprites/ui/cell_bg.png")
 const CELL_SIZE := 12
 const ITEM_TOOLTIP = preload("res://scripts/ui/item_tooltip.gd")
+const ITEM_DRAG_PREVIEW = preload("res://scripts/ui/item_drag_preview.gd")
 
 @export_range(3, 30) var columns := 12
 @export_range(1, 100) var initial_rows := 14
@@ -98,7 +99,7 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 		return null
 	_dragged_item = item
 	var origin: Vector2i = ControllerGame.inventory_positions[item]
-	var preview := Control.new()
+	var preview := ITEM_DRAG_PREVIEW.new()
 	preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var icon := TextureRect.new()
 	icon.texture = _textures.get(item.sprite_path)
