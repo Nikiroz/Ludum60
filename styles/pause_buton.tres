@@ -1,0 +1,24 @@
+[gd_resource type="Theme" format=3 uid="uid://ejwomueducc"]
+
+[ext_resource type="Texture2D" uid="uid://c3aqr0yj1leyl" path="res://sprites/ui/button/ui_pause.png" id="1_wxqhb"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jksds"]
+texture = ExtResource("1_wxqhb")
+region_rect = Rect2(0, 0, 17, 12)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_uo7se"]
+texture = ExtResource("1_wxqhb")
+region_rect = Rect2(0, 12, 17, 12)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_d5nmk"]
+texture = ExtResource("1_wxqhb")
+region_rect = Rect2(0, 0, 17, 12)
+
+[resource]
+Button/styles/focus = SubResource("StyleBoxEmpty_focus")
+Button/styles/hover = SubResource("StyleBoxTexture_jksds")
+Button/styles/hover_pressed = SubResource("StyleBoxTexture_uo7se")
+Button/styles/normal = SubResource("StyleBoxTexture_d5nmk")
+Button/styles/pressed = SubResource("StyleBoxTexture_uo7se")

@@ -5,52 +5,13 @@
 [ext_resource type="Texture2D" uid="uid://dy8k0y5o3ywww" path="res://sprites/bg/battle.png" id="2_th188"]
 [ext_resource type="Texture2D" uid="uid://ogfjp4m5sauh" path="res://sprites/mocup/screen366_ui.png" id="3_6vh42"]
 [ext_resource type="AudioStream" uid="uid://bi57eh03ditk3" path="res://sounds/SFX 1/PUNCH-002.ogg" id="3_22uqi"]
-[ext_resource type="Theme" uid="uid://dusbxqn3cho4s" path="res://styles/buttons.tres" id="3_p1qf1"]
 [ext_resource type="AudioStream" uid="uid://gn43yqd7gq2i" path="res://sounds/SFX 1/PUNCH-003.ogg" id="4_6ni85"]
 [ext_resource type="Script" uid="uid://cha3ig1kvoa5b" path="res://scripts/ui/ui_start_battle_button.gd" id="4_start_battle"]
 [ext_resource type="AudioStream" uid="uid://bfdn22h3kgwow" path="res://sounds/SFX 1/PUNCH-004.ogg" id="5_vceff"]
-[ext_resource type="Texture2D" uid="uid://btrmn3o641snb" path="res://sprites/ui/button/ui_start.png" id="6_start"]
-[ext_resource type="Texture2D" uid="uid://dokq4gih70y6b" path="res://sprites/ui/button/ui_star_presst.png" id="7_start_pressed"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_start"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-texture = ExtResource("6_start")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_start_pressed"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-texture = ExtResource("7_start_pressed")
-expand_margin_top = -1.0
-expand_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_control"]
-content_margin_left = 6.0
-content_margin_top = 4.0
-content_margin_right = 6.0
-content_margin_bottom = 4.0
-texture = ExtResource("6_start")
-texture_margin_left = 8.0
-texture_margin_top = 8.0
-texture_margin_right = 8.0
-texture_margin_bottom = 8.0
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_control_pressed"]
-content_margin_left = 6.0
-content_margin_top = 4.0
-content_margin_right = 6.0
-content_margin_bottom = 4.0
-texture = ExtResource("7_start_pressed")
-texture_margin_left = 8.0
-texture_margin_top = 8.0
-texture_margin_right = 8.0
-texture_margin_bottom = 8.0
+[ext_resource type="Theme" uid="uid://bbxdjvga3re4a" path="res://styles/start_button.tres" id="8_03edq"]
+[ext_resource type="Theme" uid="uid://bvyi4w2ixpdvx" path="res://styles/escape_button.tres" id="10_22uqi"]
+[ext_resource type="Theme" uid="uid://dyc6fvtth6cw7" path="res://styles/speed_buton.tres" id="11_6ni85"]
+[ext_resource type="Theme" uid="uid://ejwomueducc" path="res://styles/pause_buton.tres" id="12_03edq"]
 
 [node name="Battle" type="Control" unique_id=342407584]
 layout_mode = 3
@@ -128,87 +89,67 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="StarBattleButton" type="Button" parent="." unique_id=1702076129]
-custom_minimum_size = Vector2(106, 32)
+custom_minimum_size = Vector2(55, 22)
+custom_maximum_size = Vector2(55, 22)
 layout_mode = 1
-anchors_preset = 7
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -59.0
-offset_top = -180.0
-offset_right = 47.0
-offset_bottom = -148.0
+offset_left = -27.0
+offset_top = 4.0
+offset_right = 28.0
+offset_bottom = 26.0
 grow_horizontal = 2
-grow_vertical = 0
-theme = ExtResource("3_p1qf1")
-theme_override_styles/normal = SubResource("StyleBoxTexture_start")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_start_pressed")
-theme_override_styles/hover = SubResource("StyleBoxTexture_start")
-theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_start_pressed")
-theme_override_styles/disabled = SubResource("StyleBoxTexture_start")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
-text = "Start battle"
+theme = ExtResource("8_03edq")
 script = ExtResource("4_start_battle")
 
 [node name="EscapeButton" type="Button" parent="." unique_id=978319034]
 process_mode = 3
 visible = false
-custom_minimum_size = Vector2(64, 24)
+custom_minimum_size = Vector2(30, 22)
+custom_maximum_size = Vector2(30, 22)
 layout_mode = 1
-offset_left = 4.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -58.0
 offset_top = 4.0
-offset_right = 68.0
-offset_bottom = 28.0
-theme = ExtResource("3_p1qf1")
-theme_override_styles/normal = SubResource("StyleBoxTexture_control")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_control_pressed")
-theme_override_styles/hover = SubResource("StyleBoxTexture_control")
-theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_control_pressed")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
-text = "Escape"
+offset_right = -28.0
+offset_bottom = 26.0
+grow_horizontal = 2
+theme = ExtResource("10_22uqi")
 
 [node name="SpeedButton" type="Button" parent="." unique_id=798827131]
 process_mode = 3
-custom_minimum_size = Vector2(42, 24)
+custom_minimum_size = Vector2(17, 12)
+custom_maximum_size = Vector2(17, 12)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -108.0
+offset_left = -131.0
 offset_top = 4.0
-offset_right = -66.0
-offset_bottom = 28.0
+offset_right = -114.0
+offset_bottom = 16.0
 grow_horizontal = 0
-theme = ExtResource("3_p1qf1")
-theme_override_styles/normal = SubResource("StyleBoxTexture_control")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_control_pressed")
-theme_override_styles/hover = SubResource("StyleBoxTexture_control")
-theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_control_pressed")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+theme = ExtResource("11_6ni85")
 toggle_mode = true
-text = "1x"
 
 [node name="PauseButton" type="Button" parent="." unique_id=1154171639]
 process_mode = 3
-custom_minimum_size = Vector2(58, 24)
+custom_minimum_size = Vector2(17, 12)
+custom_maximum_size = Vector2(17, 12)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -62.0
-offset_top = 4.0
-offset_right = -4.0
-offset_bottom = 28.0
+offset_left = -131.0
+offset_top = 17.0
+offset_right = -114.0
+offset_bottom = 29.0
 grow_horizontal = 0
-theme = ExtResource("3_p1qf1")
-theme_override_styles/normal = SubResource("StyleBoxTexture_control")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_control_pressed")
-theme_override_styles/hover = SubResource("StyleBoxTexture_control")
-theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_control_pressed")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+theme = ExtResource("12_03edq")
 toggle_mode = true
-text = "Pause"
 
 [connection signal="pressed" from="StarBattleButton" to="StarBattleButton" method="_on_pressed"]
 [connection signal="pressed" from="EscapeButton" to="." method="_on_escape_pressed"]

@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://vjge3cefphbj" path="res://scripts/robot_sprite.gd" id="1_slot"]
 [ext_resource type="FontFile" uid="uid://yd1a2v72shn1" path="res://font/ChixaDemibold.ttf" id="2_gq5a8"]
-[ext_resource type="Texture2D" uid="uid://bh7hhgoglqxne" path="res://sprites/ui/fist.png" id="3_fist"]
 [ext_resource type="FontFile" uid="uid://cqqx14m4tqnh0" path="res://font/pixelNumbers-Regular.ttf" id="4_4ybpa"]
 [ext_resource type="Script" uid="uid://c6v46ddvqbuly" path="res://scripts/ui/robot_equipment_preview.gd" id="4_equipment_preview"]
 [ext_resource type="Texture2D" uid="uid://bse8fani6dmqc" path="res://sprites/boss/boss_shadow.png" id="5_boss_shadow"]
+[ext_resource type="Texture2D" uid="uid://vpuxsixdqoo7" path="res://sprites/ui/fight_target_icon.png" id="6_4ybpa"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_background"]
 bg_color = Color(0.25, 0, 0, 1)
@@ -179,4 +179,5 @@ offset_bottom = 24.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
-texture = ExtResource("3_fist")
+texture = ExtResource("6_4ybpa")
+stretch_mode = 2

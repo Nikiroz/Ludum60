@@ -248,7 +248,6 @@ func _on_speed_pressed() -> void:
 	if not _battle_timer.is_stopped():
 		# Preserve progress through the current tick when switching speeds.
 		_battle_timer.start(maxf(_battle_timer.time_left * previous_speed / battle_speed, 0.000001))
-	_speed_button.text = "3x" if battle_speed == 3.0 else "1x"
 	_speed_button.set_pressed_no_signal(battle_speed == 3.0)
 	_play_control_click()
 
@@ -257,7 +256,6 @@ func _on_pause_pressed() -> void:
 	if Transition.transitioning or ControllerGame.menu_paused:
 		return
 	ControllerGame.gameplay_paused = not ControllerGame.gameplay_paused
-	_pause_button.text = "Resume" if ControllerGame.gameplay_paused else "Pause"
 	_pause_button.set_pressed_no_signal(ControllerGame.gameplay_paused)
 	_play_control_click()
 
@@ -413,7 +411,6 @@ func _set_target_slot(index: int) -> void:
 func _finish_battle(victory: bool, defeat_reason: String = "все юниты погибли") -> void:
 	_battle_timer.stop()
 	ControllerGame.gameplay_paused = false
-	_pause_button.text = "Pause"
 	_pause_button.set_pressed_no_signal(false)
 	state = State.VICTORY if victory else State.DEFEAT
 	_set_target_slot(-1)

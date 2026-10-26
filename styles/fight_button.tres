@@ -1,0 +1,28 @@
+[gd_resource type="Theme" format=3 uid="uid://c4cuifqvntw8s"]
+
+[ext_resource type="Texture2D" uid="uid://byx84v7n5opin" path="res://sprites/ui/button/ui_fight.png" id="1_ebfnv"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lc44a"]
+texture = ExtResource("1_ebfnv")
+region_rect = Rect2(0, 0, 85, 25)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_k4bc3"]
+texture = ExtResource("1_ebfnv")
+region_rect = Rect2(0, 0, 85, 25)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_t0nxo"]
+texture = ExtResource("1_ebfnv")
+region_rect = Rect2(0, 0, 85, 25)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_reu7k"]
+load_path = "res://.godot/imported/ui_fight.png-05d6ce569afc81c37d45f1b01b12f83e.ctex"
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ce5iv"]
+texture = SubResource("CompressedTexture2D_reu7k")
+region_rect = Rect2(0, 25, 85, 25)
+
+[resource]
+Button/styles/focus = SubResource("StyleBoxTexture_lc44a")
+Button/styles/hover = SubResource("StyleBoxTexture_k4bc3")
+Button/styles/normal = SubResource("StyleBoxTexture_t0nxo")
+Button/styles/pressed = SubResource("StyleBoxTexture_ce5iv")

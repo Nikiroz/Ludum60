@@ -175,6 +175,6 @@ func _draw() -> void:
 		var tint := Color(1, 1, 1, 0.25 if item == _dragged_item else 1.0)
 		draw_texture_rect(texture, Rect2(Vector2(origin) * CELL_SIZE, Vector2(item.grid_size) * CELL_SIZE), false, tint)
 	if _show_drop and _drop_item != null:
-		var color := Color(0.3, 1.0, 0.4, 0.45) if _drop_valid else Color(1.0, 0.2, 0.2, 0.45)
+		var color := Color(Color("#6faf86"), 0.25) if _drop_valid else Color(1.0, 0.2, 0.2, 0.45)
 		for offset in _drop_item.occupied_cells:
 			draw_rect(Rect2(Vector2(_drop_origin + offset) * CELL_SIZE, Vector2.ONE * CELL_SIZE), color)

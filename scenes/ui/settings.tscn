@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bppj7wsn36efo"]
 
 [ext_resource type="Texture2D" uid="uid://darrvwewc4iba" path="res://sprites/ui/button/ui_button.png" id="1_gis3k"]
+[ext_resource type="Texture2D" uid="uid://daef22ilp4l0r" path="res://sprites/ui/garage/left_border.png" id="1_mn4ci"]
 [ext_resource type="Texture2D" uid="uid://drn1dki0be0ig" path="res://sprites/ui/button/ui_button_press.png" id="2_83j8s"]
 [ext_resource type="Texture2D" uid="uid://dgajcsops4e4v" path="res://sprites/ui/button/ui_blank.png" id="3_gjs24"]
 [ext_resource type="Texture2D" uid="uid://nxod2i3veqmn" path="res://sprites/ui/button/ui_button_checkbox_off.png" id="4_am25x"]
@@ -10,8 +11,13 @@
 [ext_resource type="Script" uid="uid://dexwaw3i4exg1" path="res://scripts/ui/ui_show_button.gd" id="9_am25x"]
 [ext_resource type="Script" uid="uid://bflre3rbyhirp" path="res://scripts/ui/ui_volume_slider.gd" id="10_volume"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rtw2f"]
-bg_color = Color(0, 0, 0, 0.8627451)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mn4ci"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_detail = 5
 
 [sub_resource type="Theme" id="Theme_oa1go"]
 Button/font_sizes/font_size = 10
@@ -127,69 +133,90 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="Panel" parent="." unique_id=1988362029]
+[node name="Panel" type="Panel" parent="." unique_id=147734382]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_rtw2f")
+theme_override_styles/panel = SubResource("StyleBoxFlat_mn4ci")
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="Panel" unique_id=974971200]
-custom_maximum_size = Vector2(180, -1)
+[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=900159622]
+custom_maximum_size = Vector2(140, 90)
 layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
+anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -40.0
-offset_bottom = 40.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("1_mn4ci")
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 5
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="NinePatchRect" unique_id=142817359]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="NinePatchRect/MarginContainer" unique_id=974971200]
+custom_maximum_size = Vector2(180, -1)
+layout_mode = 2
+size_flags_vertical = 4
 theme = SubResource("Theme_oa1go")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer2" unique_id=17319768]
+[node name="HBoxContainer" type="HBoxContainer" parent="NinePatchRect/MarginContainer/VBoxContainer2" unique_id=17319768]
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/VBoxContainer2/HBoxContainer" unique_id=1589731084]
+[node name="Label" type="Label" parent="NinePatchRect/MarginContainer/VBoxContainer2/HBoxContainer" unique_id=1589731084]
 custom_maximum_size = Vector2(88, -1)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Language"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer2/HBoxContainer" unique_id=1257202532]
+[node name="HBoxContainer" type="HBoxContainer" parent="NinePatchRect/MarginContainer/VBoxContainer2/HBoxContainer" unique_id=1257202532]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="TextureButton" type="TextureButton" parent="Panel/VBoxContainer2/HBoxContainer/HBoxContainer" unique_id=1177610578]
+[node name="TextureButton" type="TextureButton" parent="NinePatchRect/MarginContainer/VBoxContainer2/HBoxContainer/HBoxContainer" unique_id=1177610578]
 layout_mode = 2
 texture_normal = ExtResource("1_gis3k")
 texture_pressed = ExtResource("2_83j8s")
 
-[node name="Label" type="Label" parent="Panel/VBoxContainer2/HBoxContainer/HBoxContainer" unique_id=35792046]
+[node name="Label" type="Label" parent="NinePatchRect/MarginContainer/VBoxContainer2/HBoxContainer/HBoxContainer" unique_id=35792046]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "English"
 horizontal_alignment = 1
 
-[node name="TextureButton2" type="TextureButton" parent="Panel/VBoxContainer2/HBoxContainer/HBoxContainer" unique_id=1548623514]
+[node name="TextureButton2" type="TextureButton" parent="NinePatchRect/MarginContainer/VBoxContainer2/HBoxContainer/HBoxContainer" unique_id=1548623514]
 layout_mode = 2
 texture_normal = ExtResource("1_gis3k")
 texture_pressed = ExtResource("2_83j8s")
 flip_h = true
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/VBoxContainer2" unique_id=2062018290]
+[node name="HBoxContainer2" type="HBoxContainer" parent="NinePatchRect/MarginContainer/VBoxContainer2" unique_id=2062018290]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="Panel/VBoxContainer2/HBoxContainer2" unique_id=837955712]
+[node name="Label2" type="Label" parent="NinePatchRect/MarginContainer/VBoxContainer2/HBoxContainer2" unique_id=837955712]
 custom_maximum_size = Vector2(88, -1)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Sound"
 
-[node name="HScrollBar" type="HScrollBar" parent="Panel/VBoxContainer2/HBoxContainer2" unique_id=91213034]
+[node name="HScrollBar" type="HScrollBar" parent="NinePatchRect/MarginContainer/VBoxContainer2/HBoxContainer2" unique_id=91213034]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -201,16 +228,16 @@ value = 50.0
 script = ExtResource("10_volume")
 bus_name = &"Sfx"
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Panel/VBoxContainer2" unique_id=608327632]
+[node name="HBoxContainer3" type="HBoxContainer" parent="NinePatchRect/MarginContainer/VBoxContainer2" unique_id=608327632]
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="Panel/VBoxContainer2/HBoxContainer3" unique_id=1718363947]
+[node name="Label3" type="Label" parent="NinePatchRect/MarginContainer/VBoxContainer2/HBoxContainer3" unique_id=1718363947]
 custom_maximum_size = Vector2(88, -1)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Music"
 
-[node name="HScrollBar3" type="HScrollBar" parent="Panel/VBoxContainer2/HBoxContainer3" unique_id=88868988]
+[node name="HScrollBar3" type="HScrollBar" parent="NinePatchRect/MarginContainer/VBoxContainer2/HBoxContainer3" unique_id=88868988]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -222,16 +249,16 @@ value = 50.0
 script = ExtResource("10_volume")
 bus_name = &"Music"
 
-[node name="HBoxContainer4" type="HBoxContainer" parent="Panel/VBoxContainer2" unique_id=34909603]
+[node name="HBoxContainer4" type="HBoxContainer" parent="NinePatchRect/MarginContainer/VBoxContainer2" unique_id=34909603]
 layout_mode = 2
 
-[node name="Label4" type="Label" parent="Panel/VBoxContainer2/HBoxContainer4" unique_id=945880070]
+[node name="Label4" type="Label" parent="NinePatchRect/MarginContainer/VBoxContainer2/HBoxContainer4" unique_id=945880070]
 custom_maximum_size = Vector2(88, -1)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Fullscreen"
 
-[node name="CheckBox" type="CheckBox" parent="Panel/VBoxContainer2/HBoxContainer4" unique_id=1023015008]
+[node name="CheckBox" type="CheckBox" parent="NinePatchRect/MarginContainer/VBoxContainer2/HBoxContainer4" unique_id=1023015008]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_styles/normal = SubResource("StyleBoxEmpty_lgwnu")
@@ -250,11 +277,16 @@ theme_override_icons/radio_checked_disabled = ExtResource("4_am25x")
 theme_override_icons/radio_unchecked_disabled = ExtResource("5_4ppmf")
 script = ExtResource("6_83j8s")
 
-[node name="HBoxContainer5" type="HBoxContainer" parent="Panel/VBoxContainer2" unique_id=1815162401]
+[node name="HBoxContainer5" type="HBoxContainer" parent="NinePatchRect/MarginContainer/VBoxContainer2" unique_id=1815162401]
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 2
 
-[node name="QuitToMainMenu" type="Button" parent="Panel/VBoxContainer2" unique_id=1163570837]
+[node name="HBoxContainer6" type="HBoxContainer" parent="NinePatchRect/MarginContainer/VBoxContainer2" unique_id=7358826]
+layout_mode = 2
+alignment = 1
+
+[node name="QuitToMainMenu" type="Button" parent="NinePatchRect/MarginContainer/VBoxContainer2/HBoxContainer6" unique_id=1163570837]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_horizontal = 4
@@ -268,7 +300,7 @@ text = "Quit to Main Menu"
 script = ExtResource("9_am25x")
 nodeName = "Warning"
 
-[node name="Button2" type="Button" parent="Panel/VBoxContainer2" unique_id=1391457789]
+[node name="Button2" type="Button" parent="NinePatchRect/MarginContainer/VBoxContainer2/HBoxContainer6" unique_id=1391457789]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -280,7 +312,7 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_5pajh")
 text = "Back"
 script = ExtResource("6_uhhto")
 
-[connection signal="pressed" from="Panel/VBoxContainer2/HBoxContainer4/CheckBox" to="Panel/VBoxContainer2/HBoxContainer4/CheckBox" method="_on_pressed"]
-[connection signal="toggled" from="Panel/VBoxContainer2/HBoxContainer4/CheckBox" to="Panel/VBoxContainer2/HBoxContainer4/CheckBox" method="_on_toggled"]
-[connection signal="pressed" from="Panel/VBoxContainer2/QuitToMainMenu" to="Panel/VBoxContainer2/QuitToMainMenu" method="_on_pressed"]
-[connection signal="pressed" from="Panel/VBoxContainer2/Button2" to="Panel/VBoxContainer2/Button2" method="_on_pressed"]
+[connection signal="pressed" from="NinePatchRect/MarginContainer/VBoxContainer2/HBoxContainer4/CheckBox" to="NinePatchRect/MarginContainer/VBoxContainer2/HBoxContainer4/CheckBox" method="_on_pressed"]
+[connection signal="toggled" from="NinePatchRect/MarginContainer/VBoxContainer2/HBoxContainer4/CheckBox" to="NinePatchRect/MarginContainer/VBoxContainer2/HBoxContainer4/CheckBox" method="_on_toggled"]
+[connection signal="pressed" from="NinePatchRect/MarginContainer/VBoxContainer2/HBoxContainer6/QuitToMainMenu" to="NinePatchRect/MarginContainer/VBoxContainer2/HBoxContainer6/QuitToMainMenu" method="_on_pressed"]
+[connection signal="pressed" from="NinePatchRect/MarginContainer/VBoxContainer2/HBoxContainer6/Button2" to="NinePatchRect/MarginContainer/VBoxContainer2/HBoxContainer6/Button2" method="_on_pressed"]

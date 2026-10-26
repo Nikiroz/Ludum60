@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://3fgaopy5tnc8"
-path="res://.godot/imported/ui_scrap_press.png-22a76641b88952d387cfc49d333fb53d.ctex"
+uid="uid://brso4ehpmdtau"
+path="res://.godot/imported/blink.png-4b4a82b5700028ecef11e8f724e43eae.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/ui/button/ui_scrap_press.png"
-dest_files=["res://.godot/imported/ui_scrap_press.png-22a76641b88952d387cfc49d333fb53d.ctex"]
+source_file="res://sprites/ui/main_menu/blink.png"
+dest_files=["res://.godot/imported/blink.png-4b4a82b5700028ecef11e8f724e43eae.ctex"]
 
 [params]
 

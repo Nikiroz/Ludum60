@@ -1,0 +1,36 @@
+[gd_resource type="Theme" format=3 uid="uid://bbxdjvga3re4a"]
+
+[ext_resource type="Texture2D" uid="uid://btrmn3o641snb" path="res://sprites/ui/button/ui_start.png" id="1_qiyab"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_wpmab"]
+load_path = "res://.godot/imported/ui_start.png-fac21fa188f0ecc2663d1ce065c63ca1.ctex"
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_touyc"]
+texture = SubResource("CompressedTexture2D_wpmab")
+region_rect = Rect2(0, 44, 55, 22)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bnto6"]
+texture = ExtResource("1_qiyab")
+region_rect = Rect2(0, 0, 55, 22)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kt7dh"]
+texture = ExtResource("1_qiyab")
+region_rect = Rect2(0, 0, 55, 22)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_cki35"]
+texture = ExtResource("1_qiyab")
+region_rect = Rect2(0, 0, 55, 22)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_153hq"]
+load_path = "res://.godot/imported/ui_start.png-fac21fa188f0ecc2663d1ce065c63ca1.ctex"
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dvame"]
+texture = SubResource("CompressedTexture2D_153hq")
+region_rect = Rect2(0, 22, 55, 22)
+
+[resource]
+Button/styles/disabled = SubResource("StyleBoxTexture_touyc")
+Button/styles/focus = SubResource("StyleBoxTexture_bnto6")
+Button/styles/hover = SubResource("StyleBoxTexture_kt7dh")
+Button/styles/normal = SubResource("StyleBoxTexture_cki35")
+Button/styles/pressed = SubResource("StyleBoxTexture_dvame")

@@ -64,6 +64,8 @@ func hit() -> void:
 	clicks_left -= 1
 
 	var opacity := float(clicks_left) / float(clicks_required)
+	if clicks_required == 2 and clicks_left == 1:
+		opacity = 0.55
 	if is_inside_tree():
 		_emit_debris()
 		_shake_cell()

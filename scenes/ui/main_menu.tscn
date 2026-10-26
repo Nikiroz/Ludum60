@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://dexwaw3i4exg1" path="res://scripts/ui/ui_show_button.gd" id="6_rcqid"]
 [ext_resource type="Theme" uid="uid://kxx26dlcfs5b" path="res://styles/main_buttons.tres" id="6_rtw2f"]
 [ext_resource type="Script" uid="uid://dw2lxvlt7ssp4" path="res://scripts/ui/main_menu.gd" id="9_parallax"]
+[ext_resource type="Texture2D" uid="uid://brso4ehpmdtau" path="res://sprites/ui/main_menu/blink.png" id="11_7suek"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dwgav"]
 atlas = ExtResource("5_8g5eo")
@@ -657,6 +658,84 @@ animations = [{
 "speed": 12.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_dltkq"]
+atlas = ExtResource("11_7suek")
+region = Rect2(0, 0, 9, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b85nu"]
+atlas = ExtResource("11_7suek")
+region = Rect2(9, 0, 9, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pivwi"]
+atlas = ExtResource("11_7suek")
+region = Rect2(18, 0, 9, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nxbio"]
+atlas = ExtResource("11_7suek")
+region = Rect2(27, 0, 9, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o1jap"]
+atlas = ExtResource("11_7suek")
+region = Rect2(36, 0, 9, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1yehf"]
+atlas = ExtResource("11_7suek")
+region = Rect2(45, 0, 9, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mah8u"]
+atlas = ExtResource("11_7suek")
+region = Rect2(54, 0, 9, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_575hu"]
+atlas = ExtResource("11_7suek")
+region = Rect2(63, 0, 9, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c6l0o"]
+atlas = ExtResource("11_7suek")
+region = Rect2(72, 0, 9, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4tqj2"]
+atlas = ExtResource("11_7suek")
+region = Rect2(81, 0, 9, 11)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lx8v4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dltkq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b85nu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pivwi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nxbio")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o1jap")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1yehf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mah8u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_575hu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c6l0o")
+}, {
+"duration": 100.0,
+"texture": SubResource("AtlasTexture_4tqj2")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 12.0
+}]
+
 [sub_resource type="GDScript" id="GDScript_oa1go"]
 script/source = "extends UIButton
 
@@ -770,6 +849,12 @@ grow_vertical = 0
 mouse_filter = 2
 texture = ExtResource("4_7suek")
 
+[node name="AnimatedSprite2D4" type="AnimatedSprite2D" parent="Paralax_3" unique_id=127836202]
+position = Vector2(183, 71)
+sprite_frames = SubResource("SpriteFrames_lx8v4")
+autoplay = "default"
+frame_progress = 0.3415835
+
 [node name="Logo" type="TextureRect" parent="." unique_id=743466140]
 layout_mode = 1
 offset_left = 10.0
@@ -778,31 +863,25 @@ offset_right = 147.0
 offset_bottom = 66.0
 texture = ExtResource("5_otr3d")
 
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=944139333]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 42
-theme_override_constants/margin_top = 67
-
-[node name="Buttons" type="VBoxContainer" parent="MarginContainer" unique_id=347095572]
+[node name="Buttons" type="VBoxContainer" parent="." unique_id=347095572]
 custom_minimum_size = Vector2(70, 0)
-layout_mode = 2
+layout_mode = 0
+offset_left = 42.0
+offset_top = 67.0
+offset_right = 112.0
+offset_bottom = 102.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 alignment = 2
 
-[node name="NewGame" type="Button" parent="MarginContainer/Buttons" unique_id=2060632857]
+[node name="NewGame" type="Button" parent="Buttons" unique_id=2060632857]
 layout_mode = 2
 theme = ExtResource("6_rtw2f")
 text = "New game"
 alignment = 0
 script = SubResource("GDScript_oa1go")
 
-[node name="Settings_button" type="Button" parent="MarginContainer/Buttons" unique_id=1522020321]
+[node name="Settings_button" type="Button" parent="Buttons" unique_id=1522020321]
 layout_mode = 2
 theme = ExtResource("6_rtw2f")
 text = "Settings"
@@ -810,7 +889,7 @@ alignment = 0
 script = ExtResource("6_rcqid")
 nodeName = "Settings"
 
-[node name="Credits_button" type="Button" parent="MarginContainer/Buttons" unique_id=1206189617]
+[node name="Credits_button" type="Button" parent="Buttons" unique_id=1206189617]
 layout_mode = 2
 theme = ExtResource("6_rtw2f")
 text = "Credits"
@@ -818,6 +897,6 @@ alignment = 0
 script = ExtResource("6_rcqid")
 nodeName = "Credits"
 
-[connection signal="pressed" from="MarginContainer/Buttons/NewGame" to="MarginContainer/Buttons/NewGame" method="_on_pressed"]
-[connection signal="pressed" from="MarginContainer/Buttons/Settings_button" to="MarginContainer/Buttons/Settings_button" method="_on_pressed"]
-[connection signal="pressed" from="MarginContainer/Buttons/Credits_button" to="MarginContainer/Buttons/Credits_button" method="_on_pressed"]
+[connection signal="pressed" from="Buttons/NewGame" to="Buttons/NewGame" method="_on_pressed"]
+[connection signal="pressed" from="Buttons/Settings_button" to="Buttons/Settings_button" method="_on_pressed"]
+[connection signal="pressed" from="Buttons/Credits_button" to="Buttons/Credits_button" method="_on_pressed"]

@@ -1,49 +1,35 @@
 [gd_scene format=3 uid="uid://gc5ojvigf81x"]
 
 [ext_resource type="Script" uid="uid://3p2nn0t14v6h" path="res://scripts/garage.gd" id="1_47l8i"]
-[ext_resource type="Texture2D" uid="uid://b80dnnraacuc0" path="res://sprites/mocup/screen2_base.png" id="1_f50xb"]
-[ext_resource type="Texture2D" uid="uid://c2h7kk68cse5f" path="res://sprites/ui/garage/active_ico_2.png" id="2_gnlqp"]
-[ext_resource type="Texture2D" uid="uid://d00xl4qq8kd4g" path="res://sprites/ui/cell_bg.png" id="7_47l8i"]
+[ext_resource type="Texture2D" uid="uid://csg8hvmxjrsi3" path="res://sprites/ui/garage/garage_bg.png" id="2_sxw43"]
+[ext_resource type="Texture2D" uid="uid://bgjvfqcfwtwpr" path="res://sprites/mocup/2026-10-25 22.15.03.jpg" id="3_hq1gk"]
+[ext_resource type="Texture2D" uid="uid://tnx7t2tl0d1n" path="res://sprites/ui/garage/garage_u_static.png" id="4_0785v"]
 [ext_resource type="Theme" uid="uid://cx7xm3yx6xpow" path="res://styles/scroll.tres" id="7_v0fcm"]
 [ext_resource type="Texture2D" uid="uid://cxhgbsvyfea52" path="res://sprites/ui/garage/stats.png" id="8_47l8i"]
-[ext_resource type="Texture2D" uid="uid://byx84v7n5opin" path="res://sprites/ui/button/ui_fight.png" id="9_fight"]
+[ext_resource type="Texture2D" uid="uid://daef22ilp4l0r" path="res://sprites/ui/garage/left_border.png" id="9_0785v"]
 [ext_resource type="Script" uid="uid://ckg3p5xnsmbve" path="res://scripts/ui/inventory_grid.gd" id="10_inventory"]
 [ext_resource type="FontFile" uid="uid://cqqx14m4tqnh0" path="res://font/pixelNumbers-Regular.ttf" id="11_nulr8"]
 [ext_resource type="Script" uid="uid://cefdxqlr7hx15" path="res://scripts/ui/side_tabs.gd" id="11_side_tabs"]
 [ext_resource type="Theme" uid="uid://b15pjn73y7lbm" path="res://styles/scrap_buttons.tres" id="11_spycl"]
 [ext_resource type="Script" uid="uid://cce4052u4yygb" path="res://scripts/ui/robot_equipment_drop.gd" id="12_equipment_drop"]
+[ext_resource type="Texture2D" uid="uid://6agmwogojmti" path="res://sprites/ui/garage/write_zone.png" id="12_q361v"]
 [ext_resource type="Script" uid="uid://d2k5m0cpjhw1u" path="res://scripts/ui/ui_scene_button.gd" id="14_nulr8"]
 [ext_resource type="Script" uid="uid://c6v46ddvqbuly" path="res://scripts/ui/robot_equipment_preview.gd" id="15_equipment_preview"]
-[ext_resource type="Texture2D" uid="uid://dwc8duwkc2keb" path="res://sprites/ui/button/ui_fight_press.png" id="16_fight_press"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d8qye"]
-content_margin_left = 0.0
-content_margin_top = 0.0
-content_margin_right = 0.0
-content_margin_bottom = 0.0
-bg_color = Color(0.101960786, 0.101960786, 0.101960786, 0)
-border_color = Color(1, 1, 1, 0.75)
-corner_detail = 1
+[ext_resource type="Theme" uid="uid://ds6m8rmqagsmt" path="res://styles/robot_tabs.tres" id="15_lqxlc"]
+[ext_resource type="Texture2D" uid="uid://cygve1v43spkq" path="res://sprites/ui/garage/tab/I_deactive.png" id="16_5080d"]
+[ext_resource type="Texture2D" uid="uid://davvndw330vn3" path="res://sprites/ui/garage/tab/I_active.png" id="17_lqxlc"]
+[ext_resource type="Texture2D" uid="uid://civlrvg51x650" path="res://sprites/ui/garage/right_border.png" id="17_m72hl"]
+[ext_resource type="Texture2D" uid="uid://chh07wrgetu6x" path="res://sprites/ui/garage/tab/II_deactive.png" id="18_4y4st"]
+[ext_resource type="Texture2D" uid="uid://b2r8flpn5mijj" path="res://sprites/ui/garage/tab/II_active.png" id="19_7mpr7"]
+[ext_resource type="Texture2D" uid="uid://cg4yi0hnbfmvc" path="res://sprites/ui/garage/tab/III_deactive.png" id="20_65kvn"]
+[ext_resource type="Texture2D" uid="uid://cs1wi08si306i" path="res://sprites/ui/garage/tab/III_active.png" id="21_m3s41"]
+[ext_resource type="Theme" uid="uid://c4cuifqvntw8s" path="res://styles/fight_button.tres" id="24_lqxlc"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_spycl"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nulr8"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sxw43"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fight"]
-content_margin_left = 8.0
-content_margin_top = 4.0
-content_margin_right = 14.0
-content_margin_bottom = 4.0
-texture = ExtResource("9_fight")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fight_pressed"]
-content_margin_left = 8.0
-content_margin_top = 4.0
-content_margin_right = 14.0
-content_margin_bottom = 4.0
-texture = ExtResource("16_fight_press")
 
 [node name="Garage" type="Control" unique_id=468656869]
 layout_mode = 3
@@ -54,11 +40,39 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_47l8i")
 
-[node name="Screen2Base" type="Sprite2D" parent="." unique_id=1192245377]
-position = Vector2(160, 90)
-texture = ExtResource("1_f50xb")
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1072739468]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_sxw43")
+stretch_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=323282248]
+[node name="TextureRect2" type="TextureRect" parent="." unique_id=1289784595]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_hq1gk")
+stretch_mode = 2
+
+[node name="TextureRect3" type="TextureRect" parent="." unique_id=1183761897]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_0785v")
+stretch_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1804255878]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -66,177 +80,152 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=170441614]
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer" unique_id=1418153363]
 layout_mode = 2
-theme_override_constants/margin_left = 30
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_right = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer" unique_id=1804255878]
-layout_mode = 2
-
-[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/MarginContainer/HBoxContainer" unique_id=1337751281]
-custom_minimum_size = Vector2(158, 138)
+[node name="ScrapyardButton" type="Button" parent="HBoxContainer/MarginContainer2" unique_id=1273339278]
+custom_minimum_size = Vector2(20, 140)
+custom_maximum_size = Vector2(20, 140)
 layout_mode = 2
 size_flags_horizontal = 0
-size_flags_vertical = 0
-theme_override_constants/margin_left = 2
-theme_override_constants/margin_top = 2
+size_flags_vertical = 4
+theme = ExtResource("11_spycl")
+script = ExtResource("14_nulr8")
+scene_path = "res://scenes/scrapyard.tscn"
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer2" unique_id=722935975]
-custom_minimum_size = Vector2(150, 110)
+[node name="MarginContainer3" type="MarginContainer" parent="HBoxContainer" unique_id=722935975]
+custom_minimum_size = Vector2(156, 168)
+custom_maximum_size = Vector2(156, 168)
 layout_mode = 2
-theme_override_constants/margin_left = 1
-theme_override_constants/margin_top = 6
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 1
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme_override_constants/margin_left = -3
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer2/MarginContainer" unique_id=252575977]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer3" unique_id=172079750]
 layout_mode = 2
-texture = ExtResource("7_47l8i")
-stretch_mode = 1
+texture = ExtResource("9_0785v")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer2/MarginContainer" unique_id=928503113]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer3" unique_id=516300849]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 6
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/MarginContainer3/MarginContainer" unique_id=928503113]
 layout_mode = 2
 theme = ExtResource("7_v0fcm")
 horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
 
-[node name="HeadsContainer" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer2/MarginContainer/ScrollContainer" unique_id=365788305]
+[node name="HeadsContainer" type="Control" parent="HBoxContainer/MarginContainer3/MarginContainer/ScrollContainer" unique_id=365788305]
 layout_mode = 2
 script = ExtResource("10_inventory")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer/HBoxContainer" unique_id=1599431966]
+[node name="MarginContainer4" type="MarginContainer" parent="HBoxContainer" unique_id=1582016606]
+custom_minimum_size = Vector2(35, 117)
+custom_maximum_size = Vector2(35, 117)
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/margin_left = 22
-theme_override_constants/margin_right = 12
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_left = -1
 
-[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer" unique_id=1865378733]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer4" unique_id=919132126]
 layout_mode = 2
-theme_override_constants/margin_top = 27
+size_flags_vertical = 3
+texture = ExtResource("8_47l8i")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2" unique_id=1085941650]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer4" unique_id=1475154767]
 layout_mode = 2
-script = ExtResource("11_side_tabs")
+theme_override_constants/margin_top = 12
 
-[node name="TabContainer2" type="TabContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer" unique_id=249565875]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer4/MarginContainer" unique_id=515549230]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/side_margin = 0
-theme_override_constants/icon_max_width = 28
-theme_override_constants/outline_size = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_d8qye")
-theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_d8qye")
-theme_override_styles/tab_hovered = SubResource("StyleBoxFlat_d8qye")
-theme_override_styles/tab_selected = SubResource("StyleBoxFlat_d8qye")
-theme_override_styles/tab_disabled = SubResource("StyleBoxFlat_d8qye")
-theme_override_styles/tab_focus = SubResource("StyleBoxFlat_d8qye")
-current_tab = 2
-tabs_visible = false
+size_flags_horizontal = 4
 
-[node name="robot1" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer/TabContainer2" unique_id=2113432495]
-visible = false
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer4/MarginContainer/VBoxContainer" unique_id=1827699357]
 layout_mode = 2
-script = ExtResource("12_equipment_drop")
-metadata/_tab_index = 0
-metadata/_tab_name = ""
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_bottom = 11
 
-[node name="EquipmentPreview" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer/TabContainer2/robot1" unique_id=1523984160]
-custom_maximum_size = Vector2(60, 100)
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -30.0
-offset_top = -113.0
-offset_right = 30.0
-offset_bottom = -13.0
-grow_horizontal = 2
-grow_vertical = 0
-mouse_filter = 2
-script = ExtResource("15_equipment_preview")
-align_to_bottom = true
-
-[node name="robot2" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer/TabContainer2" unique_id=1045187979]
-visible = false
+[node name="Health" type="Label" parent="HBoxContainer/MarginContainer4/MarginContainer/VBoxContainer/MarginContainer" unique_id=1887011490]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(53, 14)
 layout_mode = 2
-script = ExtResource("12_equipment_drop")
-metadata/_tab_index = 1
-metadata/_tab_name = ""
+theme_override_fonts/font = ExtResource("11_nulr8")
+theme_override_font_sizes/font_size = 8
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
 
-[node name="EquipmentPreview" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer/TabContainer2/robot2" unique_id=490467583]
-custom_maximum_size = Vector2(60, 100)
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -30.0
-offset_top = -113.0
-offset_right = 30.0
-offset_bottom = -13.0
-grow_horizontal = 2
-grow_vertical = 0
-mouse_filter = 2
-script = ExtResource("15_equipment_preview")
-align_to_bottom = true
-
-[node name="robot3" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer/TabContainer2" unique_id=2127662024]
+[node name="MarginContainer3" type="MarginContainer" parent="HBoxContainer/MarginContainer4/MarginContainer/VBoxContainer" unique_id=1424274386]
 layout_mode = 2
-script = ExtResource("12_equipment_drop")
-metadata/_tab_index = 2
-metadata/_tab_name = ""
+theme_override_constants/margin_bottom = 10
 
-[node name="EquipmentPreview" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer/TabContainer2/robot3" unique_id=427945239]
-custom_maximum_size = Vector2(60, 100)
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -30.0
-offset_top = -113.0
-offset_right = 30.0
-offset_bottom = -13.0
-grow_horizontal = 2
-grow_vertical = 0
-mouse_filter = 2
-script = ExtResource("15_equipment_preview")
-align_to_bottom = true
+[node name="Speed" type="Label" parent="HBoxContainer/MarginContainer4/MarginContainer/VBoxContainer/MarginContainer3" unique_id=169314272]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(53, 14)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("11_nulr8")
+theme_override_font_sizes/font_size = 8
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
 
-[node name="TabButtons" type="VBoxContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer" unique_id=1441514338]
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer/MarginContainer4/MarginContainer/VBoxContainer" unique_id=928165987]
+layout_mode = 2
+theme_override_constants/margin_bottom = 10
+
+[node name="Damage" type="Label" parent="HBoxContainer/MarginContainer4/MarginContainer/VBoxContainer/MarginContainer2" unique_id=387893389]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(53, 14)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("11_nulr8")
+theme_override_font_sizes/font_size = 8
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="MarginContainer4" type="MarginContainer" parent="HBoxContainer/MarginContainer4/MarginContainer/VBoxContainer" unique_id=88444384]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+
+[node name="Crit" type="Label" parent="HBoxContainer/MarginContainer4/MarginContainer/VBoxContainer/MarginContainer4" unique_id=1760551073]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(53, 14)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("11_nulr8")
+theme_override_font_sizes/font_size = 8
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer" unique_id=1599431966]
+layout_mode = 2
+theme_override_constants/margin_left = -4
+theme_override_constants/margin_top = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer" unique_id=1911100848]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/VBoxContainer" unique_id=1962565366]
 layout_mode = 2
 size_flags_vertical = 0
-theme_override_constants/separation = 4
+theme_override_constants/margin_left = -3
+theme_override_constants/margin_top = -1
 
-[node name="Robot1" type="TextureButton" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer/TabButtons" unique_id=1062727773]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer" unique_id=952083168]
 layout_mode = 2
-tooltip_text = "Robot 1"
-toggle_mode = true
-texture_normal = ExtResource("2_gnlqp")
+texture = ExtResource("12_q361v")
+stretch_mode = 2
 
-[node name="Robot2" type="TextureButton" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer/TabButtons" unique_id=767822516]
-layout_mode = 2
-tooltip_text = "Robot 2"
-toggle_mode = true
-texture_normal = ExtResource("2_gnlqp")
-
-[node name="Robot3" type="TextureButton" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer2/HBoxContainer/TabButtons" unique_id=587732376]
-layout_mode = 2
-tooltip_text = "Robot 3"
-toggle_mode = true
-texture_normal = ExtResource("2_gnlqp")
-
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer" unique_id=1962565366]
-layout_mode = 2
-size_flags_vertical = 0
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 20
-
-[node name="robotname" type="LineEdit" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer" unique_id=2081708074]
+[node name="robotname" type="LineEdit" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer" unique_id=2081708074]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 size_flags_vertical = 0
@@ -253,114 +242,148 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_sxw43")
 text = "Wally"
 alignment = 1
 
-[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer" unique_id=1839725025]
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer/MarginContainer/VBoxContainer" unique_id=1865378733]
 layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = -4
+theme_override_constants/margin_right = -6
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer2" unique_id=466816641]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer2" unique_id=266714249]
 layout_mode = 2
-
-[node name="Control" type="Control" parent="VBoxContainer/MarginContainer2/HBoxContainer" unique_id=842540962]
-custom_minimum_size = Vector2(150, 30)
-layout_mode = 2
-size_flags_vertical = 4
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer2/HBoxContainer/Control" unique_id=1005293378]
-layout_mode = 1
-offset_right = 150.0
-offset_bottom = 30.0
-size_flags_horizontal = 0
-size_flags_vertical = 4
-texture = ExtResource("8_47l8i")
+mouse_filter = 2
+texture = ExtResource("17_m72hl")
 stretch_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="VBoxContainer/MarginContainer2/HBoxContainer/Control" unique_id=1073003146]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer2" unique_id=537580583]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_bottom = 6
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer" unique_id=1085941650]
+layout_mode = 2
+script = ExtResource("11_side_tabs")
+
+[node name="RobotTabs" type="TabContainer" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer" unique_id=249565875]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("15_lqxlc")
+current_tab = 0
+tabs_visible = false
+
+[node name="robot1" type="Control" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer/RobotTabs" unique_id=2113432495]
+layout_mode = 2
+script = ExtResource("12_equipment_drop")
+metadata/_tab_index = 0
+metadata/_tab_name = ""
+
+[node name="EquipmentPreview" type="Control" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer/RobotTabs/robot1" unique_id=1523984160]
+custom_maximum_size = Vector2(60, 100)
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 18.0
+offset_left = -30.0
+offset_top = -113.0
+offset_right = 30.0
+offset_bottom = -13.0
 grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/h_separation = 26
-theme_override_constants/v_separation = 2
-columns = 2
+grow_vertical = 0
+mouse_filter = 2
+script = ExtResource("15_equipment_preview")
+align_to_bottom = true
 
-[node name="Health" type="Label" parent="VBoxContainer/MarginContainer2/HBoxContainer/Control/GridContainer" unique_id=1887011490]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(53, 14)
+[node name="robot2" type="Control" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer/RobotTabs" unique_id=1045187979]
+visible = false
 layout_mode = 2
-theme_override_fonts/font = ExtResource("11_nulr8")
-theme_override_font_sizes/font_size = 8
-text = "0"
-horizontal_alignment = 1
-vertical_alignment = 1
-clip_text = true
+script = ExtResource("12_equipment_drop")
+metadata/_tab_index = 1
+metadata/_tab_name = ""
 
-[node name="Damage" type="Label" parent="VBoxContainer/MarginContainer2/HBoxContainer/Control/GridContainer" unique_id=387893389]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(53, 14)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("11_nulr8")
-theme_override_font_sizes/font_size = 8
-text = "0"
-horizontal_alignment = 1
-vertical_alignment = 1
-clip_text = true
+[node name="EquipmentPreview" type="Control" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer/RobotTabs/robot2" unique_id=490467583]
+custom_maximum_size = Vector2(60, 100)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -30.0
+offset_top = -113.0
+offset_right = 30.0
+offset_bottom = -13.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+script = ExtResource("15_equipment_preview")
+align_to_bottom = true
 
-[node name="Speed" type="Label" parent="VBoxContainer/MarginContainer2/HBoxContainer/Control/GridContainer" unique_id=169314272]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(53, 14)
+[node name="robot3" type="Control" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer/RobotTabs" unique_id=2127662024]
+visible = false
 layout_mode = 2
-theme_override_fonts/font = ExtResource("11_nulr8")
-theme_override_font_sizes/font_size = 8
-text = "0"
-horizontal_alignment = 1
-vertical_alignment = 1
-clip_text = true
+script = ExtResource("12_equipment_drop")
+metadata/_tab_index = 2
+metadata/_tab_name = ""
 
-[node name="Crit" type="Label" parent="VBoxContainer/MarginContainer2/HBoxContainer/Control/GridContainer" unique_id=1760551073]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(53, 14)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("11_nulr8")
-theme_override_font_sizes/font_size = 8
-text = "0"
-horizontal_alignment = 1
-vertical_alignment = 1
-clip_text = true
+[node name="EquipmentPreview" type="Control" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer/RobotTabs/robot3" unique_id=427945239]
+custom_maximum_size = Vector2(60, 100)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -30.0
+offset_top = -113.0
+offset_right = 30.0
+offset_bottom = -13.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+script = ExtResource("15_equipment_preview")
+align_to_bottom = true
 
-[node name="BattleButton" type="Button" parent="VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1325151344]
-custom_minimum_size = Vector2(106, 32)
+[node name="TabButtons" type="VBoxContainer" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer" unique_id=1441514338]
 layout_mode = 2
-size_flags_vertical = 4
-theme = ExtResource("11_spycl")
-theme_override_styles/normal = SubResource("StyleBoxTexture_fight")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_fight_pressed")
-theme_override_styles/hover = SubResource("StyleBoxTexture_fight")
-theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_fight_pressed")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_sxw43")
-text = "To battle!"
+size_flags_vertical = 0
+theme_override_constants/separation = 0
+
+[node name="Robot1" type="TextureButton" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer/TabButtons" unique_id=1062727773]
+layout_mode = 2
+tooltip_text = "Robot 1"
+toggle_mode = true
+texture_normal = ExtResource("16_5080d")
+texture_pressed = ExtResource("17_lqxlc")
+
+[node name="Robot2" type="TextureButton" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer/TabButtons" unique_id=767822516]
+layout_mode = 2
+tooltip_text = "Robot 2"
+toggle_mode = true
+texture_normal = ExtResource("18_4y4st")
+texture_pressed = ExtResource("19_7mpr7")
+
+[node name="Robot3" type="TextureButton" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer/TabButtons" unique_id=587732376]
+layout_mode = 2
+tooltip_text = "Robot 3"
+toggle_mode = true
+texture_normal = ExtResource("20_65kvn")
+texture_pressed = ExtResource("21_m3s41")
+
+[node name="MarginContainer3" type="MarginContainer" parent="HBoxContainer/MarginContainer/VBoxContainer" unique_id=844955779]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="BattleButton" type="Button" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer3" unique_id=1325151344]
+custom_minimum_size = Vector2(85, 24)
+custom_maximum_size = Vector2(85, 24)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = ExtResource("24_lqxlc")
 script = ExtResource("14_nulr8")
 scene_path = "res://scenes/battle.tscn"
 
-[node name="ScrapyardButton" type="Button" parent="." unique_id=1273339278]
-custom_minimum_size = Vector2(110, 24)
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 24.0
-offset_top = -68.0
-offset_right = 134.0
-offset_bottom = -44.0
-grow_vertical = 2
-rotation = 1.5707964
-theme = ExtResource("11_spycl")
-text = "Scrapyard"
-script = ExtResource("14_nulr8")
-scene_path = "res://scenes/scrapyard.tscn"
-
-[connection signal="pressed" from="VBoxContainer/MarginContainer2/HBoxContainer/BattleButton" to="VBoxContainer/MarginContainer2/HBoxContainer/BattleButton" method="_on_pressed"]
-[connection signal="pressed" from="ScrapyardButton" to="ScrapyardButton" method="_on_pressed"]
+[connection signal="pressed" from="HBoxContainer/MarginContainer2/ScrapyardButton" to="HBoxContainer/MarginContainer2/ScrapyardButton" method="_on_pressed"]
+[connection signal="pressed" from="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer3/BattleButton" to="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer3/BattleButton" method="_on_pressed"]

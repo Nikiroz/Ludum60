@@ -1,6 +1,6 @@
 extends HBoxContainer
 
-@onready var tabs: TabContainer = $TabContainer2
+@onready var tabs: TabContainer = $RobotTabs
 @onready var buttons: VBoxContainer = $TabButtons
 
 
@@ -13,6 +13,7 @@ func _ready() -> void:
 
 
 func _select_tab(index: int) -> void:
+	ControllerGame.play_one_shot(preload("uid://21gf6qfxd331"))
 	tabs.current_tab = index
 	_update_buttons(index)
 

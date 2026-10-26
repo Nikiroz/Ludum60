@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dwc8duwkc2keb"
-path="res://.godot/imported/ui_fight_press.png-26cf8d092b1a07c8c90c51adc0310705.ctex"
+uid="uid://cg4yi0hnbfmvc"
+path="res://.godot/imported/III_deactive.png-102ba85bfdb453abf43870a102ca467d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/ui/button/ui_fight_press.png"
-dest_files=["res://.godot/imported/ui_fight_press.png-26cf8d092b1a07c8c90c51adc0310705.ctex"]
+source_file="res://sprites/ui/garage/tab/III_deactive.png"
+dest_files=["res://.godot/imported/III_deactive.png-102ba85bfdb453abf43870a102ca467d.ctex"]
 
 [params]
 

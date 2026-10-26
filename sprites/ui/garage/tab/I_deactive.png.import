@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dokq4gih70y6b"
-path="res://.godot/imported/ui_star_presst.png-440d23b53e10d2d1081ae4aac2a0ffeb.ctex"
+uid="uid://cygve1v43spkq"
+path="res://.godot/imported/I_deactive.png-ece4fc4fa0e36f526d0a44831485afcc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/ui/button/ui_star_presst.png"
-dest_files=["res://.godot/imported/ui_star_presst.png-440d23b53e10d2d1081ae4aac2a0ffeb.ctex"]
+source_file="res://sprites/ui/garage/tab/I_deactive.png"
+dest_files=["res://.godot/imported/I_deactive.png-ece4fc4fa0e36f526d0a44831485afcc.ctex"]
 
 [params]
 

@@ -13,7 +13,7 @@
 [ext_resource type="AudioStream" uid="uid://d1qru7aqjl8uq" path="res://sounds/SFX 1/TRASH-001.ogg" id="12_8jmiw"]
 [ext_resource type="AudioStream" uid="uid://dn4n7iionvfsu" path="res://sounds/SFX 1/TRASH-002.ogg" id="13_n3taq"]
 [ext_resource type="AudioStream" uid="uid://pd5qdf0lj8gs" path="res://sounds/SFX 1/TRASH-003.ogg" id="14_582h4"]
-[ext_resource type="Theme" uid="uid://b15pjn73y7lbm" path="res://styles/scrap_buttons.tres" id="14_mi4xg"]
+[ext_resource type="Theme" uid="uid://bjjj0navprf4b" path="res://styles/garage_buttons.tres" id="14_mi4xg"]
 [ext_resource type="AudioStream" uid="uid://c1vymuny1ujth" path="res://sounds/SFX 1/TRASH-004.ogg" id="15_ip7ae"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_suqf5"]
@@ -1055,22 +1055,20 @@ custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
 
 [node name="GarageButton" type="Button" parent="." unique_id=920782873]
-custom_minimum_size = Vector2(110, 24)
+custom_minimum_size = Vector2(20, 105)
+custom_maximum_size = Vector2(20, 105)
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -24.0
-offset_top = 36.0
-offset_right = 86.0
-offset_bottom = 60.0
+offset_left = -20.0
+offset_top = -65.0
+offset_bottom = 40.0
 grow_horizontal = 0
 grow_vertical = 2
-rotation = -1.5707964
 theme = ExtResource("14_mi4xg")
-text = "garage"
 script = ExtResource("11_5o808")
 scene_path = "res://scenes/garage.tscn"
 show_after_round_finished = true

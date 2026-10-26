@@ -22,7 +22,7 @@ var _button_states: Dictionary[Button, Dictionary] = {}
 
 
 func _ready() -> void:
-	for button in $MarginContainer/Buttons.get_children():
+	for button in $Buttons.get_children():
 		if button is Button:
 			button.add_theme_stylebox_override("disabled", button.get_theme_stylebox("normal"))
 			button.add_theme_color_override("font_disabled_color", button.get_theme_color("font_color"))
@@ -34,7 +34,7 @@ func set_interaction_enabled(enabled: bool) -> void:
 	if _interaction_enabled == enabled:
 		return
 	_interaction_enabled = enabled
-	for child in $MarginContainer/Buttons.get_children():
+	for child in $Buttons.get_children():
 		var button := child as Button
 		if button == null:
 			continue

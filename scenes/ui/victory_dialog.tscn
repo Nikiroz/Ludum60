@@ -1,9 +1,7 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://btr8xpao2pu02"]
 
-[ext_resource type="Script" path="res://scripts/ui/victory_dialog.gd" id="1_dialog"]
-[ext_resource type="Theme" path="res://styles/buttons.tres" id="2_theme"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
+[ext_resource type="Script" uid="uid://cdx1pfc7sy7ef" path="res://scripts/ui/victory_dialog.gd" id="1_dialog"]
+[ext_resource type="Theme" uid="uid://dusbxqn3cho4s" path="res://styles/buttons.tres" id="2_theme"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
 content_margin_left = 12.0
@@ -18,9 +16,69 @@ border_width_bottom = 1
 border_color = Color(0.58431375, 0.22352941, 0.17254902, 1)
 anti_aliasing = false
 
-[node name="VictoryDialog" type="Control"]
-visible = false
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_flqon"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rcqid"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.14044744, 0.14044744, 0.14044744, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ajci"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7b55j"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5pajh"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[node name="VictoryDialog" type="Control" unique_id=148580149]
 process_mode = 3
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -30,7 +88,7 @@ grow_vertical = 2
 theme = ExtResource("2_theme")
 script = ExtResource("1_dialog")
 
-[node name="Shade" type="ColorRect" parent="."]
+[node name="Shade" type="ColorRect" parent="." unique_id=1858256578]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -40,7 +98,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0.65)
 
-[node name="Panel" type="PanelContainer" parent="."]
+[node name="Panel" type="PanelContainer" parent="." unique_id=814324251]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -55,42 +113,51 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=1117968375]
 layout_mode = 2
 theme_override_constants/separation = 10
 alignment = 1
 
-[node name="Message" type="Label" parent="Panel/VBoxContainer"]
+[node name="Message" type="Label" parent="Panel/VBoxContainer" unique_id=465406570]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96862745, 0.89411765, 0.8039216, 1)
 theme_override_font_sizes/font_size = 16
-text = "You won!\nDo you want to continue?"
+text = "You won!
+Do you want to continue?"
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="Buttons" type="HBoxContainer" parent="Panel/VBoxContainer"]
+[node name="Buttons" type="HBoxContainer" parent="Panel/VBoxContainer" unique_id=2099733797]
 layout_mode = 2
 theme_override_constants/separation = 12
 alignment = 1
 
-[node name="Yes" type="Button" parent="Panel/VBoxContainer/Buttons"]
+[node name="Yes" type="Button" parent="Panel/VBoxContainer/Buttons" unique_id=1581652881]
 custom_minimum_size = Vector2(54, 20)
 layout_mode = 2
 focus_neighbor_left = NodePath("../No")
 focus_neighbor_right = NodePath("../No")
 focus_next = NodePath("../No")
 focus_previous = NodePath("../No")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+theme_override_styles/normal = SubResource("StyleBoxFlat_flqon")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rcqid")
+theme_override_styles/hover = SubResource("StyleBoxFlat_1ajci")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_7b55j")
+theme_override_styles/focus = SubResource("StyleBoxFlat_5pajh")
 text = "Yes"
 
-[node name="No" type="Button" parent="Panel/VBoxContainer/Buttons"]
+[node name="No" type="Button" parent="Panel/VBoxContainer/Buttons" unique_id=168236800]
 custom_minimum_size = Vector2(54, 20)
 layout_mode = 2
 focus_neighbor_left = NodePath("../Yes")
 focus_neighbor_right = NodePath("../Yes")
 focus_next = NodePath("../Yes")
 focus_previous = NodePath("../Yes")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+theme_override_styles/normal = SubResource("StyleBoxFlat_flqon")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rcqid")
+theme_override_styles/hover = SubResource("StyleBoxFlat_1ajci")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_7b55j")
+theme_override_styles/focus = SubResource("StyleBoxFlat_5pajh")
 text = "No"
 
 [connection signal="pressed" from="Panel/VBoxContainer/Buttons/Yes" to="." method="_on_yes_pressed"]

@@ -269,9 +269,7 @@ func _update_quit_to_main_menu_visibility() -> void:
 	if settings == null:
 		return
 
-	var quit_to_main_menu := settings.get_node_or_null(
-		"Panel/VBoxContainer2/QuitToMainMenu"
-	) as Button
+	var quit_to_main_menu := settings.get_node_or_null("%QuitToMainMenu") as Button
 	if quit_to_main_menu != null:
 		quit_to_main_menu.visible = not isMainMenu
 

@@ -1,0 +1,24 @@
+[gd_resource type="Theme" format=3 uid="uid://ds6m8rmqagsmt"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fxvdk"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n6mtv"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_254p2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ixiue"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_k50re"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ejsny"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0xovn"]
+
+[resource]
+TabContainer/styles/panel = SubResource("StyleBoxEmpty_fxvdk")
+TabContainer/styles/tab_disabled = SubResource("StyleBoxEmpty_n6mtv")
+TabContainer/styles/tab_focus = SubResource("StyleBoxEmpty_254p2")
+TabContainer/styles/tab_hovered = SubResource("StyleBoxEmpty_ixiue")
+TabContainer/styles/tab_selected = SubResource("StyleBoxEmpty_k50re")
+TabContainer/styles/tab_unselected = SubResource("StyleBoxEmpty_ejsny")
+TabContainer/styles/tabbar_background = SubResource("StyleBoxEmpty_0xovn")
